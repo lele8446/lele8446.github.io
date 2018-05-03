@@ -24,7 +24,7 @@
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/3/24/162584e28668df7b?w=186&h=60&f=jpeg&s=2327">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/3/24/162584e258cb2af8?w=304&h=266&f=png&s=7418">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/3/24/162584e288b57eae?w=900&h=603&f=png&s=246756">
-<meta property="og:updated_time" content="2018-05-03T09:15:54.000Z">
+<meta property="og:updated_time" content="2018-05-03T09:31:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CJLabel之 —— UILabel响应点击且支持选择复制原理">
 <meta name="twitter:description" content="导读 CJLabel 是一个继承自UILabel的自定义控件，它在支持UILabel所有属性的基础上，还提供富文本展示、图文混排、自定义点击链点设置、长按（双击）唤起UIMenuController选择复制文本等功能。">
@@ -105,7 +105,7 @@
 <p><img src="https://user-gold-cdn.xitu.io/2018/3/24/162584e258dacc65?w=295&amp;h=430&amp;f=gif&amp;s=232382" alt="CJLabel"></p>
 <p><img src="https://user-gold-cdn.xitu.io/2018/3/27/1626507cc251a22b?w=290&amp;h=438&amp;f=gif&amp;s=1589611" alt="CJLabel1"></p>
 <h3 id="CJLabel链点点击实现细节"><a href="#CJLabel链点点击实现细节" class="headerlink" title="CJLabel链点点击实现细节"></a>CJLabel链点点击实现细节</h3><p>先来回顾一下CJLabel在显示文本以及响应链点点击的过程中，底层是怎样实现的。<br><img src="https://user-gold-cdn.xitu.io/2018/3/24/162584e258dbebe5?w=1240&amp;h=793&amp;f=png&amp;s=257954" alt="CJLabel.png"></p>
-<h4 id="一-设置Attributes属性"><a href="#一-设置Attributes属性" class="headerlink" title="一. 设置Attributes属性"></a>一. 设置Attributes属性</h4><p>首先设置需要显示的NSAttributedString文本的属性，除了可设置系统提供的<code>NSFontAttributeName</code> <code>NSForegroundColorAttributeName</code> <code>NSParagraphStyleAttributeName</code>等默认属性外，还支持<strong>CJLabel</strong>的若干自定义扩展属性：<br><code>kCJBackgroundFillColorAttributeName</code>背景填充颜色<br><code>kCJBackgroundStrokeColorAttributeName</code>背景边框线颜色<br><code>kCJBackgroundLineWidthAttributeName</code>背景边框线宽度<br><code>kCJStrikethroughColorAttributeName</code>删除线颜色<br>……<br>CJLabel提供配置管理类<code>CJLabelConfigure</code>，专门用来方便设置指定字符的副文本属性，同时还提供了对应的API，调用可生成封装好的NSAttributedString副文本（此处只选取若干方法说明，更多可查看<a href="https://user-gold-cdn.xitu.io/2018/3/24/16258502f22a9803" target="_blank" rel="noopener">源码</a></p>
+<h4 id="一-设置Attributes属性"><a href="#一-设置Attributes属性" class="headerlink" title="一. 设置Attributes属性"></a>一. 设置Attributes属性</h4><p>首先设置需要显示的NSAttributedString文本的属性，除了可设置系统提供的<code>NSFontAttributeName</code> <code>NSForegroundColorAttributeName</code> <code>NSParagraphStyleAttributeName</code>等默认属性外，还支持<strong>CJLabel</strong>的若干自定义扩展属性：<br><code>kCJBackgroundFillColorAttributeName</code>背景填充颜色<br><code>kCJBackgroundStrokeColorAttributeName</code>背景边框线颜色<br><code>kCJBackgroundLineWidthAttributeName</code>背景边框线宽度<br><code>kCJStrikethroughColorAttributeName</code>删除线颜色<br>……<br>CJLabel提供配置管理类<code>CJLabelConfigure</code>，专门用来方便设置指定字符的副文本属性，同时还提供了对应的API，调用可生成封装好的NSAttributedString副文本（此处只选取若干方法说明，更多可查看<a href="https://github.com/lele8446/CJLabel" target="_blank" rel="noopener">源码</a></p>
 <pre><code>/**
  根据图片名初始化NSAttributedString
 
@@ -124,10 +124,9 @@
  根据NSString初始化NSAttributedString
  */
 + (NSMutableAttributedString *)initWithString:(NSString *)string configure:(CJLabelConfigure *)configure;
-</code></pre><h4 id="二-计算label的CGRect大小"><a href="#二-计算label的CGRect大小" class="headerlink" title="二. 计算label的CGRect大小"></a>二. 计算label的CGRect大小</h4><blockquote>
-<p>label.attributedText = @”text”</p>
-</blockquote>
-<p>UILabel绘制显示文本，首先会触发以下方法<br><code>-textRectForBounds:limitedToNumberOfLines:</code><br> <code>-sizeThatFits:</code><br>我们可以在这两个方法里面根据需要显示的文本内容以及扩展属性<code>self.textInsets（绘制文本的内边距，默认UIEdgeInsetsZero）</code>，计算当前label的CGRect大小，计算使用的核心函数是:</p>
+</code></pre><h4 id="二-计算label的CGRect大小"><a href="#二-计算label的CGRect大小" class="headerlink" title="二. 计算label的CGRect大小"></a>二. 计算label的CGRect大小</h4><p><code>label.attributedText = @&quot;text&quot;</code></p>
+<p>UILabel绘制显示文本，首先会触发以下方法<br><code>-textRectForBounds:limitedToNumberOfLines:</code><br><code>-sizeThatFits:</code></p>
+<p>我们可以在这两个方法里面根据需要显示的文本内容以及扩展属性<code>self.textInsets（绘制文本的内边距，默认UIEdgeInsetsZero）</code>，计算当前label的CGRect大小，计算使用的核心函数是:</p>
 <pre><code>CGSize CTFramesetterSuggestFrameSizeWithConstraints(
     CTFramesetterRef framesetter,
     CFRange stringRange,
@@ -343,7 +342,7 @@ typedef NS_ENUM(NSInteger, CJSelectViewAction) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/03/CJLabel响应点击且支持选择复制原理/" data-id="cjgqbrtqi0000y0v33dbxrvys" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/05/03/CJLabel响应点击且支持选择复制原理/" data-id="cjgqc09pv00011iv38kc0mrnp" class="article-share-link">Share</a>
       
       
     </footer>
