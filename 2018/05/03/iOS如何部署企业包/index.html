@@ -5,24 +5,24 @@
   
 
   
-  <title>C.J.Lian</title>
+  <title>iOS如何部署企业包，以供他人下载 | C.J.Lian</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="iOS如何部署企业包，以供他人下载要安装一个App到非越狱的手机上，一般有以下几种方式：  通过App Store下载安装； 如果能获取用户设备，直接通过Xcode将包灌入设备； 个人开发者账号，获取用户设备UDID，生成对应的Provisioning Profiles后打包供人安装； 企业开发者账号，则可以将包部署到支持https下载的服务器上随意下载（如果被苹果监测到你通过企业账户来大规模散">
+  <meta name="description" content="要安装一个App到非越狱的手机上，一般有以下几种方式：  通过App Store下载安装； 如果能获取用户设备，直接通过Xcode将包灌入设备； 个人开发者账号，获取用户设备UDID，生成对应的Provisioning Profiles后打包供人安装； 企业开发者账号，则可以将包部署到支持https下载的服务器上随意下载（如果被苹果监测到你通过企业账户来大规模散发，有可能被封号-_-#）">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C.J.Lian">
+<meta property="og:title" content="iOS如何部署企业包，以供他人下载">
 <meta property="og:url" content="http://yoursite.com/2018/05/03/iOS如何部署企业包/index.html">
 <meta property="og:site_name" content="C.J.Lian">
-<meta property="og:description" content="iOS如何部署企业包，以供他人下载要安装一个App到非越狱的手机上，一般有以下几种方式：  通过App Store下载安装； 如果能获取用户设备，直接通过Xcode将包灌入设备； 个人开发者账号，获取用户设备UDID，生成对应的Provisioning Profiles后打包供人安装； 企业开发者账号，则可以将包部署到支持https下载的服务器上随意下载（如果被苹果监测到你通过企业账户来大规模散">
+<meta property="og:description" content="要安装一个App到非越狱的手机上，一般有以下几种方式：  通过App Store下载安装； 如果能获取用户设备，直接通过Xcode将包灌入设备； 个人开发者账号，获取用户设备UDID，生成对应的Provisioning Profiles后打包供人安装； 企业开发者账号，则可以将包部署到支持https下载的服务器上随意下载（如果被苹果监测到你通过企业账户来大规模散发，有可能被封号-_-#）">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1429982-9ed128fd3938ad15.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1429982-ecb65d3267d4bf18.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1429982-2536f45e48e4354c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1429982-bb4e7baf736c0711.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1429982-9fb71f58acd45d28.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/800">
-<meta property="og:updated_time" content="2018-05-03T08:41:32.000Z">
+<meta property="og:updated_time" content="2018-05-03T08:49:58.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="C.J.Lian">
-<meta name="twitter:description" content="iOS如何部署企业包，以供他人下载要安装一个App到非越狱的手机上，一般有以下几种方式：  通过App Store下载安装； 如果能获取用户设备，直接通过Xcode将包灌入设备； 个人开发者账号，获取用户设备UDID，生成对应的Provisioning Profiles后打包供人安装； 企业开发者账号，则可以将包部署到支持https下载的服务器上随意下载（如果被苹果监测到你通过企业账户来大规模散">
+<meta name="twitter:title" content="iOS如何部署企业包，以供他人下载">
+<meta name="twitter:description" content="要安装一个App到非越狱的手机上，一般有以下几种方式：  通过App Store下载安装； 如果能获取用户设备，直接通过Xcode将包灌入设备； 个人开发者账号，获取用户设备UDID，生成对应的Provisioning Profiles后打包供人安装； 企业开发者账号，则可以将包部署到支持https下载的服务器上随意下载（如果被苹果监测到你通过企业账户来大规模散发，有可能被封号-_-#）">
 <meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1429982-9ed128fd3938ad15.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000">
   
     <link rel="alternate" href="/atom.xml" title="C.J.Lian" type="application/atom+xml">
@@ -80,10 +80,19 @@
   <div class="article-inner">
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      iOS如何部署企业包，以供他人下载
+    </h1>
+  
+
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <hr>
-<h2 id="iOS如何部署企业包，以供他人下载"><a href="#iOS如何部署企业包，以供他人下载" class="headerlink" title="iOS如何部署企业包，以供他人下载"></a>iOS如何部署企业包，以供他人下载</h2><p>要安装一个App到非越狱的手机上，一般有以下几种方式：</p>
+        <p>要安装一个App到非越狱的手机上，一般有以下几种方式：</p>
 <ol>
 <li>通过App Store下载安装；</li>
 <li>如果能获取用户设备，直接通过Xcode将包灌入设备；</li>
@@ -129,7 +138,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/03/iOS如何部署企业包/" data-id="cjgqagne40000jav37yc7cse3" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/05/03/iOS如何部署企业包/" data-id="cjgqajq9d0000kfv3hj5amjkd" class="article-share-link">Share</a>
       
       
     </footer>
@@ -168,7 +177,7 @@
       <ul>
         
           <li>
-            <a href="/2018/05/03/iOS如何部署企业包/">(no title)</a>
+            <a href="/2018/05/03/iOS如何部署企业包/">iOS如何部署企业包，以供他人下载</a>
           </li>
         
       </ul>
