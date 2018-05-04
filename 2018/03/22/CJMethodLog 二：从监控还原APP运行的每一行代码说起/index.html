@@ -18,7 +18,7 @@
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1429982-7560f633f2727ec3.gif?imageMogr2/auto-orient/strip">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1429982-d5517191587c4242.png">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1429982-7c0e8d790cb65d90.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/500">
-<meta property="og:updated_time" content="2018-05-04T03:49:32.000Z">
+<meta property="og:updated_time" content="2018-05-04T03:52:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CJMethodLog 二：从监控还原APP运行的每一行代码说起">
 <meta name="twitter:description" content="导语：CJMethodLog 对于Objective-C中的任意类、任意方法，均可实时根据用户的操作行为，监控还原对应的函数调用日志，而且能够自定义记录当前函数的参数类型、返回类型、执行时间……  CJMethodLog上一篇介绍了 Runtime 原理 CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起这里就来讲讲 CJMethodLog 的具体实现。">
@@ -93,7 +93,7 @@
       
         <h3 id="导语："><a href="#导语：" class="headerlink" title="导语："></a>导语：</h3><p>CJMethodLog 对于Objective-C中的任意类、任意方法，均可实时根据用户的操作行为，监控还原对应的函数调用日志，而且能够自定义记录当前函数的参数类型、返回类型、执行时间……</p>
 <hr>
-<h3 id="CJMethodLog"><a href="#CJMethodLog" class="headerlink" title="CJMethodLog"></a>CJMethodLog</h3><p>上一篇介绍了 Runtime 原理<br> <a href="https://www.jianshu.com/p/9838c7d93087" target="_blank" rel="noopener">CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起</a><br><br>这里就来讲讲 <a href="https://github.com/lele8446/CJMethodLog" target="_blank" rel="noopener">CJMethodLog</a> 的具体实现。</p>
+<h3 id="CJMethodLog"><a href="#CJMethodLog" class="headerlink" title="CJMethodLog"></a>CJMethodLog</h3><p>上一篇介绍了 Runtime 原理<br> <a href="http://lele8446.top/2018/03/02/CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起/" target="_blank" rel="noopener">CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起</a><br><br>这里就来讲讲 <a href="https://github.com/lele8446/CJMethodLog" target="_blank" rel="noopener">CJMethodLog</a> 的具体实现。</p>
 <p><img src="https://upload-images.jianshu.io/upload_images/1429982-8814f2bf88617576.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/540" alt="CJMethodLogSource.png"></p>
 <a id="more"></a>
 <p>上图展示了CJMethodLog的文件结构，其中<code>CJMethodLog.h CJMethodLog.m</code>是核心部分</p>
@@ -482,7 +482,7 @@ objc_msgSend(objc_super-&gt;receiver, @selector(viewDidLoad))
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/03/22/CJMethodLog 二：从监控还原APP运行的每一行代码说起/" data-id="cjgrf81hn0001z1v3avjcw9yv" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/03/22/CJMethodLog 二：从监控还原APP运行的每一行代码说起/" data-id="cjgrfc5iv00020jv3n2tiv83w" class="article-share-link">Share</a>
       
       
     </footer>
