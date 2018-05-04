@@ -62,6 +62,93 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-CJMethodLog 二：从监控还原APP运行的每一行代码说起" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/22/CJMethodLog 二：从监控还原APP运行的每一行代码说起/" class="article-date">
+  <time datetime="2018-03-21T16:00:00.000Z" itemprop="datePublished">2018-03-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/22/CJMethodLog 二：从监控还原APP运行的每一行代码说起/">CJMethodLog 二：从监控还原APP运行的每一行代码说起</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="导语："><a href="#导语：" class="headerlink" title="导语："></a>导语：</h3><p>CJMethodLog 对于Objective-C中的任意类、任意方法，均可实时根据用户的操作行为，监控还原对应的函数调用日志，而且能够自定义记录当前函数的参数类型、返回类型、执行时间……</p>
+<hr>
+<h3 id="CJMethodLog"><a href="#CJMethodLog" class="headerlink" title="CJMethodLog"></a>CJMethodLog</h3><p>上一篇介绍了 Runtime 原理<br> <a href="https://www.jianshu.com/p/9838c7d93087" target="_blank" rel="noopener">CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起</a><br><br>这里就来讲讲 <a href="https://github.com/lele8446/CJMethodLog" target="_blank" rel="noopener">CJMethodLog</a> 的具体实现。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1429982-8814f2bf88617576.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/540" alt="CJMethodLogSource.png"></p>
+        
+          <p class="article-more-link">
+            <a href="/2018/03/22/CJMethodLog 二：从监控还原APP运行的每一行代码说起/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/03/22/CJMethodLog 二：从监控还原APP运行的每一行代码说起/" data-id="cjgrf81hn0001z1v3avjcw9yv" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/02/CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起/" class="article-date">
+  <time datetime="2018-03-01T16:00:00.000Z" itemprop="datePublished">2018-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/02/CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起/">CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="导语："><a href="#导语：" class="headerlink" title="导语："></a>导语：</h3><p>CJMethodLog 对于Objective-C中的任意类、任意方法，均可实时根据用户的操作行为，监控还原对应的函数调用日志，而且能够自定义记录当前函数的参数类型、返回类型、执行时间……</p>
+<h3 id="背景说明"><a href="#背景说明" class="headerlink" title="背景说明"></a>背景说明</h3><p>是否遇到过如此场景：对于项目中一些不是Crash的问题，由于缺乏log日志，排查起来很是麻烦；又或者对于一些特定设备、特定场景的问题，由于缺乏条件没法重现，最后只能不了了之。比如下面的例子：</p>
+<p>你负责开发了一个考勤打卡页面。某天你正当心情愉悦哼着小曲开始一天工作时，产品经理突然闯入：又有用户反馈明明打了卡却提示旷工！并且那用户未能提供当时的操作记录，而且也无法再重现问题。无语的你只好再次默默过了一遍打卡代码，没有发现问题，然后求助后端同事查看接口调用日志，却发现该用户反馈问题的那一天根本就没有相关的接口调用记录……<br>——最后结论是用户当时忘打卡了（但其实你却不能十足确定打卡代码没有问题）</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/03/02/CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/03/02/CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起/" data-id="cjgrf81hv0003z1v3rkceada5" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-CJLabel第三章——支持任意区域点击响应和可选择复制原理" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/11/14/CJLabel第三章——支持任意区域点击响应和可选择复制原理/" class="article-date">
@@ -96,7 +183,48 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/11/14/CJLabel第三章——支持任意区域点击响应和可选择复制原理/" data-id="cjgrd8hyb0001oov3h3g2pebd" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/11/14/CJLabel第三章——支持任意区域点击响应和可选择复制原理/" data-id="cjgrf81ht0002z1v33ys5d3vr" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-使用TouchID验证登录踩过的一些坑（同时更新FaceID使用方法）" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/08/03/使用TouchID验证登录踩过的一些坑（同时更新FaceID使用方法）/" class="article-date">
+  <time datetime="2017-08-02T16:00:00.000Z" itemprop="datePublished">2017-08-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/03/使用TouchID验证登录踩过的一些坑（同时更新FaceID使用方法）/">使用TouchID验证登录踩过的一些坑（同时更新FaceID使用方法）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="FaceID"><a href="#FaceID" class="headerlink" title="FaceID"></a>FaceID</h3><p>iPhoneX 提供的刷脸功能与之前的设备的TouchID类似，都是属于生物验证的范畴。苹果爸爸也是为了照顾开发者，这两个功能对应的API基本相同，对于之前支持TouchID的APP其实可以在不做任何修改的基础上兼容FaceID，只是在一些UI样式上需要修改。</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/08/03/使用TouchID验证登录踩过的一些坑（同时更新FaceID使用方法）/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/08/03/使用TouchID验证登录踩过的一些坑（同时更新FaceID使用方法）/" data-id="cjgrf81i80008z1v3rfdnb3dh" class="article-share-link">Share</a>
       
       
     </footer>
@@ -143,7 +271,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/05/03/CJLabel第二章——图文混排及精确点击区域/" data-id="cjgrd8hyg0002oov3fkgfic77" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/05/03/CJLabel第二章——图文混排及精确点击区域/" data-id="cjgrf81ik0009z1v3wn9qvxsk" class="article-share-link">Share</a>
       
       
     </footer>
@@ -155,8 +283,8 @@
   
     <article id="post-Node.js + apn 搭建APNS推送后台" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/05/03/Node.js + apn 搭建APNS推送后台/" class="article-date">
-  <time datetime="2017-05-02T16:00:00.000Z" itemprop="datePublished">2017-05-03</time>
+    <a href="/2017/04/03/Node.js + apn 搭建APNS推送后台/" class="article-date">
+  <time datetime="2017-04-02T16:00:00.000Z" itemprop="datePublished">2017-04-03</time>
 </a>
     
   </div>
@@ -167,7 +295,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/05/03/Node.js + apn 搭建APNS推送后台/">Node.js + apn 搭建APNS推送后台</a>
+      <a class="article-title" href="/2017/04/03/Node.js + apn 搭建APNS推送后台/">Node.js + apn 搭建APNS推送后台</a>
     </h1>
   
 
@@ -179,13 +307,13 @@
 <h4 id="需求背景"><a href="#需求背景" class="headerlink" title="需求背景"></a>需求背景</h4><p>iOS开发，在接收到APNS推送消息后打开App，然后跳转到App内任意模块、或者打开webView页面、或者执行升级操作、或者跳转打开第三方应用；对于这样的需求，开发测试的时候需要频繁发送APNS推送，如果每次都让后台服务器的兄弟来配合测试，那肯定是心好累，最好的方案就是自己搭建服务，想怎么推就怎么推！！</p>
         
           <p class="article-more-link">
-            <a href="/2017/05/03/Node.js + apn 搭建APNS推送后台/#more">Read More</a>
+            <a href="/2017/04/03/Node.js + apn 搭建APNS推送后台/#more">Read More</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/05/03/Node.js + apn 搭建APNS推送后台/" data-id="cjgrd8hz40006oov3uwd6usbw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/04/03/Node.js + apn 搭建APNS推送后台/" data-id="cjgrf81hx0004z1v36e47s9b0" class="article-share-link">Share</a>
       
       
     </footer>
@@ -228,7 +356,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/06/25/Shell脚本查找iOS线上Crash/" data-id="cjgrd8hyk0004oov300r3607i" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/06/25/Shell脚本查找iOS线上Crash/" data-id="cjgrf81i60007z1v393g669vd" class="article-share-link">Share</a>
       
       
     </footer>
@@ -269,7 +397,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/06/20/Shell脚本——Xcode脚本打包/" data-id="cjgrd8hyi0003oov3p10qcagj" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/06/20/Shell脚本——Xcode脚本打包/" data-id="cjgrf81i20005z1v3wn971654" class="article-share-link">Share</a>
       
       
     </footer>
@@ -312,7 +440,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/04/20/CJLabel第一章——UILabel富文本显示以及任意字符的点击响应/" data-id="cjgrd8hy50000oov3hpqnv1gv" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/04/20/CJLabel第一章——UILabel富文本显示以及任意字符的点击响应/" data-id="cjgrf81hg0000z1v3grff7w28" class="article-share-link">Share</a>
       
       
     </footer>
@@ -353,54 +481,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/04/19/动态计算NSAttributedString的size大小/" data-id="cjgrd8hz70007oov33o2c0dyl" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-iOS如何部署企业包" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/03/18/iOS如何部署企业包/" class="article-date">
-  <time datetime="2016-03-17T16:00:00.000Z" itemprop="datePublished">2016-03-18</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/03/18/iOS如何部署企业包/">iOS如何部署企业包，以供他人下载</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>要安装一个App到非越狱的手机上，一般有以下几种方式：</p>
-<ol>
-<li>通过App Store下载安装；</li>
-<li>如果能获取用户设备，直接通过Xcode将包灌入设备；</li>
-<li>个人开发者账号，获取用户设备UDID，生成对应的Provisioning Profiles后打包供人安装；</li>
-<li>企业开发者账号，则可以将包部署到支持https下载的服务器上随意下载（如果被苹果监测到你通过企业账户来大规模散发，有可能被封号-_-#）</li>
-</ol>
-        
-          <p class="article-more-link">
-            <a href="/2016/03/18/iOS如何部署企业包/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/03/18/iOS如何部署企业包/" data-id="cjgrd8hz10005oov3vh9tl0cg" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/04/19/动态计算NSAttributedString的size大小/" data-id="cjgrf81im000az1v33rcb7gh8" class="article-share-link">Share</a>
       
       
     </footer>
@@ -411,6 +492,11 @@
 
   
 
+
+  <nav id="page-nav">
+    
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">下一页 &raquo;</a>
+  </nav>
 
 </section>
         
@@ -428,7 +514,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li></ul>
     </div>
   </div>
 
@@ -441,23 +527,23 @@
       <ul>
         
           <li>
+            <a href="/2018/03/22/CJMethodLog 二：从监控还原APP运行的每一行代码说起/">CJMethodLog 二：从监控还原APP运行的每一行代码说起</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/02/CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起/">CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起</a>
+          </li>
+        
+          <li>
             <a href="/2017/11/14/CJLabel第三章——支持任意区域点击响应和可选择复制原理/">CJLabel第三章——支持任意区域点击响应和可选择复制原理</a>
           </li>
         
           <li>
+            <a href="/2017/08/03/使用TouchID验证登录踩过的一些坑（同时更新FaceID使用方法）/">使用TouchID验证登录踩过的一些坑（同时更新FaceID使用方法）</a>
+          </li>
+        
+          <li>
             <a href="/2017/05/03/CJLabel第二章——图文混排及精确点击区域/">CJLabel第二章——图文混排及精确点击区域</a>
-          </li>
-        
-          <li>
-            <a href="/2017/05/03/Node.js + apn 搭建APNS推送后台/">Node.js + apn 搭建APNS推送后台</a>
-          </li>
-        
-          <li>
-            <a href="/2016/06/25/Shell脚本查找iOS线上Crash/">iOS crash 解析定位，shell脚本查找crash</a>
-          </li>
-        
-          <li>
-            <a href="/2016/06/20/Shell脚本——Xcode脚本打包/">Shell脚本——Xcode脚本打包</a>
           </li>
         
       </ul>

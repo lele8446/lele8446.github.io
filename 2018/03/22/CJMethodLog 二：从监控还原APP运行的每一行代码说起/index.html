@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>CJMethodLog 二：从监控还原APP运行的每一行代码说起 | C.J.Lian</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="导语：CJMethodLog 对于Objective-C中的任意类、任意方法，均可实时根据用户的操作行为，监控还原对应的函数调用日志，而且能够自定义记录当前函数的参数类型、返回类型、执行时间……  CJMethodLog上一篇介绍了 Runtime 原理 CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起这里就来讲讲 CJMethodLog 的具体实现。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CJMethodLog 二：从监控还原APP运行的每一行代码说起">
+<meta property="og:url" content="http://yoursite.com/2018/03/22/CJMethodLog 二：从监控还原APP运行的每一行代码说起/index.html">
+<meta property="og:site_name" content="C.J.Lian">
+<meta property="og:description" content="导语：CJMethodLog 对于Objective-C中的任意类、任意方法，均可实时根据用户的操作行为，监控还原对应的函数调用日志，而且能够自定义记录当前函数的参数类型、返回类型、执行时间……  CJMethodLog上一篇介绍了 Runtime 原理 CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起这里就来讲讲 CJMethodLog 的具体实现。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1429982-8814f2bf88617576.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/540">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1429982-7560f633f2727ec3.gif?imageMogr2/auto-orient/strip">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1429982-d5517191587c4242.png">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1429982-7c0e8d790cb65d90.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/500">
+<meta property="og:updated_time" content="2018-05-04T03:49:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CJMethodLog 二：从监控还原APP运行的每一行代码说起">
+<meta name="twitter:description" content="导语：CJMethodLog 对于Objective-C中的任意类、任意方法，均可实时根据用户的操作行为，监控还原对应的函数调用日志，而且能够自定义记录当前函数的参数类型、返回类型、执行时间……  CJMethodLog上一篇介绍了 Runtime 原理 CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起这里就来讲讲 CJMethodLog 的具体实现。">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1429982-8814f2bf88617576.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/540">
+  
+    <link rel="alternate" href="/atom.xml" title="C.J.Lian" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">C.J.Lian</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/ || 主页">Home</a>
+        
+          <a class="main-nav-link" href="/archives/ || 归档">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-CJMethodLog 二：从监控还原APP运行的每一行代码说起" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/22/CJMethodLog 二：从监控还原APP运行的每一行代码说起/" class="article-date">
+  <time datetime="2018-03-21T16:00:00.000Z" itemprop="datePublished">2018-03-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      CJMethodLog 二：从监控还原APP运行的每一行代码说起
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="导语："><a href="#导语：" class="headerlink" title="导语："></a>导语：</h3><p>CJMethodLog 对于Objective-C中的任意类、任意方法，均可实时根据用户的操作行为，监控还原对应的函数调用日志，而且能够自定义记录当前函数的参数类型、返回类型、执行时间……</p>
+<hr>
+<h3 id="CJMethodLog"><a href="#CJMethodLog" class="headerlink" title="CJMethodLog"></a>CJMethodLog</h3><p>上一篇介绍了 Runtime 原理<br> <a href="https://www.jianshu.com/p/9838c7d93087" target="_blank" rel="noopener">CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起</a><br><br>这里就来讲讲 <a href="https://github.com/lele8446/CJMethodLog" target="_blank" rel="noopener">CJMethodLog</a> 的具体实现。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1429982-8814f2bf88617576.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/540" alt="CJMethodLogSource.png"></p>
+<a id="more"></a>
+<p>上图展示了CJMethodLog的文件结构，其中<code>CJMethodLog.h CJMethodLog.m</code>是核心部分</p>
+<pre><code>/**
+ * 初始化类名监听配置
+ * 注意！！！所有设置的hook类不能存在继承关系
+ *
+ * @param classNameList 需要hook的类名
+ * @param options       日志选项
+ * @param value         是否打印监听日志，（设置为YES，会输出方法监听的log信息，该值只在 DEBUG 环境有效）
+ */
++ (void)forwardingClasses:(NSArray &lt;NSString *&gt;*)classNameList logOptions:(CJLogOptions)options logEnabled:(BOOL)value;
+
+
+/**
+ * 获取日志文件
+ *
+ * @param finishBlock 获取日志文件回调block
+ */
++ (void)syncLogData:(SyncDataBlock)finishBlock;
+
+/**
+ * 删除日志数据
+ */
++ (void)clearLogData;
+</code></pre><p><code>CJMethodLog.h</code> 暂时提供三个方法：初始化配置、获取日志文件、删除日志数据。</p>
+<h5 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h5><p>在 <code>main.m</code> 文件中设置需要监听的类名配置，理论上任意时刻都可以重设监听配置，但不建议这么做！！因为每次重设监听配置都会修改监听类的方法链表（methodLists）中方法的IMP实现，随意修改可能会出现替换指定IMP的同时刚好调用了该IMP的实现，造成不可预知错误。另外在 <code>main.m</code>中初始化配置可以确保所有的hook类都生效，比如如果你hook的是 <code>AppDelegate</code> 类。</p>
+<pre><code>#import &lt;UIKit/UIKit.h&gt;
+#import &quot;AppDelegate.h&quot;
+#import &quot;CJMethodLog.h&quot;
+
+int main(int argc, char * argv[]) {
+    @autoreleasepool {
+        /*
+         * 利用消息转发，hook指定类的调用方法
+         */
+        [CJMethodLog forwardingClasses:@[
+                                         @&quot;AppDelegate&quot;,
+                                         @&quot;TestViewController&quot;
+                                         ]
+                            logOptions:CJLogDefault
+                            logEnabled:NO];
+        return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
+    }
+}
+</code></pre><p>下图展示了hook <code>TestViewController</code>类之后的函数调用情况：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1429982-7560f633f2727ec3.gif?imageMogr2/auto-orient/strip" alt="CJMethodLog.gif"></p>
+<p>日志格式说明：</p>
+<pre><code>- &lt;TestViewController&gt;  begin:  -clickManagerTest:
+-- &lt;TestViewController&gt;  begin:  +managerTest
+-- &lt;TestViewController&gt;  finish: +managerTest ; time=0.000110
+- &lt;TestViewController&gt;  finish: -clickManagerTest: ; time=0.000416
+</code></pre><ul>
+<li>最开始的<code>-</code> 表示函数调用层级；</li>
+<li><code>&lt;TestViewController&gt;</code> 表示当前调用函数的类名；</li>
+<li><code>begin:</code> <code>finish:</code> 分别表示函数执行起始阶段（只会在设置了<strong>CJLogMethodTimer</strong>选项的时候出现）；</li>
+<li><code>-clickManagerTest:</code> 表示执行的是实例方法，<code>+managerTest</code> 表示执行的是类方法；</li>
+<li><code>time=0.000110</code> 表示函数耗时</li>
+<li>之后会补充函数参数以及返回结果说明</li>
+</ul>
+<h5 id="日志数据"><a href="#日志数据" class="headerlink" title="日志数据"></a>日志数据</h5><p>获取日志数据使用<code>+ (void)syncLogData:(SyncDataBlock)finishBlock</code> ，你可以根据需要获取。比如这里在app启动的时候获取，判断当数据量大于10*1024的时候上传服务器并删除客户端数据。</p>
+<pre><code>- (void)applicationDidBecomeActive:(UIApplication *)application {
+    [CJMethodLog syncLogData:^void(NSData *logData) {
+        NSLog(@&quot;CJMethodLog: logData = %@&quot;,@([logData length]));
+        if ([logData length] &gt; 10*1024) {
+            // TODO: 上传到服务器等自定义处理
+            // 删除日志数据
+            [CJMethodLog clearLogData];
+        }
+    }];
+}
+</code></pre><h5 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h5><p><code>CJLogger.h</code> <code>CJLogger.mm</code> 是日志数据存储与获取的实现类，这是一个由OC和C++混编实现的类。<br><code>CJMethodLog+CJMessage.h</code> 是处理一些通用设置的分类。</p>
+<hr>
+<h3 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h3><p>CJMethodLog 借助 Runtime 的消息转发机制，在调用方法的时候主动触发消息转发，然后在 <code>- (void)forwardInvocation:(NSInvocation *)anInvocation</code> 方法中还原当前selector的实现，同时记录监控日志信息。下面是具体的实现流程图：</p>
+<p><strong>初始设置阶段：</strong><br><img src="https://upload-images.jianshu.io/upload_images/1429982-d5517191587c4242.png" alt="CJMethodLog设置.png"></p>
+<p><strong>方法执行阶段：</strong><br><img src="https://upload-images.jianshu.io/upload_images/1429982-7c0e8d790cb65d90.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/500" alt="CJMethodLog执行.png"></p>
+<p><strong>一些关键点</strong></p>
+<ol>
+<li><p><strong><em>默认不 hook 系统类</em></strong>。<br><br> CJMethodLog 理论上可以 hook 记录任意类、任意类的任意方法的执行日志，但实际上很少会这样做；我们关注的应该是基于具体的业务需求对应到代码层面是怎样的函数执行逻辑，而且这里的函数执行逻辑信息一般只需要到达app层级的逻辑实现就可以了，没必要更进一步去关注系统层级的实现。当然我也不介意你在初始阶段设置指定系统类或三方类，分析其内部的逻辑实现，然后做些坏坏的事😀。</p>
+<p> 附：设置不 hook 系统类的另一个原因是，hook 某个类，准确的做法应该要将该类的方法、它的父类的方法、父类的父类的方法……全都 hook 上，这样才能完整的还原出它在整个生命周期内的函数调用日志。那如果将父类方法也 hook，这时就需要一个出口了，不然会导致继承链的判断过长。我的做法是判断当父类为系统类时则停止。<br><strong><em>其实 hook 父类方法部分还未实现，因为遇到了难题，具体后面会讲到</em></strong></p>
+<p> 判断是否为自定义类：</p>
+<pre><code>BOOL inMainBundle(Class hookClass) {
+    NSBundle *currentBundle = [NSBundle bundleForClass:hookClass];
+    return [currentBundle.bundlePath hasPrefix:[NSBundle mainBundle].bundlePath];
+}
+</code></pre></li>
+<li><p><strong><em>过滤属性的setter和getter方法</em></strong>。<br>属性的setter和getter方法不hook，不然每调用一次 <code>self.</code> 语法就产生一条监控日志，造成太多没必要的干扰信息。注意默认过滤规则：getter方法（属性名），setter方法（setXXX:），其他自定义的setter和getter方法无法过滤。</p>
+<pre><code>+ (void)enumerateClassMethods:(Class)hookClass forwardMsg:(BOOL)forwardMsg logOptions:(CJLogOptions)options {
+
+    NSString *hookClassName = NSStringFromClass(hookClass);
+    // hookClass中已经被hook过的方法
+    NSArray *hookClassMethodList = [_hookClassMethodDic objectForKey:hookClassName];
+    NSMutableArray *methodList = [NSMutableArray arrayWithArray:hookClassMethodList];
+
+    //属性的 setter 与 getter 方法不hook
+    NSMutableArray *propertyMethodList = [NSMutableArray array];
+    unsigned int propertyCount = 0;
+    objc_property_t *properties = class_copyPropertyList(hookClass, &amp;propertyCount);
+    for (int i = 0; i &lt; propertyCount; i++) {
+        objc_property_t property = properties[i];
+        // getter 方法
+        NSString *propertyName = [[NSString alloc]initWithCString:property_getName(property) encoding:NSUTF8StringEncoding];
+        [propertyMethodList addObject:propertyName];
+        // setter 方法
+        NSString *firstCharacter = [propertyName substringToIndex:1];
+        firstCharacter = [firstCharacter uppercaseString];
+        NSString *endCharacter = [propertyName substringFromIndex:1];
+        NSMutableString *propertySetName = [[NSMutableString alloc]initWithString:@&quot;set&quot;];
+        [propertySetName appendString:firstCharacter];
+        [propertySetName appendString:endCharacter];
+        [propertySetName appendString:@&quot;:&quot;];
+        [propertyMethodList addObject:propertySetName];
+    }
+
+    unsigned int outCount;
+    Method *methods = class_copyMethodList(hookClass,&amp;outCount);
+    for (int i = 0; i &lt; outCount; i ++) {
+        // Method tempMethod = *(methods + i);
+        Method tempMethod = methods[i];
+        SEL selector = method_getName(tempMethod);
+
+        BOOL needHook = YES;
+        for (NSString *selStr in propertyMethodList) {
+            SEL propertySel = NSSelectorFromString(selStr);
+            if (sel_isEqual(selector, propertySel)) {
+                needHook = NO;
+                break;
+            }
+        }
+
+        if (needHook) {
+            if (forwardMsg) {
+                /*
+                 * 方案一：利用消息转发，hook forwardInvocation: 方法
+                 */
+                BOOL canHook = enableHook(tempMethod);
+                if (canHook) {
+                    forwardInvocationReplaceMethod(hookClass, selector, options);
+                }
+            }else{
+//                char *returnType = method_copyReturnType(tempMethod);
+//                /*
+//                 * 方案二：hook每一个方法（未实现）
+//                 */
+//                cjlHookMethod(hookClass, selector, returnType);
+//                free(returnType);
+            }
+
+            [methodList addObject:NSStringFromSelector(selector)];
+        }
+
+    }
+    free(methods);
+
+    [_hookedClassList addObject:hookClassName];
+    [_hookClassMethodDic setObject:methodList forKey:hookClassName];
+}
+</code></pre></li>
+<li><p><strong><em>一些系统方法不应该 hook</em></strong>。<br>具体如下：</p>
+<pre><code>@[  /*UIViewController的:*/
+    @&quot;.cxx_destruct&quot;,
+    @&quot;dealloc&quot;,
+    @&quot;_isDeallocating&quot;,
+    @&quot;release&quot;,
+    @&quot;autorelease&quot;,
+    @&quot;retain&quot;,
+    @&quot;Retain&quot;,
+    @&quot;_tryRetain&quot;,
+    @&quot;copy&quot;,
+
+    /*UIView的:*/
+    @&quot;nsis_descriptionOfVariable:&quot;,
+
+    /*NSObject的:*/
+    @&quot;respondsToSelector:&quot;,
+    @&quot;class&quot;,
+    @&quot;allowsWeakReference&quot;,
+    @&quot;retainWeakReference&quot;,
+    @&quot;init&quot;,
+    @&quot;resolveInstanceMethod:&quot;,
+    @&quot;resolveClassMethod:&quot;,
+    @&quot;forwardingTargetForSelector:&quot;,
+    @&quot;methodSignatureForSelector:&quot;,
+    @&quot;forwardInvocation:&quot;,
+    @&quot;doesNotRecognizeSelector:&quot;,
+    @&quot;description&quot;,
+    @&quot;debugDescription&quot;,
+    @&quot;self&quot;,
+    @&quot;lockFocus&quot;,
+    @&quot;lockFocusIfCanDraw&quot;,
+    @&quot;lockFocusIfCanDraw&quot;
+];    
+</code></pre></li>
+<li><strong><em>CACurrentMediaTime()</em></strong> 。<br>如果选择了日志选项<code>CJLogMethodTimer</code>，那么在计算函数执行时间时采用 <code>CACurrentMediaTime()</code> 计算，<code>CACurrentMediaTime()</code>是基于内建时钟的，能够更精确更原子化地测量，并且不会因为外部时间变化而变化（例如时区变化、夏时制、秒突变等），可以最小化的减少性能损耗。</li>
+<li><p><strong><em>mmap</em></strong>。<br>日志数据采用 <code>mmap</code> 内存映射的方式存储，具体请看 <code>CJLogger.mm</code> 中的相关实现。<br><br><br><br> 引用自—— <a href="http://www.cnblogs.com/huxiao-tee/p/4660352.html" target="_blank" rel="noopener">认真分析mmap：是什么 为什么 怎么用</a> <br><br> <code>mmap</code>是一种内存映射文件的方法，即将一个文件或者其它对象映射到进程的地址空间，实现文件磁盘地址和进程虚拟地址空间中一段虚拟地址的一一对映关系。实现这样的映射关系后，进程就可以采用指针的方式读写操作这一段内存，而系统会自动回写脏页面到对应的文件磁盘上，即完成了对文件的操作而不必再调用read,write等系统调用函数。相反，内核空间对这段区域的修改也直接反映用户空间，从而可以实现不同进程间的文件共享。</p>
+</li>
+<li><p><strong><em>forwardInvocationReplaceMethod</em></strong> <br>这个方法是实现 CJMethodLog的核心部分：</p>
+<pre><code>BOOL forwardInvocationReplaceMethod(Class cls, SEL originSelector, CJLogOptions options) {
+    Method originMethod = class_getInstanceMethod(cls, originSelector);
+    if (originMethod == nil) {
+        return NO;
+    }
+    const char *originTypes = method_getTypeEncoding(originMethod);
+
+    IMP msgForwardIMP = _objc_msgForward;
+#if !defined(__arm64__)
+    if (isStructType(originTypes)) {
+        //Reference JSPatch:
+        //In some cases that returns struct, we should use the &apos;_stret&apos; API:
+        //http://sealiesoftware.com/blog/archive/2008/10/30/objc_explain_objc_msgSend_stret.html
+        //NSMethodSignature knows the detail but has no API to return, we can only get the info from debugDescription.
+        NSMethodSignature *methodSignature = [NSMethodSignature signatureWithObjCTypes:originTypes];
+        if ([methodSignature.debugDescription rangeOfString:@&quot;is special struct return? YES&quot;].location != NSNotFound) {
+            msgForwardIMP = (IMP)_objc_msgForward_stret;
+        }
+    }
+#endif
+
+    IMP originIMP = method_getImplementation(originMethod);
+    if (originIMP == nil || originIMP == msgForwardIMP) {
+        return NO;
+    }
+
+    //添加一个新方法，该方法的IMP是原方法的IMP，并且在hook到的forwardInvocation里调用新方法
+    SEL newSelecotr = createNewSelector(originSelector);
+    BOOL addSucess = class_addMethod(cls, newSelecotr, originIMP, originTypes);
+    if (!addSucess) {
+        NSString *str = NSStringFromSelector(newSelecotr);
+        CJLNSLog(@&quot;CJMethodLog: Class addMethod fail : %@，%@&quot;,cls,str);
+        return NO;
+    }
+
+    //替换当前方法的IMP为msgForwardIMP，从而在调用时候触发消息转发
+    class_replaceMethod(cls, originSelector, msgForwardIMP, originTypes);
+
+    Method forwardInvocationMethod = class_getInstanceMethod(cls, @selector(forwardInvocation:));
+    _VIMP originMethod_IMP = (_VIMP)method_getImplementation(forwardInvocationMethod);
+    method_setImplementation(forwardInvocationMethod, imp_implementationWithBlock(^(id target, NSInvocation *invocation){
+
+        SEL originSelector = invocation.selector;
+        BOOL isInstance = isInstanceType(target);
+        Class targetClass = isInstance?[target class]:object_getClass(target);
+        if (class_respondsToSelector(targetClass, originSelector)) {
+
+            _CJDeep ++;
+            NSString *originSelectorStr = NSStringFromSelector(originSelector);
+            NSMutableString *methodlog = [[NSMutableString alloc]initWithCapacity:3];
+            for (NSInteger deepLevel = 0; deepLevel &lt;= _CJDeep; deepLevel ++) {
+                [methodlog appendString:@&quot;-&quot;];
+            }
+
+            [methodlog appendFormat:@&quot; &lt;%@&gt; &quot;,targetClass];
+
+            CFTimeInterval startTimeInterval = 0;
+            BOOL beginAndEnd = NO;
+            if ((options &amp; CJLogMethodTimer) || (options &amp; CJLogMethodArgs)) {
+                [methodlog appendFormat:@&quot; begin: &quot;];
+                if (options &amp; CJLogMethodTimer) {
+                    startTimeInterval = CACurrentMediaTime();
+                }
+                beginAndEnd = YES;
+            }
+
+            if (isInstance) {
+                [methodlog appendFormat:@&quot; -%@&quot;,originSelectorStr];
+            }else{
+                [methodlog appendFormat:@&quot; +%@&quot;,originSelectorStr];
+            }
+
+            if (options &amp; CJLogMethodArgs) {
+                NSDictionary *methodArguments = CJMethodArguments(invocation);
+                NSArray *argumentArray = methodArguments[_CJMethodArgsListKey];
+                NSMutableString *argStr = [[NSMutableString alloc]initWithCapacity:3];
+
+                for (NSInteger i = 0; i &lt; argumentArray.count; i++) {
+                    id arg = argumentArray[i];
+                    if (i == 0) {
+                        [argStr appendFormat:@&quot; ; args=[ argIndex:%@ argValue:%@&quot;,@(i),[arg description]];
+                    }else{
+                        [argStr appendFormat:@&quot;, argIndex:%@ argValue:%@&quot;,@(i),[arg description]];
+                    }
+                }
+                if (argumentArray.count &gt; 0) {
+                    [argStr appendString:@&quot; ]&quot;];
+                }
+                [methodlog appendString:argStr];
+            }
+
+            if (_logEnable) {
+                CJLNSLog(@&quot;%@&quot;,methodlog);
+            }
+            [_logger flushAllocationStack:[NSString stringWithFormat:@&quot;%@\n&quot;,methodlog]];
+
+            [invocation setSelector:createNewSelector(originSelector)];
+            [invocation setTarget:target];            
+            [invocation invoke];
+
+            if (beginAndEnd) {
+                [methodlog setString:[methodlog stringByReplacingOccurrencesOfString:@&quot;begin: &quot; withString:@&quot;finish:&quot;]];
+
+                if (options &amp; CJLogMethodTimer) {
+                    CFTimeInterval endTimeInterval = CACurrentMediaTime();
+                    [methodlog appendFormat:@&quot; ; time=%f&quot;,(endTimeInterval-startTimeInterval)];
+                }
+
+                if (options &amp; CJLogMethodReturnValue) {
+                    id returnValue = getReturnValue(invocation);
+                    [methodlog appendFormat:@&quot; ; return= %@&quot;,[returnValue description]];
+                }
+
+                if (_logEnable) {
+                    CJLNSLog(@&quot;%@&quot;,methodlog);
+                }
+                [_logger flushAllocationStack:[NSString stringWithFormat:@&quot;%@\n&quot;,methodlog]];
+            }
+
+            _CJDeep --;
+
+        }
+        //如果target本身已经实现了对无法执行的方法的消息转发(forwardInvocation:)，则这里要还原其本来的实现
+        else {
+            originMethod_IMP(target,@selector(forwardInvocation:),invocation);
+        }
+        if (_CJDeep == -1) {
+            if (_logEnable) {
+                CJLNSLog(@&quot;\n&quot;);
+            }
+            [_logger flushAllocationStack:@&quot;\n&quot;];
+        }
+    }));
+    return YES;
+}
+</code></pre></li>
+</ol>
+<pre><code>* 首先判断SEL对应的Method是否存在
+* 然后获取消息转发IMP （`msgForwardIMP`），注意 `_objc_msgForward` 与 `_objc_msgForward_stret` 的判断
+* 判断当前方法的IMP（`originIMP`）不为nil，并且不等于`msgForwardIMP`
+* 添加一个指定前缀（`&quot;cjlMethod_&quot;`）开头的新方法，该方法的IMP是原方法的IMP
+* 替换当前方法的IMP为`msgForwardIMP`，从而在调用时候触发消息转发
+* 获取记录当前class的 `@selector(forwardInvocation:)` 对应的IMP，然后重写其IMP实现，这里直接使用了 `imp_implementationWithBlock(id _Nonnull block)` 生成IMP
+* 调用方法，触发消息转发，进入`@selector(forwardInvocation:)` 对应的IMP内。
+</code></pre><p>首先判断当前Class是否可执行原来方法，这里注意一下实例方法以及类方法的判断，如果是类方法，取的是<code>object_getClass()</code>：</p>
+<pre><code>SEL originSelector = invocation.selector;
+BOOL isInstance = isInstanceType(target);
+Class targetClass = isInstance?[target class]:object_getClass(target);
+if (class_respondsToSelector(targetClass, originSelector)) {
+    //TODO:写入日志以及还原原方法的执行
+}
+//如果target本身已经实现了对无法执行的方法的消息转发(forwardInvocation:)，则这里要还原其本来的实现
+else {
+    originMethod_IMP(target,@selector(forwardInvocation:),invocation);
+}
+</code></pre><p>  当判断到当前方法需要执行日志监听时，拼装日志信息（<code>_CJDeep</code> 记录了方法执行的层级关系），然后执行一次日志写入操作：</p>
+<pre><code>[_logger flushAllocationStack:[NSString stringWithFormat:@&quot;%@\n&quot;,methodlog]];
+</code></pre><p>  再接着还原实际调用方法的实现：</p>
+<pre><code>[invocation setSelector:createNewSelector(originSelector)];
+[invocation setTarget:target];            
+[invocation invoke];
+</code></pre><p>  紧接着如果存在 <code>CJLogMethodTimer</code> 选项，则计算当前函数执行时间，同时写入日志信息。<br>最后将 <code>_CJDeep</code>  - 1，从而完成本次hook方法的执行。</p>
+<ol start="7">
+<li><p><strong><em>CJMethodLog 无法同时 hook super方法</em></strong><br><br>是否还记得上篇文章讲到，Objective-C中执行方法，其实底层调用的是<code>objc_msgSend(receiver,SEL)</code>；如果是super方法，会调用<code>objc_msgSendSuper(objc_super,SEL)</code>，再往下会转换成<code>objc_msgSend(objc_super-&gt;receiver, SEL)</code>，此时的receiver和 objc_super-&gt;receiver 表示的是同一个接收者。<br>比如下面例子：</p>
+<pre><code>- (void)viewDidLoad {
+    [super viewDidLoad];
+}
+
+底层对应的是
+objc_msgSend(self,@selector(viewDidLoad))
+objc_msgSend(objc_super-&gt;receiver, @selector(viewDidLoad))
+</code></pre><p>   当CJMethodLog都hook了父子类的 viewDidLoad 方法后，调用会触发消息转发，最终由以下代码还原其实现</p>
+<pre><code>[invocation setSelector:createNewSelector(@selector(viewDidLoad))];
+[invocation setTarget:target];            
+[invocation invoke];
+</code></pre><p> 子类方法 target=self，父类方法 target=objc_super-&gt;receiver，其中<strong>self = objc_super-&gt;receiver</strong>，到此为止你是否发现了问题所在？问题就是这里的方法调用其实是一个死循环！！！伪代码如下：</p>
+<pre><code>objc_msgSend(receiver,@selector(viewDidLoad)) {
+    objc_msgSend(receiver, @selector(viewDidLoad));
+}
+</code></pre><p> 要破解这一难题只能想办法区分父子类调用方法时候的不同上下文，可惜这一块我还没找到好的解决方案。</p>
+</li>
+</ol>
+<hr>
+<h4 id="更多"><a href="#更多" class="headerlink" title="更多"></a>更多</h4><ul>
+<li>解决<code>self</code> <code>super</code> 上下文调用的问题</li>
+<li>欢迎各位大神<code>star</code> <code>issue</code>，帮忙解决难题<br>项目地址： <a href="https://github.com/lele8446/CJMethodLog" target="_blank" rel="noopener">CJMethodLog</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/03/22/CJMethodLog 二：从监控还原APP运行的每一行代码说起/" data-id="cjgrf81hn0001z1v3avjcw9yv" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/03/02/CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/03/22/CJMethodLog 二：从监控还原APP运行的每一行代码说起/">CJMethodLog 二：从监控还原APP运行的每一行代码说起</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/02/CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起/">CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/14/CJLabel第三章——支持任意区域点击响应和可选择复制原理/">CJLabel第三章——支持任意区域点击响应和可选择复制原理</a>
+          </li>
+        
+          <li>
+            <a href="/2017/08/03/使用TouchID验证登录踩过的一些坑（同时更新FaceID使用方法）/">使用TouchID验证登录踩过的一些坑（同时更新FaceID使用方法）</a>
+          </li>
+        
+          <li>
+            <a href="/2017/05/03/CJLabel第二章——图文混排及精确点击区域/">CJLabel第二章——图文混排及精确点击区域</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 lele8446<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/ || 主页" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives/ || 归档" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
