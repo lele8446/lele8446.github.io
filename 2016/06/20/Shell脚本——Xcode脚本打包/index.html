@@ -5,15 +5,23 @@
   
 
   
-  <title>C.J.Lian</title>
+  <title>Shell脚本——Xcode脚本打包 | C.J.Lian</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="C.J.Lian">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="最近有好一段时间没有整理博客了，也不是因为忙，就是太懒。或者说程序员都自带懒属性😅，表现在对于一些机械性重复性的工作，宁愿一次性多花些精力去封装、去写出各种各样的工具来替自己干活，也不愿意多次重复劳动（就算那是很简单的工作）。这不，我结合最近的工作，研究着写了两份Shell脚本，一是关于Xcode脚本打包，还有一个是关于crash log解析（这个将在下一篇文章说明）。  Shell打包脚本实现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shell脚本——Xcode脚本打包">
+<meta property="og:url" content="http://yoursite.com/2016/06/20/Shell脚本——Xcode脚本打包/index.html">
 <meta property="og:site_name" content="C.J.Lian">
+<meta property="og:description" content="最近有好一段时间没有整理博客了，也不是因为忙，就是太懒。或者说程序员都自带懒属性😅，表现在对于一些机械性重复性的工作，宁愿一次性多花些精力去封装、去写出各种各样的工具来替自己干活，也不愿意多次重复劳动（就算那是很简单的工作）。这不，我结合最近的工作，研究着写了两份Shell脚本，一是关于Xcode脚本打包，还有一个是关于crash log解析（这个将在下一篇文章说明）。  Shell打包脚本实现">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429982-a749b05d47be9dd0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429982-731170b26679c196.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429982-98a992b7ffba67d7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-05-04T01:23:39.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="C.J.Lian">
+<meta name="twitter:title" content="Shell脚本——Xcode脚本打包">
+<meta name="twitter:description" content="最近有好一段时间没有整理博客了，也不是因为忙，就是太懒。或者说程序员都自带懒属性😅，表现在对于一些机械性重复性的工作，宁愿一次性多花些精力去封装、去写出各种各样的工具来替自己干活，也不愿意多次重复劳动（就算那是很简单的工作）。这不，我结合最近的工作，研究着写了两份Shell脚本，一是关于Xcode脚本打包，还有一个是关于crash log解析（这个将在下一篇文章说明）。  Shell打包脚本实现">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1429982-a749b05d47be9dd0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
   
     <link rel="alternate" href="/atom.xml" title="C.J.Lian" type="application/atom+xml">
   
@@ -60,284 +68,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-Shell脚本查找iOS线上Crash" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/06/25/Shell脚本查找iOS线上Crash/" class="article-date">
-  <time datetime="2016-06-24T16:00:00.000Z" itemprop="datePublished">2016-06-25</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/25/Shell脚本查找iOS线上Crash/">iOS crash 解析定位，shell脚本查找crash</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>iOS开发中，对于线上版本或公测版本产生的crash，我们可以通过结合.app ，.dSYM 及 crash log 三个文件来进行解析定位。</p>
-<p><strong><em>最新更新:</em></strong></p>
-<p><strong>最近对查找线上Crash做了整理，写成<a href="https://github.com/lele8446/CrashScript/tree/master" target="_blank" rel="noopener">CrashScript.sh</a>，详情见下面</strong><code>查找Crash脚本</code></p>
-<hr>
-<ul>
-<li><p>获取iOS设备上的 crash log</p>
-<ol>
-<li><p>将iOS设备连接到电脑上，打开 Xcode -&gt; Organizer -&gt; Devices,找到该台设备，在 Device logs 中找到 crash log（后缀为 .crash 的 log 文件），将其导出即可。</p>
-</li>
-<li><p>如果你的应用已经上架App Store，那么开发者可以通过iTunes Connect（Manage Your Applications - View Details - Crash Reports）获取用户的crash log。不过这并不是100%有效的，而且大多数开发者并不依赖于此，因为这需要用户设备同意上传相关信息，详情可参见iOS: Providing Apple with diagnostics and usage information摘要。</p>
-</li>
-<li><p>第三方crash收集系统，甚至还带了符号化crash日志的功能。比较常用的有<a href="http://www.cnblogs.com/www.crashlytics.com" target="_blank" rel="noopener">Crashlytics</a>，<a href="http://www.flurry.com/" target="_blank" rel="noopener">Flurry</a>等。</p>
-</li>
-</ol>
-</li>
-</ul>
-<ul>
-<li><p>确保.app  .dSYM和crash log的uuid相同</p>
-<p>  以上三者的uuid必须都一样才能进行解析，查看三个文件的 uuid ：</p>
-<ol>
-<li><p>查看xx.app文件的uuid的方法,在终端输入：</p>
-<blockquote>
-<p>$ dwarfdump –uuid xxx.app/xxx (xxx工程名)</p>
-</blockquote>
-</li>
-<li><p>查看xx.app.dSYM文件的uuid的方法，在命令行输入：</p>
-<blockquote>
-<p>$ dwarfdump –uuid xxx.app.dSYM (xxx工程名)</p>
-</blockquote>
-</li>
-<li><p>查看 crash log 文件的 uuid的方法：<br><br>在 crash log 文件中，找到 Binary Images: 项目名后面第一个尖括号中的一串码就是改 crash log 文件的 uuid。<br>如下，70464c7fc4df37f38f81eeaf88a0713d就是uuid。</p>
-<blockquote>
-<p>Binary Images:<br>0x10000c000 - 0x100cf7fff xxx (xxx工程名) arm64  <70464c7fc4df37f38f81eeaf88a0713d></70464c7fc4df37f38f81eeaf88a0713d></p>
-</blockquote>
-</li>
-</ol>
-</li>
-<li><p>显示.dYSM包内容，进入/Contents/Resources/DWARF路径下，执行命令：</p>
-<blockquote>
-<p>atos -arch armv7 -o XXX(项目名称) 0x17D580(16进制crash奔溃地址)</p>
-</blockquote>
-<p>显示结果，可以看到是PCBabyMyGroupReplyTVCell类第66行出错。</p>
-<pre><code>-[PCBabyMyGroupReplyTVCell setCellInfo:] (in BabyBook2) (PCBabyMyGroupReplyTVCell.m:66)
-</code></pre><p>  如果定位不对，可能涉及到地址偏移的计算。首先查看起始地址，即使每次iOS app启动都会加载(main module)主模块在不同的内存地址，但是dSYM文件总是假设你的main module加载在地址0x100000000(64位)，或者0x4000(32位)。</p>
-<p>  查看偏移，显示.dYSM包内容，进入/Contents/Resources/DWARF路径下，执行命令：</p>
-<blockquote>
-<p>otool -arch arm64 -l XXX(XXX为项目名) | grep -B 1 -A 10 “LC_SEGM” | grep -B 3 -A 8 “__TEXT”</p>
-</blockquote>
-<p>显示结果：</p>
-<pre><code>Load command 1
-          cmd LC_SEGMENT_64
-      cmdsize 1032
-      segname __TEXT
-       vmaddr 0x0000000100000000
-       vmsize 0x0000000000620000
-      fileoff 0
-     filesize 6422528
-      maxprot 0x00000005
-     initprot 0x00000005
-       nsects 12
-        flags 0x0
-</code></pre><p>看到vmaddr显示为0x0000000100000000，所以偏移地址计算为：0x17D580＋0x0000000100000000＝0x10017D580。<br>再次执行终端命令：</p>
-<blockquote>
-<p>atos -arch armv7 -o XXX(项目名称) 0x10017D580</p>
-</blockquote>
-<p>  附：32位及64位设备的执行命令</p>
-<p>  32位： xcrun atos -arch armv7 -o xxx(应用名称)  xxx(偏移地址)<br><br>  64位： xcrun atos -arch arm64 -o xxx(应用名称)  xxx(偏移地址)</p>
-</li>
-</ul>
-<hr>
-<h3 id="查找Crash脚本"><a href="#查找Crash脚本" class="headerlink" title="查找Crash脚本"></a>查找Crash脚本</h3><p><strong><em>注意！！!Shell脚本默认无法处理带空格的文件路径，请确保<code>.xcarchive</code> 文件以及<code>CrashScript.sh</code>脚本所在路径名不存在空格。（Xcode Archive生成的<code>.xcarchive</code>文件名默认带空格，请去除）</em></strong></p>
-<p>获取打包生成的 <code>.xcarchive</code> 文件，将其和<code>CrashScript.sh</code>脚本放到同一级目录下，运行脚本:</p>
-<pre><code>./CrashScript.sh [-u] [-t &lt;Device type&gt;] -a &lt;Code address&gt; 
-</code></pre><p>参数说明：<code>[]表示可选参数，&lt;&gt;表示必填参数</code></p>
-<pre><code>-u                          是否查看UUID
--t &lt;Device type&gt;            发生crash的设备类型，有两种值：32和64，默认64
--a &lt;Code address&gt;           10进制的出错地址
-</code></pre><p>脚本完整<a href="https://github.com/lele8446/CrashScript/tree/master" target="_blank" rel="noopener">代码</a></p>
-<pre><code>#!/bin/bash
-
-#--------------------------------------------------------------------------------
-# 脚本说明：
-#
-# 1、实现功能：
-#     1）、查看 .xcarchive 文件的UUID
-#     2）、查看10进制的出错地址对应的代码
-#
-# 2、使用方式：
-#     1）、将CrashScript.sh脚本和 .xcarchive 文件放到同一级文件夹下
-#     2）、运行脚本：
-#            ./CrashScript.sh [-u] [-t &lt;Device type&gt;] -a &lt;Code address&gt; 
-#         参数说明：
-#                 -u                      是否查看UUID
-#                 -t &lt;Device type&gt;        发生crash的设备类型，有两种值：32和64，默认64
-#                 -a &lt;Code address&gt;       10进制的出错地址
-#--------------------------------------------------------------------------------
-
-# 脚本文件所在根目录
-Release_path=$(pwd)
-xcarchive_path=&quot;&quot;
-cd ${Release_path}
-Valid_dic=false
-for i in `ls`;
-do 
-    #获取文件后缀名
-    extension=${i##*.}
-    if [[ ${extension} == &quot;xcarchive&quot; ]]; then
-        Valid_dic=true
-        xcarchive_path=&quot;${Release_path}/${i}&quot;
-    fi
-done
-
-if [[ ${Valid_dic} == false ]]; then
-    echo -e &quot;\033[31mCrashScript.sh脚本所在路径不存在.xcarchive文件，请检查！！\033[0m&quot;
-    exit 2
-fi
-
-Check_UUID=&quot;NO&quot;
-Device_type=&quot;64&quot;
-Have_code_address=&quot;NO&quot;
-Code_address=&quot;&quot;
-
-# 参数处理
-param_pattern=&quot;:ut:a:&quot;
-OPTIND=1
-while getopts $param_pattern optname
-  do
-    case &quot;$optname&quot; in
-      &quot;u&quot;)        
-        Check_UUID=&quot;YES&quot;    
-        ;;
-      &quot;t&quot;)
-        tmp_optind=$OPTIND
-        tmp_optname=$optname
-        tmp_optarg=$OPTARG
-
-        OPTIND=$OPTIND-1
-        if getopts $param_pattern optname ;then
-            echo  -e &quot;\033[31m选项参数错误 $tmp_optname\033[0m&quot;
-            exit 2
-        fi
-        OPTIND=$tmp_optind
-        Device_type=$tmp_optarg
-        if [[ ${Device_type} != &quot;32&quot; &amp;&amp; ${Device_type} != &quot;64&quot; ]]; then
-            echo  -e &quot;\033[31m选项$tmp_optname 参数错误 $Device_type\033[0m&quot;
-            exit 2
-        fi
-        ;;
-      &quot;a&quot;)        
-        tmp_optind=$OPTIND
-        tmp_optname=$optname
-        tmp_optarg=$OPTARG
-        Have_code_address=&quot;YES&quot;
-
-        OPTIND=$OPTIND-1
-        if getopts $param_pattern optname ;then
-            echo  -e &quot;\033[31m选项参数错误 $tmp_optname\033[0m&quot;
-            exit 2
-        fi
-        OPTIND=$tmp_optind
-        Code_address=$tmp_optarg
-        ;;
-      &quot;?&quot;)
-        echo -e &quot;\033[31m选项错误: $OPTARG\033[0m&quot;
-        exit 2
-        ;;
-      &quot;:&quot;)
-        echo -e &quot;\033[31m选项 $OPTARG 必须带参数\033[0m&quot;
-        exit 2
-        ;;
-      *)
-        echo -e &quot;\033[31m参数错误\033[0m&quot;
-        exit 2
-        ;;
-    esac
-  done
-
-dSYMs_path=&quot;${xcarchive_path}/dSYMs&quot;
-dSYM_file=&quot;&quot;
-cd ${dSYMs_path}
-
-# if [ ! -d &quot;${dSYMs_path}&quot; ];then
-if [ $? != 0 ]; then
-    echo -e &quot;\033[31m*************  dSYMs路径不存在  **************\033[0m&quot;
-    echo -e &quot;\033[31mdSYMs_path = ${dSYMs_path}\033[0m&quot;
-    exit 2
-fi
-
-for file in `ls`;
-do 
-    #获取文件后缀名
-    extension=${file##*.}
-    if [[ ${extension} == &quot;dSYM&quot; ]]; then
-        dSYM_file=${file}
-    fi
-done
-
-if [[ ${Check_UUID} == &quot;YES&quot; ]]; then
-    echo -e &quot;\033[32m*************** 获取  UUID ***************\033[0m&quot;
-    echo -e &quot;\033[36mdSYM文件 : ${dSYM_file}\033[0m&quot;;
-    echo &apos;&apos;
-    # 获取UUID
-    dwarfdump --uuid ${dSYM_file}
-    echo &apos;&apos;
-
-    if [ $? != 0 ]; then
-    echo -e &quot;\033[31m*************  获取UUID出错  **************\033[0m&quot;
-    exit 2
-fi
-fi
-
-if [[ ${Have_code_address} == &quot;NO&quot; ]]; then
-    echo -e &quot;\033[31m请输入出错的10进制代码地址！！\033[0m&quot;
-    exit 2
-fi
-
-DWARF_path=&quot;${dSYMs_path}/${dSYM_file}/Contents/Resources/DWARF&quot;
-echo -e &quot;\033[32m*************** 获取  DWARF ***************\033[0m&quot;
-# echo -e &quot;\033[36mDWARF_path : ${DWARF_path}\033[0m&quot;;
-
-cd ${DWARF_path}
-for file in `ls`;
-do
-    echo -e &quot;\033[36mDWARF文件 : ${file}\033[0m&quot;
-
-    echo &apos;&apos;
-    echo -e &quot;\033[32m*************** 获取出错代码 ***************\033[0m&quot;
-
-    if [[ ${Device_type} == &quot;32&quot; ]]; then
-        # 搜索地址＝偏移地址转换为16进制后加0x4000;
-        searchAddress=&quot;0x&quot;$(echo &quot;ibase=10;obase=16;${Code_address}+16384&quot;|bc);
-        xcrun atos -arch armv7 -o ${file} ${searchAddress}
-    elif [[ ${Device_type} == &quot;64&quot; ]]; then
-        #搜索地址＝偏移地址转换为16进制后，64位系统加100000000
-        searchAddress=&quot;0x&quot;$(echo &quot;ibase=10;obase=16;${Code_address}+4294967296&quot;|bc);
-        xcrun atos -arch arm64 -o ${file} ${searchAddress}
-    fi
-
-done
-</code></pre>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/06/25/Shell脚本查找iOS线上Crash/" data-id="cjgraf0y70002swv3ohscevya" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Shell脚本——Xcode脚本打包" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-Shell脚本——Xcode脚本打包" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/06/20/Shell脚本——Xcode脚本打包/" class="article-date">
   <time datetime="2016-06-19T16:00:00.000Z" itemprop="datePublished">2016-06-20</time>
@@ -350,8 +81,8 @@ done
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/20/Shell脚本——Xcode脚本打包/">Shell脚本——Xcode脚本打包</a>
+    <h1 class="article-title" itemprop="name">
+      Shell脚本——Xcode脚本打包
     </h1>
   
 
@@ -809,101 +540,28 @@ fi
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-CJLabel响应点击且支持选择复制原理" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/04/20/CJLabel响应点击且支持选择复制原理/" class="article-date">
-  <time datetime="2016-04-19T16:00:00.000Z" itemprop="datePublished">2016-04-20</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
+    <a href="/2016/06/25/Shell脚本查找iOS线上Crash/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
         
+          iOS crash 解析定位，shell脚本查找crash
+        
+      </div>
+    </a>
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/20/CJLabel响应点击且支持选择复制原理/">CJLabel之 —— UILabel响应点击且支持选择复制原理</a>
-    </h1>
   
+    <a href="/2016/04/20/CJLabel响应点击且支持选择复制原理/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">CJLabel之 —— UILabel响应点击且支持选择复制原理</div>
+    </a>
+  
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h3><blockquote>
-<p><strong><a href="https://github.com/lele8446/CJLabel" target="_blank" rel="noopener">CJLabel</a></strong> 是一个继承自UILabel的自定义控件，它在支持UILabel所有属性的基础上，还提供富文本展示、图文混排、自定义点击链点设置、长按（双击）唤起UIMenuController选择复制文本等功能。</p>
-</blockquote>
-        
-          <p class="article-more-link">
-            <a href="/2016/04/20/CJLabel响应点击且支持选择复制原理/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/04/20/CJLabel响应点击且支持选择复制原理/" data-id="cjgraf0xv0000swv3dcsc5y89" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
   
 </article>
-
-
-  
-    <article id="post-iOS如何部署企业包" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/03/18/iOS如何部署企业包/" class="article-date">
-  <time datetime="2016-03-17T16:00:00.000Z" itemprop="datePublished">2016-03-18</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/03/18/iOS如何部署企业包/">iOS如何部署企业包，以供他人下载</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>要安装一个App到非越狱的手机上，一般有以下几种方式：</p>
-<ol>
-<li>通过App Store下载安装；</li>
-<li>如果能获取用户设备，直接通过Xcode将包灌入设备；</li>
-<li>个人开发者账号，获取用户设备UDID，生成对应的Provisioning Profiles后打包供人安装；</li>
-<li>企业开发者账号，则可以将包部署到支持https下载的服务器上随意下载（如果被苹果监测到你通过企业账户来大规模散发，有可能被封号-_-#）</li>
-</ol>
-        
-          <p class="article-more-link">
-            <a href="/2016/03/18/iOS如何部署企业包/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/03/18/iOS如何部署企业包/" data-id="cjgraf0y90003swv3zbwc5ukw" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
 
 </section>
         
