@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>懒到极致之怒撸一键打包发布系统 | C.J.Lian</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一切得从上个版本的打包发布说起。 开发中本人负责了iOS包的版本发布工作。iOS打包：不就是选一下证书，再在Xcode上点几下按钮，IDE全都给你设置好流程了，有必要这么麻烦吗？ 诚然，如果只是打包，在不考虑团队协同合作、打包效率、重复工作量的前提下，使用Xcode自带的打包方式当然是没问题的。但实际开发中，每次打包大概包含以下流程：拉取最新代码（SVN或Git） → 编译通过 → 设置打包环境（">
+<meta property="og:type" content="article">
+<meta property="og:title" content="懒到极致之怒撸一键打包发布系统">
+<meta property="og:url" content="http://yoursite.com/2018/04/20/懒到极致之怒撸一键打包发布系统/index.html">
+<meta property="og:site_name" content="C.J.Lian">
+<meta property="og:description" content="一切得从上个版本的打包发布说起。 开发中本人负责了iOS包的版本发布工作。iOS打包：不就是选一下证书，再在Xcode上点几下按钮，IDE全都给你设置好流程了，有必要这么麻烦吗？ 诚然，如果只是打包，在不考虑团队协同合作、打包效率、重复工作量的前提下，使用Xcode自带的打包方式当然是没问题的。但实际开发中，每次打包大概包含以下流程：拉取最新代码（SVN或Git） → 编译通过 → 设置打包环境（">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1429982-c1cc63292476ca7a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000">
+<meta property="og:updated_time" content="2018-05-04T05:56:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="懒到极致之怒撸一键打包发布系统">
+<meta name="twitter:description" content="一切得从上个版本的打包发布说起。 开发中本人负责了iOS包的版本发布工作。iOS打包：不就是选一下证书，再在Xcode上点几下按钮，IDE全都给你设置好流程了，有必要这么麻烦吗？ 诚然，如果只是打包，在不考虑团队协同合作、打包效率、重复工作量的前提下，使用Xcode自带的打包方式当然是没问题的。但实际开发中，每次打包大概包含以下流程：拉取最新代码（SVN或Git） → 编译通过 → 设置打包环境（">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1429982-c1cc63292476ca7a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000">
+  
+    <link rel="alternate" href="/atom.xml" title="C.J.Lian" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">C.J.Lian</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/ || 主页">Home</a>
+        
+          <a class="main-nav-link" href="/archives/ || 归档">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-懒到极致之怒撸一键打包发布系统" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/20/懒到极致之怒撸一键打包发布系统/" class="article-date">
+  <time datetime="2018-04-19T16:00:00.000Z" itemprop="datePublished">2018-04-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      懒到极致之怒撸一键打包发布系统
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一切得从上个版本的打包发布说起。</p>
+<p>开发中本人负责了iOS包的版本发布工作。iOS打包：不就是选一下证书，再在Xcode上点几下按钮，IDE全都给你设置好流程了，有必要这么麻烦吗？</p>
+<p>诚然，如果只是打包，在不考虑团队协同合作、打包效率、重复工作量的前提下，使用Xcode自带的打包方式当然是没问题的。但实际开发中，每次打包大概包含以下流程：<br><code>拉取最新代码（SVN或Git）</code> → <code>编译通过</code> → <code>设置打包环境（开发、测试、生成等）</code> → <code>导出IPA包</code> → <code>上传IPA包（App Store或者企业包上传至指定服务器）</code></p>
+<a id="more"></a>
+<p>可以看出，其中的很多步骤都是机械重复的，特别当进入测试验收阶段，有时每修复几个bug就要重新打包发布测试，比如上个版本的时候新功能主要是队友在开发，测试到最后频繁地让我打包发布，不停地打断我的工作去重复机械的事情，这简直就是在浪费人生啊！！！😤😤😤</p>
+<p>虽然之前为了打包方便，我已经整理了一份脚本打包的流程（传送门：<a href="http://lele8446.top/2016/06/20/Shell脚本——Xcode脚本打包/" target="_blank" rel="noopener">Shell脚本——Xcode脚本打包</a>），但还是不够方便快捷，乘着新版发布后的空档期，撸出 <strong>一键打包发布系统</strong> ，功能包括：<br><code>自动拉取Git最新代码</code> → <code>自动选择签名证书并打包导出ipa文件</code> → <code>Git自动同步代码</code>→  <code>自动上传ipa包（我们是企业包，上传至自己的服务器，这一步是可选的）</code></p>
+<hr>
+<h3 id="一键打包"><a href="#一键打包" class="headerlink" title="一键打包"></a>一键打包</h3><p><a href="https://github.com/lele8446/CJShellDemo/tree/master/ArchiveSource" target="_blank" rel="noopener">项目链接地址</a></p>
+<h5 id="一键打包资源（ArchiveSource）简介："><a href="#一键打包资源（ArchiveSource）简介：" class="headerlink" title="一键打包资源（ArchiveSource）简介："></a>一键打包资源（ArchiveSource）简介：</h5><ul>
+<li>Code文件夹下是打包应用程序源代码</li>
+<li><p>Source文件夹下是打包资源</p>
+<p>Source文件夹：</p>
+<ol>
+<li>Archive.app（打包应用程序）</li>
+<li>ExportOptions.plist（导出ipa包配置文件）</li>
+</ol>
+</li>
+</ul>
+<h5 id="一键打包步骤："><a href="#一键打包步骤：" class="headerlink" title="一键打包步骤："></a>一键打包步骤：</h5><ol>
+<li>进入Source文件夹，启动 Archive 应用程序</li>
+<li>选择 .xcodeproj 或 .xcworkspace 文件</li>
+<li>修改打包版本号<blockquote>
+<p>启动Xcode，手动选择签名证书（如果默认签名失败的话）</p>
+</blockquote>
+</li>
+<li>点击打包</li>
+</ol>
+<h5 id="打包生成的IPA包路径说明："><a href="#打包生成的IPA包路径说明：" class="headerlink" title="打包生成的IPA包路径说明："></a>打包生成的IPA包路径说明：</h5><p><code>../项目所在路径/Archiving/（以AppId命名的文件夹）/（App名+版本号命名的文件夹）/（以打包时间命名的文件夹）</code></p>
+<p>示例：<br><code>../Archiving/(AppID)/(App名)_3_1_29/2018_04_10_11:18:51</code></p>
+<hr>
+<h3 id="一键打包原理"><a href="#一键打包原理" class="headerlink" title="一键打包原理"></a>一键打包原理</h3><p>一键打包发布系统其实很简单：开发一款Mac应用，应用启动时读取本机已有的Certificates和Provisioning Profiles信息，再在应用内调用Shell脚本，主要通过脚本来实现Git同步以及打包的相关操作。</p>
+<ul>
+<li><h5 id="Shell脚本调用"><a href="#Shell脚本调用" class="headerlink" title="Shell脚本调用"></a>Shell脚本调用</h5><p>Objective-C中调用Shell脚本可以使用 <strong>NSTask</strong> 。通过NSTask，我们可以在应用中调用另一个程序或运行一段脚本并获得其执行状态和最终结果，NSTask最为常用的一个场景是为命令行操作提供图形化的界面。</p>
+<pre><code>//创建一个新的Task
+NSTask *optTask = [[NSTask alloc] init];
+//设置调用路径
+optTask.launchPath = shellPath;
+//设置调用参数(被调用程序命令)
+optTask.arguments = @[@&quot;-ls&quot;];
+//创建输出Pipe
+NSPipe *outputPipe = [NSPipe pipe];
+[optTask setStandardOutput:outputPipe];
+//创建错误输出Pipe
+NSPipe *errorPipe = [NSPipe pipe];
+[optTask setStandardError:errorPipe];
+
+//执行完成Block 通知
+optTask.terminationHandler = ^(NSTask *theTask) {
+    [theTask.standardOutput fileHandleForReading].readabilityHandler = nil;
+    [theTask.standardError fileHandleForReading].readabilityHandler = nil;
+};
+
+//错误输出
+[[errorPipe fileHandleForReading] setReadabilityHandler:^(NSFileHandle *file) {
+    NSData *data = [file availableData];
+    NSString *errorMsg = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSLog(@&quot;errorMsg = %@&quot;,errorMsg);
+
+}];
+//执行结果输出
+[[outputPipe fileHandleForReading] setReadabilityHandler:^(NSFileHandle *file) {
+    NSData *data = [file availableData];
+    NSString *msg = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSLog(@&quot;msg = %@&quot;,msg);
+}];
+
+//开启执行
+[optTask launch];
+//阻塞直到执行完毕（NSTask默认是异步执行,如果有同步需求,可调用waitUntilExit()方法）
+[optTask waitUntilExit];
+
+[[outputPipe fileHandleForReading] closeFile];
+[[errorPipe fileHandleForReading] closeFile];
+</code></pre></li>
+<li><h5 id="自动选择签名证书"><a href="#自动选择签名证书" class="headerlink" title="自动选择签名证书"></a>自动选择签名证书</h5><p>获取电脑中以<code>iPhone Distribution</code>和<code>iPhone Developer</code>命名开头的Certificates：</p>
+<pre><code>+ (void)loadCerListBlock:(CerListBlock)listBlock {
+    NSDictionary *options = @{(__bridge id)kSecClass: (__bridge id)kSecClassCertificate,
+                              (__bridge id)kSecMatchLimit: (__bridge id)kSecMatchLimitAll};
+    CFArrayRef certs = NULL;
+    __unused OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)options, (CFTypeRef *)&amp;certs);
+    NSArray *certificates = CFBridgingRelease(certs);
+
+    NSMutableArray  *tempArray=[NSMutableArray array];
+    for (int i=0;i&lt;[certificates count];i++) {
+        SecCertificateRef  certificate = (__bridge SecCertificateRef)([certificates objectAtIndex:i]);
+        NSString *name =  CFBridgingRelease(SecCertificateCopySubjectSummary(certificate));
+
+        if ([name hasPrefix:@&quot;iPhone Distribution&quot;]||[name hasPrefix:@&quot;iPhone Developer&quot;]) {
+            [tempArray addObject:name];
+        }
+    }
+    listBlock(tempArray);
+}
+</code></pre><p>  获取电脑中Provisioning Profiles：</p>
+<pre><code>//获取电脑中满足条件的Provisioning Profiles的路径
++ (NSArray *)getAllProvisioningProfileList{
+    NSString  *path=[NSString stringWithFormat:@&quot;%@/%@&quot;, NSHomeDirectory(), kMobileprovisionDirName];
+
+    NSFileManager *fileManager=[NSFileManager defaultManager];
+
+    NSArray *provisioningProfiles =[fileManager contentsOfDirectoryAtPath:path error:nil];
+    provisioningProfiles = [provisioningProfiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@&quot;pathExtension IN %@&quot;,  @[@&quot;mobileprovision&quot;, @&quot;provisionprofile&quot;]]];
+
+    return provisioningProfiles;
+}
+
+//自定义 YAProvisioningProfile ，将profile转换为对应实体
+YAProvisioningProfile *profile = [[YAProvisioningProfile alloc] initWithPath:path];
+</code></pre><p>  根据App ID匹配 Profile 描述文件：</p>
+<pre><code>//根据appBundleIdentifier匹配 profile 描述文件
+YAProvisioningProfile *selectProfile = nil;
+for (YAProvisioningProfile *profile in profileArray) {
+    // 查找与bundleIdentifier相等，描述文件不以 XC: 命名开头，而且是最新的文件
+    if ([profile.bundleIdentifier isEqualToString:appBundleIdentifier] &amp;&amp; ![profile.name hasPrefix:@&quot;XC:&quot;] &amp;&amp; profile.newest) {
+        selectProfile = profile;
+        break;
+    }
+}
+</code></pre></li>
+<li><h5 id="读写Xcode工程配置"><a href="#读写Xcode工程配置" class="headerlink" title="读写Xcode工程配置"></a>读写Xcode工程配置</h5><p>右键 XXX.xcodeproj 文件，显示包内容，可以看到<code>project.pbxproj</code>。<code>project.pbxproj</code>存储着 Xcode 工程的各项配置参数，我们可以通过脚本来直接读取或修改其配置，执行效果等同于在Xcode的General、Build Settings中的修改。</p>
+<p>  读取App Bundler Identifier：</p>
+<pre><code># Pbxproj_Path指向 project.pbxproj 文件路径
+configuration=$(grep -i &quot;PRODUCT_BUNDLE_IDENTIFIER =&quot; ${Pbxproj_Path})
+Array=($(echo $configuration))
+# project.pbxproj 中存在多行PRODUCT_BUNDLE_IDENTIFIER信息，从后往前读取
+Bundle_Identifier=${Array[5]}
+if [ ! -n $Bundle_Identifier ]
+then
+    Bundle_Identifier=${Array[3]}
+fi
+echo &quot;Bundle_Identifier = ${Bundle_Identifier}&quot;
+</code></pre><p>  修改配置信息：<br>修改 project.pbxproj 配置可以通过 <code>sed</code> 命令实现，比如将签名类型指定为Manual</p>
+<pre><code>key=&quot;CODE_SIGN_STYLE&quot;
+value=&quot;Manual;&quot;
+# 修改 project.pbxproj 配置，指定签名类型为手动选择
+sed -i &quot;&quot; &quot;s/$key =.*$/$key = $value/g&quot; $Pbxproj_Path
+</code></pre><p>  如果程序成功读取到对应的证书签名，那么打包前需要修改的配置包括：</p>
+<pre><code>#修改 PRODUCT_BUNDLE_IDENTIFIER
+changeConfiguration &quot;PRODUCT_BUNDLE_IDENTIFIER&quot; &quot;${APP_ID};&quot;
+
+#修改 PROVISIONING_PROFILE
+changeConfiguration &quot;PROVISIONING_PROFILE&quot; &quot;\&quot;${Profile_Name}\&quot;;&quot;
+
+#修改 PROVISIONING_PROFILE_SPECIFIER
+changeConfiguration &quot;PROVISIONING_PROFILE_SPECIFIER&quot; &quot;${Profile_Specifier};&quot;
+
+#修改 PRODUCT_NAME
+changeConfiguration &quot;PRODUCT_NAME&quot; &quot;${Scheme_Name};&quot;
+
+#修改 &quot;CODE_SIGN_IDENTITY[sdk=iphoneos*]&quot;
+changeConfiguration &quot;\&quot;CODE_SIGN_IDENTITY\[sdk=iphoneos\*\]\&quot;&quot; &apos;&quot;iPhone Distribution&quot;;&apos;
+
+#修改 CODE_SIGN_STYLE
+changeConfiguration &quot;CODE_SIGN_STYLE&quot; &quot;Manual;&quot;
+
+#修改 ProvisioningStyle
+changeConfiguration &quot;ProvisioningStyle&quot; &quot;Manual;&quot;
+
+#修改 DEVELOPMENT_TEAM
+changeConfiguration &quot;DEVELOPMENT_TEAM&quot; &quot;${Development_Team};&quot;
+
+#修改 DevelopmentTeam
+changeConfiguration &quot;DevelopmentTeam&quot; &quot;${Development_Team};&quot;
+</code></pre><p>  修改项目版本号：<br>Info.plist文件中<code>CFBundleShortVersionString</code>对应Version号，<code>CFBundleVersion</code>对应Build号，使用脚本可以直接指定版本号</p>
+<pre><code># info.plist文件路径
+InfoPlist_Path=&quot;${Project_Path}/${App_Name}/Info.plist&quot;
+# 如果是旧的项目，info.plist文件对应的名字为 (App_Name)-Info.plist
+if [ ! -e &quot;${InfoPlist_Path}&quot; ];then
+    InfoPlist_Path=&quot;${Project_Path}/${App_Name}/${App_Name}-Info.plist&quot;
+fi
+
+/usr/libexec/PlistBuddy -c &quot;Set :CFBundleShortVersionString ${Version_String}&quot;  ${InfoPlist_Path}
+/usr/libexec/PlistBuddy -c &quot;Set :CFBundleVersion ${Version_String}&quot; ${InfoPlist_Path}
+</code></pre></li>
+<li><h5 id="打包项目"><a href="#打包项目" class="headerlink" title="打包项目"></a>打包项目</h5></li>
+</ul>
+<pre><code># 指定打包模式为Release
+Configuration=&quot;Release&quot;
+# 判断编译的项目类型是workspace还是project
+if [[ ${Is_Workspace} == &quot;YES&quot; ]]; then
+    # 编译前清理工程，&gt;&gt; ${Log_path} 表示将日志输出写入到Log_path文件
+    xcodebuild clean -configuration &quot;${Configuration}&quot; -alltargets &gt;&gt; ${Log_path}
+
+    # 自定义签名，指定签名证书
+    if [[ ${Custom_Sign} == &quot;YES&quot; ]]; then
+        xcodebuild archive -workspace &quot;${Workspace_Path}&quot; \
+                       -scheme &quot;${Scheme_Name}&quot; \
+                       -archivePath &quot;${Xcarchive_path}&quot; \
+                       -configuration &quot;${Configuration}&quot; \
+                       PROVISIONING_PROFILE=&quot;${Profile_Name}&quot; \
+                       CODE_SIGN_IDENTITY=&quot;${Sign_Identity}&quot; \
+                       &gt;&gt; ${Log_path}
+    else
+        xcodebuild archive -workspace &quot;${Workspace_Path}&quot; \
+                       -scheme &quot;${Scheme_Name}&quot; \
+                       -archivePath &quot;${Xcarchive_path}&quot; \
+                       -configuration &quot;${Configuration}&quot; \
+                       &gt;&gt; ${Log_path}
+    fi
+
+
+else
+    # 编译前清理工程
+    xcodebuild clean -configuration &quot;${Configuration}&quot; -alltargets &gt;&gt; ${Log_path}
+
+    if [[ ${Custom_Sign} == &quot;YES&quot; ]]; then
+        xcodebuild archive -project &quot;${Xcodeproj_Path}&quot; \
+                           -scheme &quot;${Scheme_Name}&quot; \
+                           -archivePath &quot;${Xcarchive_path}&quot; \
+                              -configuration &quot;${Configuration}&quot; \
+                           PROVISIONING_PROFILE=&quot;${Profile_Name}&quot; \
+                           CODE_SIGN_IDENTITY=&quot;${Sign_Identity}&quot;\
+                           &gt;&gt; ${Log_path}
+    else
+        xcodebuild archive -project &quot;${Xcodeproj_Path}&quot; \
+                       -scheme &quot;${Scheme_Name}&quot; \
+                       -archivePath &quot;${Xcarchive_path}&quot; \
+                           -configuration &quot;${Configuration}&quot; \
+                       &gt;&gt; ${Log_path}
+    fi
+
+fi
+</code></pre><ul>
+<li><h5 id="导出IPA包"><a href="#导出IPA包" class="headerlink" title="导出IPA包"></a>导出IPA包</h5></li>
+</ul>
+<pre><code>    xcodebuild -exportArchive -archivePath &quot;${Xcarchive_path}&quot; -exportPath &quot;${IPA_Archiving_Path}&quot; -exportOptionsPlist &quot;${ExportOptionsPlistPath}&quot; &gt;&gt; ${Log_path}
+
+Xcarchive_path指向上一步打包生成的`*.xcarchive`文件路径；IPA\_Archiving\_Path指向导出的`*.ipa`文件所在路径；ExportOptionsPlistPath对应`ExportOptions.plist`文件路径，ExportOptions.plist是使用xcodebuild -exportArchive指令导出ipa包时需要指定的配置文件
+
+![ExportOptions.png](https://upload-images.jianshu.io/upload_images/1429982-78f888751b7ab8a9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/440)
+</code></pre><ul>
+<li><strong>compileBitcode</strong>：不上架App Store，Xcode是否启用Bitcode重新编译，默认为YES。</li>
+<li><strong>method</strong>：归档类型，包括app-store、ad-hoc、<br>package、enterprise、development以及developer-id。</li>
+<li><strong>provisioningProfiles</strong>：打包证书信息，包含的字典信息格式：&lt;key为App ID&gt;:&lt;value为对应的profile文件名&gt;。</li>
+<li><strong>uploadBitcode</strong>：上线App Store是否开启Bitcode，默认为YES。</li>
+<li><p><strong>uploadSymbols</strong>：上线App Store，是否开启符号序列化，这是与查crash相关的，默认为YES。</p>
+<p> 关于更多的xcodebuild指令，可以通过<code>xcodebuild -help</code>查看。</p>
+</li>
+</ul>
+<ul>
+<li><h5 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h5><p>其他部分还包括Git代码管理、IPA包上传、无效资源删除等，都可以直接通过NSTask执行脚本命令实现，比如拉取Git代码：<code>git pull origin</code>，当然前提是你本地的Git已经配置为免密操作。<br>如果你是使用SourceTree进行Git管理，而且是http模式，那么可以这样设置免密操作，第3步将远程仓库路径编辑为 <code>http://用户名:密码@仓库地址</code> 这样的方式；当然如果你是SSH模式，那么本身就支持免密码操作了。<br><img src="https://upload-images.jianshu.io/upload_images/1429982-c1cc63292476ca7a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000" alt="SourceTree.png"></p>
+<p>  上传IPA包。<br><br>我这里打的是企业包，所以只要将ipa文件上传到指定服务器就能够下载了（想了解更多关于企业包的下载信息，可以参照我的另一篇文章<a href="http://lele8446.top/2016/03/18/iOS如何部署企业包/" target="_blank" rel="noopener">iOS如何部署企业包，以供他人下载</a>）。一开始想着将自动上传也集成到打包程序内，但最后发现这涉及到内网间不同服务器以及账号验证过程，太过复杂暂时将这一部分阉割了……</p>
+</li>
+</ul>
+<h3 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h3><p>以上便是一键打包系统的功能讲解，想了解更多可以查看<a href="https://github.com/lele8446/CJShellDemo" target="_blank" rel="noopener">源码</a><br><br><br>  <strong><a href="https://github.com/lele8446/CJShellDemo" target="_blank" rel="noopener">CJShellDemo</a></strong> 说明：<br><br> <a href="https://github.com/lele8446/CJShellDemo/tree/master/ArchiveSource" title="ArchiveSource" target="_blank" rel="noopener">ArchiveSource</a> 一键打包程序资源<br><br> <a href="https://github.com/lele8446/CJShellDemo/tree/master/CrashScript" title="CrashScript" target="_blank" rel="noopener">CrashScript</a> 线上crash查找脚本<br><br> <a href="https://github.com/lele8446/CJShellDemo/tree/master/ReleaseDir" title="ReleaseDir" target="_blank" rel="noopener">ReleaseDir</a> Xcode打包脚本</p>
+<p>欢迎点赞以及GitHub Star👍</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/20/懒到极致之怒撸一键打包发布系统/" data-id="cjgrjs1nw0007chv38vhhc6zz" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/03/22/CJMethodLog 二：从监控还原APP运行的每一行代码说起/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">CJMethodLog 二：从监控还原APP运行的每一行代码说起</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/04/20/懒到极致之怒撸一键打包发布系统/">懒到极致之怒撸一键打包发布系统</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/22/CJMethodLog 二：从监控还原APP运行的每一行代码说起/">CJMethodLog 二：从监控还原APP运行的每一行代码说起</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/02/CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起/">CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/14/CJLabel第三章——支持任意区域点击响应和可选择复制原理/">CJLabel第三章——支持任意区域点击响应和可选择复制原理</a>
+          </li>
+        
+          <li>
+            <a href="/2017/08/03/使用TouchID验证登录踩过的一些坑（同时更新FaceID使用方法）/">使用TouchID验证登录踩过的一些坑（同时更新FaceID使用方法）</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 lele8446<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/ || 主页" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives/ || 归档" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
