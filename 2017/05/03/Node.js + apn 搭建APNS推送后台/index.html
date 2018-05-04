@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Node.js + apn 搭建APNS推送后台 | C.J.Lian</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本文重点关注的是APNS推送后台的搭建，不涉及推送证书Certificate 、Profiles 文件，iOS客户端推送代码的介绍。 需求背景iOS开发，在接收到APNS推送消息后打开App，然后跳转到App内任意模块、或者打开webView页面、或者执行升级操作、或者跳转打开第三方应用；对于这样的需求，开发测试的时候需要频繁发送APNS推送，如果每次都让后台服务器的兄弟来配合测试，那肯定是心好累">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Node.js + apn 搭建APNS推送后台">
+<meta property="og:url" content="http://yoursite.com/2017/05/03/Node.js + apn 搭建APNS推送后台/index.html">
+<meta property="og:site_name" content="C.J.Lian">
+<meta property="og:description" content="本文重点关注的是APNS推送后台的搭建，不涉及推送证书Certificate 、Profiles 文件，iOS客户端推送代码的介绍。 需求背景iOS开发，在接收到APNS推送消息后打开App，然后跳转到App内任意模块、或者打开webView页面、或者执行升级操作、或者跳转打开第三方应用；对于这样的需求，开发测试的时候需要频繁发送APNS推送，如果每次都让后台服务器的兄弟来配合测试，那肯定是心好累">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429982-6a7d458bb426e048.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-05-04T01:46:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Node.js + apn 搭建APNS推送后台">
+<meta name="twitter:description" content="本文重点关注的是APNS推送后台的搭建，不涉及推送证书Certificate 、Profiles 文件，iOS客户端推送代码的介绍。 需求背景iOS开发，在接收到APNS推送消息后打开App，然后跳转到App内任意模块、或者打开webView页面、或者执行升级操作、或者跳转打开第三方应用；对于这样的需求，开发测试的时候需要频繁发送APNS推送，如果每次都让后台服务器的兄弟来配合测试，那肯定是心好累">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1429982-6a7d458bb426e048.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+  
+    <link rel="alternate" href="/atom.xml" title="C.J.Lian" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">C.J.Lian</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/ || 主页">Home</a>
+        
+          <a class="main-nav-link" href="/archives/ || 归档">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Node.js + apn 搭建APNS推送后台" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/03/Node.js + apn 搭建APNS推送后台/" class="article-date">
+  <time datetime="2017-05-02T16:00:00.000Z" itemprop="datePublished">2017-05-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Node.js + apn 搭建APNS推送后台
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文重点关注的是APNS推送后台的搭建，不涉及推送证书Certificate 、Profiles 文件，iOS客户端推送代码的介绍。</p>
+<h4 id="需求背景"><a href="#需求背景" class="headerlink" title="需求背景"></a>需求背景</h4><p>iOS开发，在接收到APNS推送消息后打开App，然后跳转到App内任意模块、或者打开webView页面、或者执行升级操作、或者跳转打开第三方应用；对于这样的需求，开发测试的时候需要频繁发送APNS推送，如果每次都让后台服务器的兄弟来配合测试，那肯定是心好累，最好的方案就是自己搭建服务，想怎么推就怎么推！！</p>
+<a id="more"></a>
+<h4 id="写在开头"><a href="#写在开头" class="headerlink" title="写在开头"></a>写在开头</h4><p> 网上关于APNS推送的文章有很多，但对于推送后台介绍的文章却不多（有很多都是介绍java后台的，本人曾经参照教程用java实现过，那是在Android Studio上运行的，为了推送消息这个小小的功能，却要安装Android Studio那么大一个IDE，同时还要新建工程来运行项目，想想都头大😓）</p>
+<p>在探寻的过程中发现了Node.js + apn是一个不错方案，只是网上关于这方面的介绍不多，有的也是<a href="http://blog.csdn.net/freedom2028/article/details/12243187" target="_blank" rel="noopener">同一篇文章</a>在相互转载。<br>文章最后对于后台的介绍只一句带过<code>最后，安装apn，把key.pem和cert.pem拷贝到项目目录。执行以下代码可以推送通知到指定设备</code>，这对于我这个js门外汉来说完全就是懵逼。。。</p>
+<p>无奈只能实践出真理，并将摸索过程中的一些经验做了总结。</p>
+<h4 id="干货"><a href="#干货" class="headerlink" title="干货"></a>干货</h4><h5 id="1-生成-pem文件"><a href="#1-生成-pem文件" class="headerlink" title="1. 生成 pem文件"></a>1. 生成 pem文件</h5><p><em>请先确保已安装对应的Apple Push Services证书，如果没有请网上搜索Apple Push Notification service SSL关键字</em></p>
+<p>打开<code>钥匙串访问</code>- 找到对应的推送证书，分别导出<code>apns-dev-cert.p12</code>以及<code>apns-dev-key.p12</code>文件，这里我导出的是development环境下的p12，这个可以在Xcode连真机build的时候收到推送。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1429982-6a7d458bb426e048.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="导出p12.png"></p>
+<p>导出的时候会提示设置密码，这里我设置的是：123456，后面生成pem和js文件中会用到。</p>
+<p>然后通过终端命令将两个文件转换为PEM格式：</p>
+<pre><code>openssl pkcs12 -clcerts -nokeys -out apns-dev-cert.pem -in apns-dev-cert.p12
+
+openssl pkcs12 -nocerts -out apns-dev-key.pem -in apns-dev-key.p12
+</code></pre><h5 id="2-编辑js文件（APNS-js）"><a href="#2-编辑js文件（APNS-js）" class="headerlink" title="2. 编辑js文件（APNS.js）"></a>2. 编辑js文件（APNS.js）</h5><pre><code>&quot;use strict&quot;;
+
+const apn = require(&quot;apn&quot;);
+
+// token 数组
+let tokens = [&quot;45c0bc9952a930e96cd50df871dfc0f6a8382bb0ded0821c1111495507f8f5c3&quot;, &quot;4a633149803b1721590802eac88003ed024be210a3053ad51fa7a657d3b2a531&quot;];
+
+let service = new apn.Provider({
+  cert: &quot;/你电脑上的绝对路径/apns-dev-cert.pem&quot;,
+  key: &quot;/你电脑上的绝对路径/apns-dev-key.pem&quot;,
+  gateway: &quot;gateway.sandbox.push.apple.com&quot;,
+  // gateway: &quot;gateway.push.apple.com&quot;; //线上地址
+  // port: 2195, //端口
+  passphrase: &quot;123456&quot; //pem证书密码
+});
+
+let note = new apn.Notification({
+    alert:  &quot;Breaking News: I just sent my first Push Notification&quot;,
+});
+
+// 主题 一般取应用标识符（bundle identifier）
+note.topic = &quot;com.xxx.xxx
+
+console.log(`Sending: ${note.compile()} to ${tokens}`);
+service.send(note, tokens).then( result =&gt; {
+    console.log(&quot;sent:&quot;, result.sent.length);
+    console.log(&quot;failed:&quot;, result.failed.length);
+    console.log(result.failed);
+});
+
+service.shutdown();
+</code></pre><h5 id="3-配置"><a href="#3-配置" class="headerlink" title="3. 配置"></a>3. 配置</h5><p>安装Node.js地址 <a href="https://nodejs.org" target="_blank" rel="noopener">https://nodejs.org</a></p>
+<p>安装apn，终端执行：</p>
+<blockquote>
+<p>$  sudo npm install apn</p>
+</blockquote>
+<p>配置node_modules环境变量 ，终端执行：</p>
+<blockquote>
+<p>// 进入当前用户目录，创建.bash_profile文件（如果没有会新建）<br><br>$  touch ~/.bash_profile</p>
+</blockquote>
+<p>打开.bash_profile文件，添加以下内容并保存</p>
+<blockquote>
+<p>export NODE_PATH=/usr/local/lib/node_modules/</p>
+</blockquote>
+<p>完成后在终端运行：</p>
+<blockquote>
+<p>$ node APNS.js</p>
+</blockquote>
+<p>不出意外，等待若干秒后可以收到推送消息，如果有问题可以根据终端提示修改。<br>更多关于apn的介绍看这里：<a href="https://github.com/node-apn/node-apn" target="_blank" rel="noopener">https://github.com/node-apn/node-apn</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/05/03/Node.js + apn 搭建APNS推送后台/" data-id="cjgrcvmqh0005kov33p1xvhw3" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/05/03/CJLabel第二章——图文混排及精确点击区域/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          CJLabel第二章——图文混排及精确点击区域
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/06/25/Shell脚本查找iOS线上Crash/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">iOS crash 解析定位，shell脚本查找crash</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/11/14/CJLabel第三章——支持任意区域点击响应和可选择复制原理/">CJLabel第三章——支持任意区域点击响应和可选择复制原理</a>
+          </li>
+        
+          <li>
+            <a href="/2017/05/03/CJLabel第二章——图文混排及精确点击区域/">CJLabel第二章——图文混排及精确点击区域</a>
+          </li>
+        
+          <li>
+            <a href="/2017/05/03/Node.js + apn 搭建APNS推送后台/">Node.js + apn 搭建APNS推送后台</a>
+          </li>
+        
+          <li>
+            <a href="/2016/06/25/Shell脚本查找iOS线上Crash/">iOS crash 解析定位，shell脚本查找crash</a>
+          </li>
+        
+          <li>
+            <a href="/2016/06/20/Shell脚本——Xcode脚本打包/">Shell脚本——Xcode脚本打包</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 lele8446<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/ || 主页" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives/ || 归档" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

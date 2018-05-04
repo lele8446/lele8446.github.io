@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>CJLabel第一章——富文本显示及任意链点点击 | C.J.Lian</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="CJLabel已更新相关文章介绍：CJLabel第二章——图文混排及精确点击区域CJLabel第三章——支持任意区域点击响应和可选择复制原理  在NSAttributedString出现之前，UILabel只能做简单的文本显示，如果要显示富文本我们只能通过Core Text来实现，同时UILabel的userInteractionEnabled属性默认是NO的，即不能响应用户的交互操作。在本文我通">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CJLabel第一章——富文本显示及任意链点点击">
+<meta property="og:url" content="http://yoursite.com/2016/04/20/CJLabel第一章——UILabel富文本显示以及任意字符的点击响应/index.html">
+<meta property="og:site_name" content="C.J.Lian">
+<meta property="og:description" content="CJLabel已更新相关文章介绍：CJLabel第二章——图文混排及精确点击区域CJLabel第三章——支持任意区域点击响应和可选择复制原理  在NSAttributedString出现之前，UILabel只能做简单的文本显示，如果要显示富文本我们只能通过Core Text来实现，同时UILabel的userInteractionEnabled属性默认是NO的，即不能响应用户的交互操作。在本文我通">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429982-a44d3e804e769dc0.gif?imageMogr2/auto-orient/strip">
+<meta property="og:updated_time" content="2018-05-04T02:33:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CJLabel第一章——富文本显示及任意链点点击">
+<meta name="twitter:description" content="CJLabel已更新相关文章介绍：CJLabel第二章——图文混排及精确点击区域CJLabel第三章——支持任意区域点击响应和可选择复制原理  在NSAttributedString出现之前，UILabel只能做简单的文本显示，如果要显示富文本我们只能通过Core Text来实现，同时UILabel的userInteractionEnabled属性默认是NO的，即不能响应用户的交互操作。在本文我通">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1429982-a44d3e804e769dc0.gif?imageMogr2/auto-orient/strip">
+  
+    <link rel="alternate" href="/atom.xml" title="C.J.Lian" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">C.J.Lian</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/ || 主页">Home</a>
+        
+          <a class="main-nav-link" href="/archives/ || 归档">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-CJLabel第一章——UILabel富文本显示以及任意字符的点击响应" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/20/CJLabel第一章——UILabel富文本显示以及任意字符的点击响应/" class="article-date">
+  <time datetime="2016-04-19T16:00:00.000Z" itemprop="datePublished">2016-04-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      CJLabel第一章——富文本显示及任意链点点击
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://github.com/lele8446/CJLabelTest" target="_blank" rel="noopener">CJLabel已更新</a><br>相关文章介绍：<br><br><a href="http://www.jianshu.com/p/9a70533d217e" target="_blank" rel="noopener">CJLabel第二章——图文混排及精确点击区域</a><br><br><a href="http://lele8446.top/2016/04/20/CJLabel响应点击且支持选择复制原理/" target="_blank" rel="noopener">CJLabel第三章——支持任意区域点击响应和可选择复制原理</a></p>
+<hr>
+<p>在NSAttributedString出现之前，UILabel只能做简单的文本显示，如果要显示富文本我们只能通过Core Text来实现，同时UILabel的userInteractionEnabled属性默认是NO的，即不能响应用户的交互操作。在本文我通过UILabel的attributedText来显示富文本（关于对NSAttributedString的封装以及size信息的计算，可参照上一篇文章<a href="http://www.jianshu.com/p/371019b757df" target="_blank" rel="noopener">动态计算NSAttributedString的size大小</a>），同时判断每次点击label时对应字符的NSRange位置信息，实现了任意字符的点击响应。</p>
+<a id="more"></a>
+<hr>
+<ul>
+<li><p>先上效果图</p>
+<p>  <img src="http://upload-images.jianshu.io/upload_images/1429982-a44d3e804e769dc0.gif?imageMogr2/auto-orient/strip" alt="image"></p>
+</li>
+<li><p>创建UILabel的子类CJLabel</p>
+<pre><code>@interface CJLabel : UILabel
+/**
+  *  是否加大点击响应范围，类似于UIWebView的链点点击效果，默认NO
+  */
+@property (nonatomic, assign) BOOL extendsLinkTouchArea;
+
+/**
+ *  文本中内容相同的链点是否都能够响应点击，
+ *  必须在设置self.attributedText前赋值，
+ *  如果值为NO，则取文本中首次出现的链点，
+ *  默认YES
+ */
+@property (nonatomic, assign) IBInspectable BOOL sameLinkEnable;
+
+/**
+  *  增加点击链点
+  *
+  *  @param linkString 响应点击的字符串
+  *  @param linkDic    响应点击的字符串的Attribute值
+  *  @param parameter  响应点击的字符串的相关参数：id，色值，字体大小等
+  *  @param linkBlock  点击回调
+  */
+  - (void)addLinkString:(NSString *)linkString linkAddAttribute:(NSDictionary *)linkDic linkParameter:(id)parameter block:(CJLinkLabelModelBlock)linkBlock;
+
+/**
+  *  取消点击链点
+  *
+  *  @param linkString 取消点击的字符串
+  */
+- (void)removeLinkString:(NSAttributedString *)linkString;
+@end
+</code></pre></li>
+</ul>
+<p>方法 <code>- addLinkString: linkAddAttribute: linkParameter: block:</code>添加要响应点击事件的字符串，block为点击该字符串对应的回调事件；<code>- removeLinkString:</code>移除点击事件。</p>
+<pre><code>- (void)addLinkString:(NSAttributedString *)linkString block:(CJLinkLabelModelBlock)linkBlock {
+    CJLinkLabelModel *linkModel = [[CJLinkLabelModel alloc]initLinkLabelModelWithString:linkString range:[self getRangeWithLinkString:linkString] block:linkBlock];
+    if (nil != linkModel) {
+        [self.linkArray addObject:linkModel];
+    }
+}
+</code></pre><p><code>CJLinkLabelModel</code>是自定义的点击链点model类，包含三个属性linkBlock（该链点的点击回调事件）、linkString（链点对应的字符串）、range（链点对应的NSRange信息）、parameter（可传递点击链点的相关参数：id，色值，字体大小等）。每添加一段能够响应点击事件的字符串，都新创建一个<code>CJLinkLabelModel</code>，并add到<code>self.linkArray</code>中。</p>
+<p> 设置CJLabel的属性<code>self.userInteractionEnabled = YES</code>，同时重写<code>- touchesBegan: withEvent:</code>方法</p>
+<pre><code>- (void)touchesBegan:(NSSet&lt;UITouch *&gt; *)touches withEvent:(nullable UIEvent *)event {
+   UITouch * touch = touches.anyObject;
+   //获取触摸点击当前view的坐标位置
+   CGPoint location = [touch locationInView:self];
+   //判断是否响应了点击事件
+   if(![self needResponseTouchLabel:location]) {
+      [self.nextResponder touchesBegan:touches withEvent:event];
+   }
+}
+</code></pre><p><code>- needResponseTouchLabel</code>方法将点击坐标转化为对应的第index个字符，然后遍历<code>self.linkArray</code>数组，判断该字符是否在需响应点击事件的字符串数组内，是的话则响应点击回调，否则向<code>self.nextResponder</code>继续传递点击交互。</p>
+<p> 另外<code>self.extendsLinkTouchArea</code>可以设置是否加大点击响应范围，类似于UIWebView的链点点击效果，默认NO。</p>
+<p> <code>- removeLinkString:</code>方法</p>
+<pre><code>- (void)removeLinkString:(NSAttributedString *)linkString {
+    __block NSUInteger index = 0;
+    __block BOOL needRemove = NO;
+   [self.linkArray enumerateObjectsUsingBlock:^(id num, NSUInteger idx, BOOL *stop){
+        CJLinkLabelModel *linkModel = (CJLinkLabelModel *)num;
+        if ([linkModel.linkString isEqualToAttributedString:linkString]) {
+            index = idx;
+            needRemove = YES;
+            *stop = YES;
+         }
+    }];
+    [self.linkArray removeObjectAtIndex:index];
+}
+</code></pre><h5 id="CJLabel的使用"><a href="#CJLabel的使用" class="headerlink" title="CJLabel的使用"></a>CJLabel的使用</h5><ul>
+<li><p>使用cocoapods安装</p>
+<pre><code>platform :ios, &apos;7.0&apos;
+pod &apos;CJLabel&apos;, &apos;~&gt; 1.0.3&apos;
+</code></pre></li>
+<li>直接引用：<br>从GitHub下载<a href="https://github.com/lele8446/CJLabelTest" target="_blank" rel="noopener">CJLabel</a>文件夹，直接引用到工程中。</li>
+</ul>
+<hr>
+<p>最后附上<a href="https://codeload.github.com/lele8446/CJLabelTest/zip/1.0.3" target="_blank" rel="noopener">demo地址</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/04/20/CJLabel第一章——UILabel富文本显示以及任意字符的点击响应/" data-id="cjgrcvmpt0000kov3o3pjpg1b" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/06/20/Shell脚本——Xcode脚本打包/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Shell脚本——Xcode脚本打包
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/04/19/动态计算NSAttributedString的size大小/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">动态计算NSAttributedString的size大小</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/11/14/CJLabel第三章——支持任意区域点击响应和可选择复制原理/">CJLabel第三章——支持任意区域点击响应和可选择复制原理</a>
+          </li>
+        
+          <li>
+            <a href="/2017/05/03/CJLabel第二章——图文混排及精确点击区域/">CJLabel第二章——图文混排及精确点击区域</a>
+          </li>
+        
+          <li>
+            <a href="/2017/05/03/Node.js + apn 搭建APNS推送后台/">Node.js + apn 搭建APNS推送后台</a>
+          </li>
+        
+          <li>
+            <a href="/2016/06/25/Shell脚本查找iOS线上Crash/">iOS crash 解析定位，shell脚本查找crash</a>
+          </li>
+        
+          <li>
+            <a href="/2016/06/20/Shell脚本——Xcode脚本打包/">Shell脚本——Xcode脚本打包</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 lele8446<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/ || 主页" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives/ || 归档" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

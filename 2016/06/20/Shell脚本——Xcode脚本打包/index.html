@@ -7,20 +7,20 @@
   
   <title>Shell脚本——Xcode脚本打包 | C.J.Lian</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最近有好一段时间没有整理博客了，也不是因为忙，就是太懒。或者说程序员都自带懒属性😅，表现在对于一些机械性重复性的工作，宁愿一次性多花些精力去封装、去写出各种各样的工具来替自己干活，也不愿意多次重复劳动（就算那是很简单的工作）。这不，我结合最近的工作，研究着写了两份Shell脚本，一是关于Xcode脚本打包，还有一个是关于crash log解析（这个将在下一篇文章说明）。  Shell打包脚本实现">
+  <meta name="description" content="最近有好一段时间没有整理博客了，也不是因为忙，就是太懒。或者说程序员都自带懒属性😅，表现在对于一些机械性重复性的工作，宁愿一次性多花些精力去封装、去写出各种各样的工具来替自己干活，也不愿意多次重复劳动（就算那是很简单的工作）。这不，我结合最近的工作，研究着写了两份Shell脚本，一是关于Xcode脚本打包，还有一个是关于crash log解析（这个将在下一篇文章说明）。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Shell脚本——Xcode脚本打包">
 <meta property="og:url" content="http://yoursite.com/2016/06/20/Shell脚本——Xcode脚本打包/index.html">
 <meta property="og:site_name" content="C.J.Lian">
-<meta property="og:description" content="最近有好一段时间没有整理博客了，也不是因为忙，就是太懒。或者说程序员都自带懒属性😅，表现在对于一些机械性重复性的工作，宁愿一次性多花些精力去封装、去写出各种各样的工具来替自己干活，也不愿意多次重复劳动（就算那是很简单的工作）。这不，我结合最近的工作，研究着写了两份Shell脚本，一是关于Xcode脚本打包，还有一个是关于crash log解析（这个将在下一篇文章说明）。  Shell打包脚本实现">
+<meta property="og:description" content="最近有好一段时间没有整理博客了，也不是因为忙，就是太懒。或者说程序员都自带懒属性😅，表现在对于一些机械性重复性的工作，宁愿一次性多花些精力去封装、去写出各种各样的工具来替自己干活，也不愿意多次重复劳动（就算那是很简单的工作）。这不，我结合最近的工作，研究着写了两份Shell脚本，一是关于Xcode脚本打包，还有一个是关于crash log解析（这个将在下一篇文章说明）。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429982-a749b05d47be9dd0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429982-731170b26679c196.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429982-98a992b7ffba67d7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-05-04T01:23:39.000Z">
+<meta property="og:updated_time" content="2018-05-04T01:50:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Shell脚本——Xcode脚本打包">
-<meta name="twitter:description" content="最近有好一段时间没有整理博客了，也不是因为忙，就是太懒。或者说程序员都自带懒属性😅，表现在对于一些机械性重复性的工作，宁愿一次性多花些精力去封装、去写出各种各样的工具来替自己干活，也不愿意多次重复劳动（就算那是很简单的工作）。这不，我结合最近的工作，研究着写了两份Shell脚本，一是关于Xcode脚本打包，还有一个是关于crash log解析（这个将在下一篇文章说明）。  Shell打包脚本实现">
+<meta name="twitter:description" content="最近有好一段时间没有整理博客了，也不是因为忙，就是太懒。或者说程序员都自带懒属性😅，表现在对于一些机械性重复性的工作，宁愿一次性多花些精力去封装、去写出各种各样的工具来替自己干活，也不愿意多次重复劳动（就算那是很简单的工作）。这不，我结合最近的工作，研究着写了两份Shell脚本，一是关于Xcode脚本打包，还有一个是关于crash log解析（这个将在下一篇文章说明）。">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1429982-a749b05d47be9dd0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
   
     <link rel="alternate" href="/atom.xml" title="C.J.Lian" type="application/atom+xml">
@@ -90,7 +90,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近有好一段时间没有整理博客了，也不是因为忙，就是太懒。或者说程序员都自带懒属性😅，表现在对于一些机械性重复性的工作，宁愿一次性多花些精力去封装、去写出各种各样的工具来替自己干活，也不愿意多次重复劳动（就算那是很简单的工作）。这不，我结合最近的工作，研究着写了两份Shell脚本，一是关于<a href="https://github.com/lele8446/ReleaseDir" target="_blank" rel="noopener">Xcode脚本打包</a>，还有一个是关于<a href="http://www.jianshu.com/p/392d801062d1" target="_blank" rel="noopener">crash log解析</a>（这个将在下一篇文章说明）。</p>
+        <p>最近有好一段时间没有整理博客了，也不是因为忙，就是太懒。或者说程序员都自带懒属性😅，表现在对于一些机械性重复性的工作，宁愿一次性多花些精力去封装、去写出各种各样的工具来替自己干活，也不愿意多次重复劳动（就算那是很简单的工作）。这不，我结合最近的工作，研究着写了两份Shell脚本，一是关于<a href="https://github.com/lele8446/ReleaseDir" target="_blank" rel="noopener">Xcode脚本打包</a>，还有一个是关于<a href="http://lele8446.top/2016/06/25/Shell脚本查找iOS线上Crash/" target="_blank" rel="noopener">crash log解析</a>（这个将在下一篇文章说明）。</p>
+<a id="more"></a>
 <hr>
 <h3 id="Shell打包脚本实现了如下功能"><a href="#Shell打包脚本实现了如下功能" class="headerlink" title="Shell打包脚本实现了如下功能"></a>Shell打包脚本实现了如下功能</h3><ol>
 <li>指定打包项目的Build号，Version版本号——Version号可选择自增或自定义（在测试阶段打包时，每次手动改变Version号很是麻烦，而且不方便管理；而如果能打包时通过脚本参数控制，so easy～）</li>
@@ -534,7 +535,7 @@ fi
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/06/20/Shell脚本——Xcode脚本打包/" data-id="cjgraf0y10001swv3egw0qw7e" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/06/20/Shell脚本——Xcode脚本打包/" data-id="cjgrcvmq70002kov3peavuhcz" class="article-share-link">Share</a>
       
       
     </footer>
@@ -553,9 +554,9 @@ fi
     </a>
   
   
-    <a href="/2016/04/20/CJLabel响应点击且支持选择复制原理/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2016/04/20/CJLabel第一章——UILabel富文本显示以及任意字符的点击响应/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">CJLabel之 —— UILabel响应点击且支持选择复制原理</div>
+      <div class="article-nav-title">CJLabel第一章——富文本显示及任意链点点击</div>
     </a>
   
 </nav>
@@ -579,7 +580,7 @@ fi
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li></ul>
     </div>
   </div>
 
@@ -592,19 +593,23 @@ fi
       <ul>
         
           <li>
+            <a href="/2017/11/14/CJLabel第三章——支持任意区域点击响应和可选择复制原理/">CJLabel第三章——支持任意区域点击响应和可选择复制原理</a>
+          </li>
+        
+          <li>
+            <a href="/2017/05/03/CJLabel第二章——图文混排及精确点击区域/">CJLabel第二章——图文混排及精确点击区域</a>
+          </li>
+        
+          <li>
+            <a href="/2017/05/03/Node.js + apn 搭建APNS推送后台/">Node.js + apn 搭建APNS推送后台</a>
+          </li>
+        
+          <li>
             <a href="/2016/06/25/Shell脚本查找iOS线上Crash/">iOS crash 解析定位，shell脚本查找crash</a>
           </li>
         
           <li>
             <a href="/2016/06/20/Shell脚本——Xcode脚本打包/">Shell脚本——Xcode脚本打包</a>
-          </li>
-        
-          <li>
-            <a href="/2016/04/20/CJLabel响应点击且支持选择复制原理/">CJLabel之 —— UILabel响应点击且支持选择复制原理</a>
-          </li>
-        
-          <li>
-            <a href="/2016/03/18/iOS如何部署企业包/">iOS如何部署企业包，以供他人下载</a>
           </li>
         
       </ul>
