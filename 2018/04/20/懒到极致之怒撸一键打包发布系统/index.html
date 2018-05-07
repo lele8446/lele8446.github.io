@@ -90,7 +90,7 @@
       
         <p>一切得从上个版本的打包发布说起。</p>
 <p>开发中本人负责了iOS包的版本发布工作。iOS打包：不就是选一下证书，再在Xcode上点几下按钮，IDE全都给你设置好流程了，有必要这么麻烦吗？</p>
-<p>诚然，如果只是打包，在不考虑团队协同合作、打包效率、重复工作量的前提下，使用Xcode自带的打包方式当然是没问题的。但实际开发中，每次打包大概包含以下流程：<br><code>拉取最新代码（SVN或Git）</code> → <code>编译通过</code> → <code>设置打包环境（开发、测试、生成等）</code> → <code>导出IPA包</code> → <code>上传IPA包（App Store或者企业包上传至指定服务器）</code></p>
+<p>诚然，如果只是打包，在不考虑团队协同合作、打包效率、重复工作量的前提下，使用Xcode自带的打包方式当然是没问题的。但实际开发中，每次打包大概包含以下流程：<br><code>拉取最新代码（SVN或Git）</code> → <code>编译通过</code> → <code>设置打包环境（开发、测试、生产等）</code> → <code>导出IPA包</code> → <code>上传IPA包（App Store或者企业包上传至指定服务器）</code></p>
 <a id="more"></a>
 <p>可以看出，其中的很多步骤都是机械重复的，特别当进入测试验收阶段，有时每修复几个bug就要重新打包发布测试，比如上个版本的时候新功能主要是队友在开发，测试到最后频繁地让我打包发布，不停地打断我的工作去重复机械的事情，这简直就是在浪费人生啊！！！😤😤😤</p>
 <p>虽然之前为了打包方便，我已经整理了一份脚本打包的流程（传送门：<a href="http://lele8446.top/2016/06/20/Shell脚本——Xcode脚本打包/" target="_blank" rel="noopener">Shell脚本——Xcode脚本打包</a>），但还是不够方便快捷，乘着新版发布后的空档期，撸出 <strong>一键打包发布系统</strong> ，功能包括：<br><code>自动拉取Git最新代码</code> → <code>自动选择签名证书并打包导出ipa文件</code> → <code>Git自动同步代码</code>→  <code>自动上传ipa包（我们是企业包，上传至自己的服务器，这一步是可选的）</code></p>
@@ -335,7 +335,7 @@ Xcarchive_path指向上一步打包生成的`*.xcarchive`文件路径；IPA\_Arc
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/04/20/懒到极致之怒撸一键打包发布系统/" data-id="cjgrkwap0000bp5v37g2svy90" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/04/20/懒到极致之怒撸一键打包发布系统/" data-id="cjgvlerbo00071qv3gw7f3tl9" class="article-share-link">Share</a>
       
       
     </footer>
