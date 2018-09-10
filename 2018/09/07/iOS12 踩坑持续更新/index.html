@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>iOS12 踩坑持续更新 | C.J.Lian</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="iOS12很快就要发布，项目的坑都填好了吗？没有！那还不赶紧填…… info.plist文件重复Xcode10编译提示Multiple commands produce &amp;#39;xxx/Info.plist&amp;#39;，这是由于项目中存在重复命名的info.plist文件。 解决方式：  xcworkspace项目： Xcode–File–Workspace Settings–Build Syst">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS12 踩坑持续更新">
+<meta property="og:url" content="http://yoursite.com/2018/09/07/iOS12 踩坑持续更新/index.html">
+<meta property="og:site_name" content="C.J.Lian">
+<meta property="og:description" content="iOS12很快就要发布，项目的坑都填好了吗？没有！那还不赶紧填…… info.plist文件重复Xcode10编译提示Multiple commands produce &amp;#39;xxx/Info.plist&amp;#39;，这是由于项目中存在重复命名的info.plist文件。 解决方式：  xcworkspace项目： Xcode–File–Workspace Settings–Build Syst">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1429982-717b80da2d643b36.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/640">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1429982-27de22d2a427ff28.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/800">
+<meta property="og:updated_time" content="2018-09-06T16:00:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS12 踩坑持续更新">
+<meta name="twitter:description" content="iOS12很快就要发布，项目的坑都填好了吗？没有！那还不赶紧填…… info.plist文件重复Xcode10编译提示Multiple commands produce &amp;#39;xxx/Info.plist&amp;#39;，这是由于项目中存在重复命名的info.plist文件。 解决方式：  xcworkspace项目： Xcode–File–Workspace Settings–Build Syst">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1429982-717b80da2d643b36.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/640">
+  
+    <link rel="alternate" href="/atom.xml" title="C.J.Lian" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">C.J.Lian</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/ || 主页">Home</a>
+        
+          <a class="main-nav-link" href="/archives/ || 归档">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-iOS12 踩坑持续更新" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/07/iOS12 踩坑持续更新/" class="article-date">
+  <time datetime="2018-09-06T16:00:00.000Z" itemprop="datePublished">2018-09-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      iOS12 踩坑持续更新
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>iOS12很快就要发布，项目的坑都填好了吗？没有！那还不赶紧填……</p>
+<h4 id="info-plist文件重复"><a href="#info-plist文件重复" class="headerlink" title="info.plist文件重复"></a>info.plist文件重复</h4><p>Xcode10编译提示<code>Multiple commands produce &#39;xxx/Info.plist&#39;</code>，这是由于项目中存在重复命名的info.plist文件。</p>
+<p>解决方式：</p>
+<ol>
+<li>xcworkspace项目： Xcode–File–Workspace Settings–Build System–Legacy Build System</li>
+<li>xcodeproj项目：Xcode–File–Project Settings–Build System–Legacy Build System</li>
+</ol>
+<a id="more"></a>
+<p><img src="https://upload-images.jianshu.io/upload_images/1429982-717b80da2d643b36.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/640" alt="info文件重复.png"></p>
+<h4 id="library-not-found-for-l”stdc-6-0-9”"><a href="#library-not-found-for-l”stdc-6-0-9”" class="headerlink" title="library not found for -l”stdc++.6.0.9”"></a>library not found for -l”stdc++.6.0.9”</h4><p>提示library not found for -l”stdc++.6.0.9”，因为Xcode10去除了C++6.0.9的支持。</p>
+<p>解决方式：</p>
+<ol>
+<li>TARGETS–Build Phases–Link Binary With Libraries，删除6.0.9依赖，需要的话对应添加libc++.tdb、libstdc++.tdb</li>
+<li>TARGETS–Build Settings–Other Linker Flags，删除 -l”stdc++.6.0.9”</li>
+<li>如果是第三库引用了C++6.0.9库，那就只能联系服务方修改了</li>
+</ol>
+<h4 id="UIWebView、WKWebView播放视频"><a href="#UIWebView、WKWebView播放视频" class="headerlink" title="UIWebView、WKWebView播放视频"></a>UIWebView、WKWebView播放视频</h4><p>iOS12 上UIWebView、WKWebView含有视频，使用系统自带播放器全屏播放返回后，会存在 <strong>UIStatusBar</strong> 隐藏不见的问题。</p>
+<p>解决方式：</p>
+<p>注册<code>UIWindowDidBecomeKeyNotification</code>通知，视频播放完成主window成为KeyWindow的时候重新显示UIStatusBar。</p>
+<pre><code>//兼容iOS12 播放视频返回UIStatusBar的隐藏问题
+if (@available(iOS 12.0, *)) {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(videoFinished:)
+                                                 name:UIWindowDidBecomeKeyNotification
+                                               object:self.window];
+}
+
+//重新显示UIStatusBar
+- (void)videoFinished:(NSNotification *)notification {
+    [[UIApplication sharedApplication]setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
+}
+</code></pre><h4 id="CNCopyCurrentNetworkInfo"><a href="#CNCopyCurrentNetworkInfo" class="headerlink" title="CNCopyCurrentNetworkInfo"></a>CNCopyCurrentNetworkInfo</h4><p>使用CNCopyCurrentNetworkInfo获取Wi-Fi名称，iOS12下获取不到</p>
+<pre><code>+ (id)wifiSSID {
+    id value = @&quot;&quot;;
+    NSArray *ifs = (__bridge_transfer id)CNCopySupportedInterfaces();
+    for (NSString *ifnam in ifs) {
+        NSDictionary *info = (__bridge_transfer id)CNCopyCurrentNetworkInfo((__bridge CFStringRef)ifnam);
+        if (info[@&quot;SSID&quot;]) {
+            value = info[@&quot;SSID&quot;];
+        }
+    }
+    if (!value || [value length]==0) {
+        NSLog(@&quot;get WiFi SSID Error!!&quot;);
+    }
+    return value;
+}
+</code></pre><p>iOS12之后获取Wi-Fi信息，需要另外申请证书配置[说明]<br>(<a href="https://developer.apple.com/documentation/systemconfiguration/1614126-cncopycurrentnetworkinfo" target="_blank" rel="noopener">https://developer.apple.com/documentation/systemconfiguration/1614126-cncopycurrentnetworkinfo</a>)</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1429982-27de22d2a427ff28.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/800" alt="CNCopyCurrentNetworkInfo.png"></p>
+<p>申请步骤请看关键字 <a href="https://developer.apple.com/documentation/networkextension/nehotspothelper" target="_blank" rel="noopener">NEHotspotHelper</a>，或者自行搜索更多信息，这里提供一篇网文</p>
+<p><a href="https://juejin.im/post/5a3214cd51882506fd589047" target="_blank" rel="noopener">iOS 无法获取 WiFi 列表？一定是因为你不知道这个框架</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/09/07/iOS12 踩坑持续更新/" data-id="cjlvm1f9u0006pwfy6vhett9k" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/04/20/懒到极致之怒撸一键打包发布系统/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">懒到极致之怒撸一键打包发布系统</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/09/07/iOS12 踩坑持续更新/">iOS12 踩坑持续更新</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/20/懒到极致之怒撸一键打包发布系统/">懒到极致之怒撸一键打包发布系统</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/22/CJMethodLog 二：从监控还原APP运行的每一行代码说起/">CJMethodLog 二：从监控还原APP运行的每一行代码说起</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/02/CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起/">CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/14/CJLabel第三章——支持任意区域点击响应和可选择复制原理/">CJLabel第三章——支持任意区域点击响应和可选择复制原理</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 lele8446<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/ || 主页" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives/ || 归档" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
