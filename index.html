@@ -1,178 +1,95 @@
-
 <!DOCTYPE html>
-<html lang="zh-CN ">
-
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CJ.Lian || </title>
-    <meta name="author" content="lele8446">
-    <meta name="description" content=" ">
-    <meta name="keywords" content=" ">
-    <link rel="icon" href="/lele8446/avatar.png">
-    <link rel="stylesheet" href="/lele8446/css/antd.min.css">
+  <meta charset="utf-8">
+  
+  
+  <title>CJ.Lian</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="CJ.Lian">
+<meta property="og:url" content="https://github.com/lele8446/index.html">
+<meta property="og:site_name" content="CJ.Lian">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="lele8446">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/lele8446/atom.xml" title="CJ.Lian" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/lele8446/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/lele8446/css/style.css">
+
+  
     
-    <link rel="stylesheet" href="/lele8446/css/night-theme.css">
-    
-    <script src="/lele8446/js/vue.js"></script>
-    <script src="/lele8446/js/antd.min.js"></script>
+<link rel="stylesheet" href="/lele8446/fancybox/jquery.fancybox.min.css">
+
+  
 <meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
-
-    <div id="loading"
-        style="height: 100vh; width: 100%; position: fixed;display: flex;z-index: 200; justify-content: space-between;">
-        <div id="loadleft" style="width: 50%;background-color: #ffffff;transition: width 0.6s ease-out;"></div>
-        <div id="loadright" style="width: 50%;background-color: #ffffff;transition: width 0.6s ease-out;"></div>
-        <div
-            style="position: fixed; height: 100vh; width: 100%;display: flex;justify-content: center;align-items: center;">
-            <div id="loadcontent"
-                style="width:400px;height:400px;padding:50px;border-radius:50%;display:flex;justify-content:center;align-items:center;border:solid 10px#a3ddfb; text-align:center;opacity:1;transition:opacity 0.3s ease-out;">
-                <div>
-                    <h2>LOADING...</h2>
-                    <p>加载过慢请开启缓存(浏览器默认开启)</p>
-                    <div>
-                        <img src="/lele8446/dancingkitty.gif" alt="loading">
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/lele8446/" id="logo">CJ.Lian</a>
+      </h1>
+      
     </div>
-
-    <div id="layout">
-        <transition name="into">
-            <div v-show="show_page" style="display: none;">
-                <div id="menu_show">
-                     
-<nav id="menu">
-    <div class="desktop-menu">
-        <a href="/lele8446/">
-            <span class="title">CJ.Lian</span>
-        </a>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
         
-        <a href="/">
-            <span>
-                <a-icon type="home" theme="filled" />
-            </span>
-            <span>home</span>
-        </a>
+          <a class="main-nav-link" href="/lele8446/">Home</a>
         
-        <a href="/archives">
-            <span>
-                <a-icon type="folder" theme="filled" />
-            </span>
-            <span>archives</span>
-        </a>
+          <a class="main-nav-link" href="/lele8446/archives">Archives</a>
         
-        <a href="https://github.com/lele8446">
-            <span>
-                <a-icon type="github" theme="filled" />
-            </span>
-            <span>github</span>
-        </a>
+      </nav>
+      <nav id="sub-nav">
         
+          <a id="nav-rss-link" class="nav-icon" href="/lele8446/atom.xml" title="RSS 订阅"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://github.com/lele8446"></form>
+      </div>
     </div>
+  </div>
+</header>
 
-    <div :class="'phone-menu ' + menu_show" id="phone-menu">
-        <div :class="'title'" @click="menu_show=!menu_show">
-            <span style="margin-right: 10px;">
-                <a-icon type="appstore" theme="filled" />
-            </span>
-            <span>CJ.Lian</span>
-        </div>
-        <div class="items" v-show="menu_show">
-            
-            <a href="/">
-                <div class="item">
-                    <div style="min-width:20px; max-width:50px; width: 10%">
-                        <a-icon type="home" theme="filled" />
-                    </div>
-                    <div style="min-width:100px;max-width: 150%;width: 20%;">home</div>
-                </div>
-            </a>
-            
-            <a href="/archives">
-                <div class="item">
-                    <div style="min-width:20px; max-width:50px; width: 10%">
-                        <a-icon type="folder" theme="filled" />
-                    </div>
-                    <div style="min-width:100px;max-width: 150%;width: 20%;">archives</div>
-                </div>
-            </a>
-            
-            <a href="https://github.com/lele8446">
-                <div class="item">
-                    <div style="min-width:20px; max-width:50px; width: 10%">
-                        <a-icon type="github" theme="filled" />
-                    </div>
-                    <div style="min-width:100px;max-width: 150%;width: 20%;">github</div>
-                </div>
-            </a>
-            
-        </div>
-        <div class="curtain" v-show="menu_show"></div>
-    </div>
-
-</nav>
-                </div>
-
-                <div id="main">
-                    <div id="home-head" style=background-image:url('home.jpg')>
-    <script>
-        var menu = document.getElementById("menu")
-        menu.className += " menu-color"
-    </script>
-     
-    <div id="home-info" class="home-info" @click="home_click">
-        <span class="loop"></span>
-        <span class="loop"></span>
-        <span class="loop"></span>
-        <span class="loop"></span>
-        <span class="info">
-            <div class="wrap">
-                <h1>CJ.Lian</h1>
-                <h3></h3>
-                <h5></h5>
-            </div>
-        </span>
-    </div>
-     
-</div>
-
-
-
-<div id="home-posts-wrap" class=>
-    <div id="home-posts">
-
-        <div id="posts">
-            
-
-<div class="post">
-
-    <a href="/lele8446/2021/04/15/hello-world/">
-        <h2>
-            Hello World
-        </h2>
-    </a>
-
-    <div class="category-and-date">
-
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-hello-world" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/lele8446/2021/04/15/hello-world/" class="article-date">
+  <time class="dt-published" datetime="2021-04-15T10:27:22.974Z" itemprop="datePublished">2021-04-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
         
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/lele8446/2021/04/15/hello-world/">Hello World</a>
+    </h1>
+  
 
-        <span class="date">
-            <span class="icon">
-                <a-icon type="calendar" theme="filled" />
-            </span>
-            2021/4/15
-        </span>
-
-    </div>
-
-    <div class="excerpt">
-        <div class="content" v-pre>
-            
-            
-            <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre><code class="bash">$ hexo new &quot;My New Post&quot;
 </code></pre>
 <p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
@@ -186,176 +103,101 @@
 </code></pre>
 <p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 
-            
-        </div>
+      
     </div>
+    <footer class="article-footer">
+      <a data-url="https://github.com/lele8446/2021/04/15/hello-world/" data-id="ckniwbxdn0000eeu37huyh36g" data-title="Hello World" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
 
-    <div class="post-tags">
+
+
+  
+
+
+</section>
         
-        
-    </div>
-
-    <a href="/lele8446/2021/04/15/hello-world/ " class="go-post">
-        阅读全文
-    </a>
-</div>
-
-
-             
-<div class="page-current">
-
-    <div class="prev">
-        
-    </div>
-
-    <div class="page-index">
-
-        
-
-        <span class="current">
-            1
-        </span>
-
-        
-
-    </div>
-
-    <div class="next">
-        
-    </div>
-
-</div>
-
-        </div>
-    </div>
+          <aside id="sidebar">
+  
     
-    <div id="home-card">
-        <a-affix :offset-top="card_top">
-    <a-card class="card-style" style="width: 300px">
-        <div class="avatar">
-            <img src="avatar.png " alt="头像">
-        </div>
-        <div class="name">
-            lele8446
-        </div>
-        <div class="descriptions">
-            
-            <div class="description">
-                coding, learning...
-            </div>
-            
-        </div>
-        <div class="icon-links">
-            
-            <span class="icon-link">
-                <a href="https://github.com/lele8446">
 
-                    
-                    <a-icon type="github"
-                        theme="filled" />
-                    
-                </a>
-            </span>
-            
-            <span class="icon-link">
-                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/%E7%82%BD%E9%87%91-%E7%BB%83-966a4813b/">
-
-                    
-                    <a-icon type="linkedin"
-                        theme="" />
-                    
-                </a>
-            </span>
-            
-            <span class="icon-link">
-                <a href="mailto:lele8446@foxmail.com">
-
-                    
-                    <a-icon type="mail"
-                        theme="" />
-                    
-                </a>
-            </span>
-            
-        </div>
-        <div class="friend-links">
-            
-            <div class="friend-link">
-                <a href="">
-                     
-                </a>
-            </div>
-            
-        </div>
-    </a-card>
-</a-affix>
-    </div>
+  
     
-</div>
-                     
-<footer id="footer">
-    <div class="footer-wrap">
-        <div>
-            © 2016 - 2021 CJ.Lian
-            <span class="footer-icon">
-                <a-icon type="flag" theme="filled" /></span>
-            @lele8446
-        </div>
-        <div></div>
-        <div>Based on the <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo Engine</a> & <a
-                href="https://github.com/korilin/hexo-theme-particle">Particle Theme</a></div>
-        
-    </div>
 
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/lele8446/archives/2021/04/">四月 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/lele8446/2021/04/15/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 lele8446<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
 </footer>
 
-<script src="/lele8446/js/highlight.min.js"></script>
-<script src="/lele8446/js/particle.js"></script>
-                </div>
-            </div>
-        </transition>
     </div>
+    <nav id="mobile-nav">
+  
+    <a href="/lele8446/" class="mobile-nav-link">Home</a>
+  
+    <a href="/lele8446/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
 
-    <script>
-    new Vue({
-        el: "#layout",
-        data: {
-            show_page: false,
-            onload_menu: false,
-            menu_show: false,
-            card_top: 100
-        },
-        created: function () {
-            var that = this
-            window.onload = function () {
-                that.show_page = true
-                document.getElementById("loadcontent").style.opacity = 0
-                setTimeout(function () {
-                    document.getElementById("loadleft").style.width = 0
-                    document.getElementById("loadright").style.width = 0
-                }, 300)
-                setTimeout(function () {
-                    document.getElementById("loading").style = "display:none"
-                }, 600)
-            }
-        },
-        mounted: function () {
-            var that = this
-            window.addEventListener('scroll', function (e) {
-                that.menu_show = false
-            })
-        },
-        methods: {
-            home_click: function () {
-                window.scrollTo({
-                    top: window.innerHeight - 80,
-                    behavior: "smooth",
-                });
-            }
-        }
-    })
-</script>
 
+<script src="/lele8446/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/lele8446/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/lele8446/js/script.js"></script>
+
+
+
+
+
+  </div>
 </body>
-
 </html>
