@@ -1,0 +1,379 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN ">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C.J.Lian || </title>
+    <meta name="author" content="lele8446">
+    <meta name="description" content=" ">
+    <meta name="keywords" content=" ">
+    <link rel="icon" href="/avatar.png">
+    <link rel="stylesheet" href="/css/antd.min.css">
+    
+    <link rel="stylesheet" href="/css/night-theme.css">
+    
+    <script src="/js/vue.js"></script>
+    <script src="/js/antd.min.js"></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+
+    <div id="loading"
+        style="height: 100vh; width: 100%; position: fixed;display: flex;z-index: 200; justify-content: space-between;">
+        <div id="loadleft" style="width: 50%;background-color: #ffffff;transition: width 0.6s ease-out;"></div>
+        <div id="loadright" style="width: 50%;background-color: #ffffff;transition: width 0.6s ease-out;"></div>
+        <div
+            style="position: fixed; height: 100vh; width: 100%;display: flex;justify-content: center;align-items: center;">
+            <div id="loadcontent"
+                style="width:400px;height:400px;padding:50px;border-radius:50%;display:flex;justify-content:center;align-items:center;border:solid 10px#a3ddfb; text-align:center;opacity:1;transition:opacity 0.3s ease-out;">
+                <div>
+                    <h2>LOADING...</h2>
+                    <p>加载过慢请开启缓存(浏览器默认开启)</p>
+                    <div>
+                        <img src="/dancingkitty.gif" alt="loading">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="layout">
+        <transition name="into">
+            <div v-show="show_page" style="display: none;">
+                <div id="menu_show">
+                     
+<nav id="menu">
+    <div class="desktop-menu">
+        <a href="/">
+            <span class="title">C.J.Lian</span>
+        </a>
+        
+        <a href="/">
+            <span>
+                <a-icon type="home" theme="filled" />
+            </span>
+            <span>home</span>
+        </a>
+        
+        <a href="/archives">
+            <span>
+                <a-icon type="folder" theme="filled" />
+            </span>
+            <span>archives</span>
+        </a>
+        
+        <a target="_blank" rel="noopener" href="https://github.com/lele8446">
+            <span>
+                <a-icon type="github" theme="filled" />
+            </span>
+            <span>github</span>
+        </a>
+        
+    </div>
+
+    <div :class="'phone-menu ' + menu_show" id="phone-menu">
+        <div :class="'title'" @click="menu_show=!menu_show">
+            <span style="margin-right: 10px;">
+                <a-icon type="appstore" theme="filled" />
+            </span>
+            <span>C.J.Lian</span>
+        </div>
+        <div class="items" v-show="menu_show">
+            
+            <a href="/">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="home" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">home</div>
+                </div>
+            </a>
+            
+            <a href="/archives">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="folder" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">archives</div>
+                </div>
+            </a>
+            
+            <a target="_blank" rel="noopener" href="https://github.com/lele8446">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="github" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">github</div>
+                </div>
+            </a>
+            
+        </div>
+        <div class="curtain" v-show="menu_show"></div>
+    </div>
+
+</nav>
+                </div>
+
+                <div id="main">
+                     
+<link rel="stylesheet" href="/css/post-body.css">
+<div class="article">
+    <div>
+        <h1> </h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <a-icon type="calendar" theme="filled" />
+            </span>
+            2020/1/26
+        </span>
+
+        
+
+        
+    </div>
+
+    <div class="content" v-pre>
+        <p>#iOS打包签名，你真的懂吗</p>
+<blockquote>
+<p>导语：iOS签名类型有Development、AD-Hoc、In-House、App Store，而打包过程中又涉及到各种证书、Provision Profile、entitlements、CertificateSigningRequest、p12、AppID……各种概念一大堆，本文将从打包签名的原理说起，并梳理完全签名的整体流程，最后讲解重签名的实现以及签名机制中有哪些是需要注意防护的要点。</p>
+</blockquote>
+<p>为了保证App的分发平台是可控的，以及保证所有安装到iOS设备上的App都是经过苹果官方允许的，苹果建立了iOS签名打包机制。要了解iOS签名机制的实现，我们首先从签名机制的原理说起。</p>
+<h3 id="1-签名原理"><a href="#1-签名原理" class="headerlink" title="1. 签名原理"></a>1. 签名原理</h3><h4 id="1-1-不对称加密"><a href="#1-1-不对称加密" class="headerlink" title="1.1 不对称加密"></a>1.1 不对称加密</h4><p>网络数据的传输可以使用对称加密以及不对称加密的方式进行安全防护，对称加密是指数据发送者（A）和接收者（B）双方进行加解密的密钥是一致的，但这样会增加密钥自身分发的不安全性：比如要如何保证密钥在传递过程中不被泄露。</p>
+<p>而不对称加密则由A、B持有一对公私钥进行加解密，公私钥钥匙对是成对出现的。对于一个私钥，有且只有一个与其对应的公钥，私钥保密、公钥公开，但是不能通过公钥推导出私钥，使用私钥加密的文件可用公钥解密，反过来公钥加密的文件也只能用私钥进行解密。加密过程如下：</p>
+<ol>
+<li><p>发送方（A）首先生成一对公私钥钥匙对，私钥自己保管，公钥则任意分发出去（每台iOS设备终端其实已经包含Apple的公钥）。</p>
+</li>
+<li><p>发送数据时，发送方使用私钥对原数据加密成密文传输（加密打包ipa）；</p>
+</li>
+<li><p>接收方（B）收到密文后，使用之前已经获取到的公钥进行解密得到数据内容（iOS设备验证安装ipa）。</p>
+</li>
+</ol>
+<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/%E4%B8%8D%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86.png" alt="不对称加密"></p>
+<h4 id="1-2-数据签名"><a href="#1-2-数据签名" class="headerlink" title="1.2 数据签名"></a>1.2 数据签名</h4><p>这里主要解决了两个问题，一个是加密数据大小的问题，另一个是如何验证公钥的有效性。</p>
+<p>#####1.2.1 信息摘要</p>
+<p>前面已经讲到，iOS打包安装的过程中会对ipa包进行加解密验证。然而ipa安装包大小动辄就有十几M，大的有好几G，那如果对这么大的数据量进行加解密，肯定效率是非常低的。而信息摘要则是解决了加密数据过大的问题，其原理是对信息内容通过一个很难被逆向推导的公式计算得到一段哈希数值，它具有以下特点：</p>
+<ul>
+<li>计算得到的哈希值大小固定，不受原本信息内容大小的影响；</li>
+<li>不可逆，根据哈希值无法推断得到原本信息（实际上MD5以及SHA-1算法已经被证明可以被破解）；</li>
+<li>唯一性，原本信息内容一致，那么哈希值也一致；原数据不同，也不会存在重复的哈希结果。</li>
+</ul>
+<p>使用信息摘要技术在数据加密传输时，发送方先对文件内容使用哈希算法进行信息摘要计算，再对摘要内容进行加密，之后将文件内容以及摘要内容（已加密）发送出去。</p>
+<p>接收方收到数据后，先解密得到摘要内容，再依据相同的哈希算法对文件内容进行信息摘要计算，最后匹配接收到的哈希值与计算得到的哈希值是否一致，如果一致那就说明传输过程是安全的。</p>
+<p>这样也就避免了对整体原数据加解密的计算过程，从而提高了验证效率。</p>
+<h5 id="1-2-2-签名证书"><a href="#1-2-2-签名证书" class="headerlink" title="1.2.2 签名证书"></a>1.2.2 签名证书</h5><p>不对称加密中的公钥是公开的，谁都可以得到，这样也就存在了不安全性。比如主动攻击者C冒充数据发送者A，将自己伪装后的公钥分发给数据接收者B，从而达到监听A、B之间通信的目的，又或者是对A、B之间的通信数据进行注入攻击。</p>
+<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6.png" alt="签名证书"></p>
+<p>那为了保证获取公钥的安全性，这里引入CA认证（Certificate Authority）。CA是证明公钥合法性的权威机构（Apple就属于CA认证机构），它为每个使用公开密钥的用户发放一个数字证书，数字证书的作用是证明证书中列出的用户合法拥有证书中列出的公开密钥。用户使用 CA 的公钥对数字证书上的签名进行验证，如果验证通过，也就认为证书内包含的公钥是有效的。</p>
+<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/CA%E7%AD%BE%E5%90%8D.png" alt="CA签名"></p>
+<p>CA认证确保了用户公钥使用过程中的安全性，iOS打包需要向苹果开发者中心上传<code>.certSigningRequest</code>文件，然后配置得到各种<code>.cer</code>证书，这些流程中便包括了开发者向Apple CA认证中心注册公钥的过程。</p>
+<h3 id="2-iOS签名"><a href="#2-iOS签名" class="headerlink" title="2. iOS签名"></a>2. iOS签名</h3><p>####2.1 概念要点</p>
+<ul>
+<li><p><strong>.certSigningRequest</strong> 文件。从Mac的钥匙串访问中生成<code>.certSigningRequest</code>文件，这个过程会从Mac终端生成一对钥匙对，私钥存储在Mac中，公钥则包含在<code>.certSigningRequest</code>中。再将<code>.certSigningRequest</code>文件上传到Apple后台即苹果开发者中心，则可以对应生成开发证书或者发布证书（<code>.cer</code>文件）。</p>
+<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/certSigningRequest.png" alt="certSigningRequest"></p>
+</li>
+<li><p><strong>.cer</strong> 文件：Apple后台使用Apple私钥对Mac公钥进行签名后生成的证书。</p>
+</li>
+<li><p><strong>.p12</strong> 文件：Mac本地生成的钥匙对私钥。由于私钥是本地私有的，但你可以使用<code>.p12</code>将私钥导出给其他团队成员使用。</p>
+</li>
+<li><p><strong>Identifiers</strong>。<code>Identifiers</code>是iOS设备安装应用时用来识别不同App的唯一标识，点击创建App IDs，同时勾选app所包含的权限：APNs、HealthKit、iCloud等。</p>
+</li>
+<li><p><strong>entitlements</strong>。App使用到的各种权限（APNs、HealthKit、iCloud等），也是需要Apple验证通过后才能生效的，Apple将这些权限开关统一称为Entitlements。当第一次在Xcode中勾选权限时，项目中会自动生成一个.entitlements后缀的文件，里面记录了App所拥有的权限。</p>
+</li>
+<li><p><strong>Profiles</strong>。<code>.cer</code>文件只是声明了证书的类型，比如Apple Development、Apple Distribution、APNs推送等等，而至于使用什么证书打包、AppID是什么、打包的App包含了哪些功能、可以在哪些设备上安装，则是通过<code>Provisioning Profile</code> 描述文件（<code>.mobileprovision</code>后缀）来说明的，苹果后台将所有这些信息组合后再使用Apple私钥进行签名，最后生成<code>Provisioning Profile</code>描述文件：</p>
+<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/Profiles.png" alt="Profiles"></p>
+</li>
+</ul>
+<h4 id="2-2-AppStore签名"><a href="#2-2-AppStore签名" class="headerlink" title="2.2 AppStore签名"></a>2.2 AppStore签名</h4><p>发布App至AppStore之前需要经过苹果后台审核，审核通过苹果后台会用Apple私钥对App数据进行加密签名生成ipa包；用户从AppStore下载App后，使用设备内置的Apple公钥解密验证，验证通过安装成功。由于AppStore分发的过程中上传审核、下载安装的整个过程都处在苹果的生态链内，所以只需要一次验证就能保证安全性。</p>
+<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/AppStore.png" alt="AppStore"></p>
+<h4 id="2-3-其他签名"><a href="#2-3-其他签名" class="headerlink" title="2.3 其他签名"></a>2.3 其他签名</h4><p>从AppStore下载安装App只需要一次数字签名就足以保证安全性，但除了这种途径苹果还有其他的安装方式：</p>
+<ul>
+<li>开发中连接设备到Xcode进行调试安装</li>
+<li>AD-Hoc内部测试安装，需要先获取设备UDID并注册，并且有最多100台设备的限制</li>
+<li>In-House企业内部分发，安装设备数量无限制，但安装后需主动在设置中选择信任证书</li>
+</ul>
+<p>那这些安装App的过程中苹果又是怎样保证流程安全性的呢？答案就是<strong>双重签名机制</strong>，苹果使用前面讲到的Mac本地钥匙对以及Apple后台钥匙对进行多次数字签名，从而保证整体流程的可控。</p>
+<ol>
+<li><p>Mac <code>钥匙串访问</code> 在本地生成一对公私钥钥匙对，下面默认为<strong>公钥L</strong>、<strong>私钥L</strong>（L：Local）。</p>
+</li>
+<li><p>Apple已有一对公私钥钥匙对，<strong>私钥A</strong>在Apple后台，<strong>公钥A</strong>内置到每一台iOS设备终端（A：Apple）。</p>
+</li>
+<li><p>上传<strong>公钥L</strong>至Apple后台，使用<strong>私钥A</strong>对<strong>公钥L</strong>进行数字签名生成签名证书**.cer<strong>，同时使用</strong>私钥A<strong>对额外信息（使用什么证书打包、AppID、打包的App包含了哪些功能、可以在哪些设备上安装）进行签名生成描述文件</strong>Provisioning Profile<strong>，之后将</strong>.cer<strong>和</strong>Provisioning Profile**下载安装到Mac机器上。</p>
+</li>
+<li><p>编译打包app，选择签名证书**.cer<strong>，打包指令会自动找到该证书对应的</strong>私钥L<strong>（能匹配是因为钥匙对是成对出现的，前提是本地必须已经存在L私钥，也就是p12的安装），然后使用</strong>私钥L**对app进行签名。</p>
+<ul>
+<li><p>这些签名数据包含两部分：<code>Mach-O</code>可执行文件会把签名直接写入这个文件中，其他资源文件则会保存在<code>_CodeSignature</code>目录下。你可以将打包生成的<code>.ipa</code>文件另存为<code>.zip</code>，解压后对<code>Payload</code>文件夹中的<code>.app</code>文件右键、显示包内容，就可以看到签名数据。</p>
+</li>
+<li><p>另外签名过程中对于App内包含的动态库以及插件（<code>Plugins、Watch、Frameworks</code>文件夹），每一个都会单独进行一次签名，并生成各自的<code>Mach-O</code>可执行文件和<code>_CodeSignature</code>。</p>
+</li>
+<li><p>签名数据指代码内容、App包含的所有资源文件，只要其中有任何改动，都必须重新签名才有效。</p>
+</li>
+</ul>
+</li>
+<li><p>打包的过程中会将描述文件<strong>Provisioning Profile</strong>命名为<strong>embedded.mobileprovision</strong>放入到打包app中。</p>
+</li>
+<li><p>安装/启动，iOS设备使用内置的<strong>公钥A</strong>验证<strong>embedded.mobileprovision</strong>是否有效（设备是否在允许安装列表内），同时再次验证里面包含的**.cer<strong>证书签名是否有效（证书过期与否）并取出</strong>公钥L**。</p>
+</li>
+<li><p><strong>embedded.mobileprovision</strong>验证通过，就使用<strong>公钥L</strong>解密验证app签名信息：AppID是否对应、权限开关是否跟app里的<code>entitlements</code>一致等等。</p>
+</li>
+<li><p>所有验证通过，安装/启动完成。</p>
+</li>
+</ol>
+<h2 id=""><a href="#" class="headerlink" title=""></a><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/%E7%AD%BE%E5%90%8D%E6%B5%81%E7%A8%8B.png" alt="签名流程"></h2><p>以上流程便是开发调试、AD-Hoc、In-House等方式打包安装App的过程，区别只在于第⑤步中<code>设备IDs</code>的匹配规则不一致。开发调试只安装当前联调的设备；AD-Hoc允许安装到已在开发者账号下注册过的设备，且每年最多允许100台；In-House无设备数量限制，常用于企业内部App的分发。</p>
+<h3 id="3-ipa包重签名"><a href="#3-ipa包重签名" class="headerlink" title="3. ipa包重签名"></a>3. ipa包重签名</h3><p>ipa包重签名主要针对的是非App Store的安装包，App Store分发最终是上传ipa文件到苹果后台审核，通过后使用Apple私钥加密，然后才能发布安装，不存在重签入侵的可能。而开发调试、AD-Hoc、In-House等分发途径生成的ipa包不存在苹果后台验证的步骤，这也就意味着你可以对任意的<code>.app、</code> <code>.ipa</code>文件进行重签名。</p>
+<p>回顾前面讲到的签名流程，真正对ipa包进行签名的关键步骤（④⑤）是在Mac本地进行的，签名过程中需要满足三个条件：<code>App</code>即软件代码编译生成的产物、<code>p12</code>证书以及<code>Provisioning Profile</code>配置文件。其中<code>App</code>的内容是动态变动的，Apple不会去验证它，实际上也无需验证，因为在开发调试过程中，所开发的App肯定是不停的迭代变化的，如果需要上线App Store那Apple只需在审核阶段对App内容进行把关验证即可，而其他分发渠道它则管不了。<code>p12</code>以及<code>Provisioning Profile</code>则是下载后主动安装的，大部分情况下都是由管理员创建下载好之后，导出分发给团队成员。</p>
+<h4 id="3-1-签名指令"><a href="#3-1-签名指令" class="headerlink" title="3.1 签名指令"></a>3.1 签名指令</h4><p>iOS签名调用的是<em><strong>codesign</strong></em>指令，你也可以直接使用相关指令进行签名，下面是codesign的常用指令：</p>
+<pre><code class="shell"># MAC终端输入： codesign --help
+codesign --help
+Usage: codesign -s identity [-fv*] [-o flags] [-r reqs] [-i ident] path ... # sign
+       codesign -v [-v*] [-R=&lt;req string&gt;|-R &lt;req file path&gt;] path|[+]pid ... # verify
+       codesign -d [options] path ... # display contents
+       codesign -h pid ... # display hosting paths
+</code></pre>
+<p>查看Xcode的编译日志，也可以看到签名的详细信息</p>
+<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/Xcode%E7%AD%BE%E5%90%8D.png" alt="Xcode签名"></p>
+<pre><code class="shell"># 签名指令
+codesign -f -s &quot;iPhone Distribution: XXX（证书名称）&quot; --entitlements entitlements.plist（Profile配置文件） XXX.app（签名app）
+</code></pre>
+<p>####3.2 重签名</p>
+<ul>
+<li><p>首先获取需要重签名的ipa包，注意该ipa包必须是未加密的。如果是从App Store下载的ipa，需要砸壳解密后才能进行重签名，你也可以从越狱平台下载。将获取的<code>.ipa</code>重命名为<code>.zip</code>，然后右键解压，将会生成一个 <strong>Payload</strong> 文件夹，里面包含<code>.app</code>文件。</p>
+</li>
+<li><p>将签名证书对应的<code>Provisioning Profile</code>文件重命名为 <strong>embedded.mobileprovision</strong>，并拷贝放到<strong>Payload</strong>文件夹中。同时右键<code>.app</code>文件，显示包内容，将前面的<strong>embedded.mobileprovision</strong>文件再拷贝一份放到<code>.app</code>文件夹中，替换掉原有的<code>embedded.mobileprovision</code>。</p>
+</li>
+<li><p><strong>entitlements.plist</strong>是由签名证书对应的<strong>Profile</strong>配置导出的签名文件，它与前面截图Xcode签名日志中的<code>XXX.xcent</code>文件的作用相同。终端cd到<strong>Payload</strong>文件夹路径，执行指令</p>
+<pre><code class="shell"># cd xxx/Payload，然后执行下面指令
+security cms -D -i embedded.mobileprovision
+</code></pre>
+<p>将会打印出Profile配置的内容，找到<code>&lt;key&gt;Entitlements&lt;/key&gt;</code>，然后把<code>&lt;key&gt;Entitlements&lt;/key&gt;</code>下面<code>&lt;dict&gt;...&lt;/dict&gt;</code>的内容拷贝到新建的<code>entitlements.plist</code>文件中（可以通过Xcode生成plist文件，选Property List类型），最后将<code>entitlements.plist</code>文件放到<strong>Payload</strong>文件夹中。</p>
+<pre><code class="xml"># 拷贝内容为：&lt;dict&gt; ... &lt;/dict&gt;
+&lt;key&gt;Entitlements&lt;/key&gt;
+    &lt;dict&gt;
+                &lt;key&gt;application-identifier&lt;/key&gt;
+        &lt;string&gt;xxx&lt;/string&gt;
+                &lt;key&gt;keychain-access-groups&lt;/key&gt;
+        &lt;array&gt;
+                &lt;string&gt;xxx&lt;/string&gt;
+        &lt;/array&gt;
+                &lt;key&gt;get-task-allow&lt;/key&gt;
+        &lt;false/&gt;
+                &lt;key&gt;com.apple.developer.team-identifier&lt;/key&gt;
+        &lt;string&gt;xxx&lt;/string&gt;
+    &lt;/dict&gt;
+</code></pre>
+</li>
+<li><p><strong>签名证书名称</strong>可以在安装证书后从钥匙串中心查看</p>
+<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/%E8%AF%81%E4%B9%A6%E5%90%8D%E7%A7%B0.png" alt="证书名称"></p>
+<p>或者在终端使用以下指令查看：</p>
+<pre><code class="shell">security find-identity -v -p codesigning
+</code></pre>
+</li>
+<li><p>准备工作完成，开始重签名。先右键<code>.app</code>显示包内容，查看动态库和插件（<code>Plugins、Watch、Frameworks</code>文件夹），如果是个人证书需要移除<code>Plugins、Watch</code>文件夹，因为个人证书没法签名Extention。如果存在<code>Frameworks</code>，则执行签名指令，有多个的话则每一个Frameworks都要重签一次。</p>
+</li>
+<li><pre><code class="shell">codesign -fs &quot;签名证书名称&quot; &quot;Frameworks/xxx.framework（动态库路径）&quot;
+</code></pre>
+</li>
+<li><p>最后对app进行重签名</p>
+</li>
+<li><pre><code class="shell">codesign -f -s &quot;iPhone Distribution: XXX（证书名称）&quot; --entitlements entitlements.plist（Profile配置文件） XXX.app（签名app）
+</code></pre>
+</li>
+<li><p>最后将<strong>Payload</strong>文件夹下的资源移除，只保留**.app**文件，右键压缩，然后更改后缀为<code>.ipa</code>，这样重签后的ipa便已生成了，你可以通过iTunes、iTools或其他途径安装到iOS设备上。</p>
+</li>
+</ul>
+<p>####3.3 注入代码重签</p>
+<ul>
+<li><p>ipa代码注入一般通过动态库来实现。新建动态库在Xcode中选择新建 <code>TARTETS — Framework &amp; Library — Framework</code>，然后在framework中添加自定义代码，一般都是使用Runtime来注入附加功能。最后选择framework要支持的架构，编译后便得到了最终动态库。</p>
+<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/%E5%8A%A8%E6%80%81%E5%BA%93.png" alt="动态库"></p>
+</li>
+<li><p>对需要重签名的**.app<strong>右键显示包内容，然后将动态库拷贝到<code>Framework</code>文件夹（没有则新建）中。然而此时动态库与app还没建立关联关系，动态库需要注入<code>MachO</code>中才能生效。注入使用</strong><a target="_blank" rel="noopener" href="https://github.com/KJCracks/yololib">yololib</a>**工具，下载yololib并编译，将生产的命令复制到<code>/usr/local/bin</code>或<code>$PATH</code>中的其他路径，便可以在终端使用<code>yololib</code>指令</p>
+<pre><code class="sh">## 通过yololib工具实现注入动态库
+yololib &quot;MachO文件路径&quot; &quot;需要注入的动态库路径&quot;
+</code></pre>
+<p>注入成功后再对所有Framework签名，最后对app重签名，然后生成ipa文件。</p>
+<p>这里整理了一份用于重签名的脚本 <a target="_blank" rel="noopener" href="https://github.com/lele8446/CJShellDemo/tree/master/CJCodeSign">CJCodeSign</a>，想了解更多关于签名指令的内容可点击查看详情。</p>
+</li>
+</ul>
+<p>####3.4 关于重签名的思考</p>
+<p>iOS重签名实现，可以发现用于签名的私钥资源（包括<code>.cer</code>证书和<code>Provisioning Profile</code>配置）和实际签名的app包是没有强关联关系的，这也就带来了两方面的问题。</p>
+<ol>
+<li><code>.cer</code>证书和<code>Provisioning Profile</code>配置被用于其他App的分发签名，特别如果是In-House企业类型的证书，那是可以进行无限制分发的，而一旦苹果检测到这种违规签名的行为，轻则撤销证书，重则注销企业开发者账号！这也就是为什么一定要严格把控 <code>p12</code>、<code>Provisioning Profile</code> 文件外发的原因。</li>
+<li>自有App被注入代码后重签名，比如应用多开、添加插件、恶意抓包等等，对于这一类的防护除了对Bundle ID进行检查，以及对App动态库增加白名单检索外好像也没有更好的办法。当然这已经涉及到逆向防护的方向了，本人对此还未深入了解，有兴趣的同学可以一起参与探讨。</li>
+</ol>
+<p><strong>全文完</strong>！</p>
+<p>最后再附上重签名脚本地址： <a target="_blank" rel="noopener" href="https://github.com/lele8446/CJShellDemo/tree/master/CJCodeSign">CJCodeSign</a> </p>
+<p>作者简介：lele8446，iOS开发深耕者，爱好分享、深⼊探讨有温度的内容，<a target="_blank" rel="noopener" href="https://github.com/lele8446">GitHub</a>地址。</p>
+
+    </div>
+
+    
+</div>
+                     
+<footer id="footer">
+    <div class="footer-wrap">
+        <div>
+            © 2016 - 2021 C.J.Lian
+            <span class="footer-icon">
+                <a-icon type="flag" theme="filled" /></span>
+            @lele8446
+        </div>
+        <div></div>
+        <div>Based on the <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo Engine</a> & <a
+                target="_blank" rel="noopener" href="https://github.com/korilin/hexo-theme-particle">Particle Theme</a></div>
+        
+    </div>
+
+</footer>
+
+<script src="/js/highlight.min.js"></script>
+<script src="/js/particle.js"></script>
+                </div>
+            </div>
+        </transition>
+    </div>
+
+    <script>
+    new Vue({
+        el: "#layout",
+        data: {
+            show_page: false,
+            onload_menu: false,
+            menu_show: false,
+            card_top: 100
+        },
+        created: function () {
+            var that = this
+            window.onload = function () {
+                that.show_page = true
+                document.getElementById("loadcontent").style.opacity = 0
+                setTimeout(function () {
+                    document.getElementById("loadleft").style.width = 0
+                    document.getElementById("loadright").style.width = 0
+                }, 300)
+                setTimeout(function () {
+                    document.getElementById("loading").style = "display:none"
+                }, 600)
+            }
+        },
+        mounted: function () {
+            var that = this
+            window.addEventListener('scroll', function (e) {
+                that.menu_show = false
+            })
+        },
+        methods: {
+            home_click: function () {
+                window.scrollTo({
+                    top: window.innerHeight - 80,
+                    behavior: "smooth",
+                });
+            }
+        }
+    })
+</script>
+
+</body>
+
+</html>
