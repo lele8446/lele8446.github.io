@@ -1,106 +1,32 @@
 <!DOCTYPE html>
-
-
-
-  
-
-
-<html class="theme-next muse use-motion" lang="zh-CN">
+<html lang="zh-Hans">
 <head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
 
-
-
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
-
-
-
-
-  
-  
-  
-  
-
-  
-    
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    
-    
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-  
-
-
-
-
-
-
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Hexo, NexT" />
-
-
-
-
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
-
-
-
-
-
-
-<meta name="description" content="#iOS打包签名，你真的懂吗  导语：iOS签名类型有Development、AD-Hoc、In-House、App Store，而打包过程中又涉及到各种证书、Provision Profile、entitlements、CertificateSigningRequest、p12、AppID……各种概念一大堆，本文将从打包签名的原理说起，并梳理完全签名的整体流程，最后讲解重签名的实现以及签名机制中">
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;example.com&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Pisces&quot;,&quot;version&quot;:&quot;8.3.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:&quot;disqus&quot;,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script>
+<meta name="description" content="导语：iOS签名类型有Development、AD-Hoc、In-House、App Store，而打包过程中又涉及到各种证书、Provision Profile、entitlements、CertificateSigningRequest、p12、AppID……各种概念一大堆，本文将从打包签名的原理说起，并梳理完全签名的整体流程，最后讲解重签名的实现以及签名机制中有哪些是需要注意防护的要点。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C.J.Lian">
+<meta property="og:title" content="iOS打包签名，你真的懂吗">
 <meta property="og:url" content="http://example.com/2020/01/26/iOS%E7%AD%BE%E5%90%8D%E6%89%93%E5%8C%85%EF%BC%8C%E4%BD%A0%E7%9C%9F%E7%9A%84%E6%87%82%E5%90%97/index.html">
 <meta property="og:site_name" content="C.J.Lian">
-<meta property="og:description" content="#iOS打包签名，你真的懂吗  导语：iOS签名类型有Development、AD-Hoc、In-House、App Store，而打包过程中又涉及到各种证书、Provision Profile、entitlements、CertificateSigningRequest、p12、AppID……各种概念一大堆，本文将从打包签名的原理说起，并梳理完全签名的整体流程，最后讲解重签名的实现以及签名机制中">
-<meta property="og:locale" content="zh_CN">
+<meta property="og:description" content="导语：iOS签名类型有Development、AD-Hoc、In-House、App Store，而打包过程中又涉及到各种证书、Provision Profile、entitlements、CertificateSigningRequest、p12、AppID……各种概念一大堆，本文将从打包签名的原理说起，并梳理完全签名的整体流程，最后讲解重签名的实现以及签名机制中有哪些是需要注意防护的要点。">
+<meta property="og:locale">
 <meta property="og:image" content="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/%E4%B8%8D%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86.png">
 <meta property="og:image" content="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6.png">
 <meta property="og:image" content="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/CA%E7%AD%BE%E5%90%8D.png">
@@ -111,240 +37,221 @@
 <meta property="og:image" content="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/Xcode%E7%AD%BE%E5%90%8D.png">
 <meta property="og:image" content="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/%E8%AF%81%E4%B9%A6%E5%90%8D%E7%A7%B0.png">
 <meta property="og:image" content="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/%E5%8A%A8%E6%80%81%E5%BA%93.png">
-<meta property="article:published_time" content="2020-01-26T13:55:48.140Z">
-<meta property="article:modified_time" content="2020-04-01T03:07:23.364Z">
+<meta property="article:published_time" content="2020-01-26T13:55:03.000Z">
+<meta property="article:modified_time" content="2020-04-01T04:00:00.000Z">
 <meta property="article:author" content="lele8446">
+<meta property="article:tag" content="iOS打包">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/%E4%B8%8D%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86.png">
 
 
-
-<script type="text/javascript" id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '',
-    scheme: 'Muse',
-    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: true,
-    tabs: true,
-    motion: true,
-    duoshuo: {
-      userId: '0',
-      author: 'Author'
-    },
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
+<link rel="canonical" href="http://example.com/2020/01/26/iOS%E7%AD%BE%E5%90%8D%E6%89%93%E5%8C%85%EF%BC%8C%E4%BD%A0%E7%9C%9F%E7%9A%84%E6%87%82%E5%90%97/">
 
 
 
-  <link rel="canonical" href="http://example.com/2020/01/26/iOS签名打包，你真的懂吗/"/>
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-Hans&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;01&#x2F;26&#x2F;iOS%E7%AD%BE%E5%90%8D%E6%89%93%E5%8C%85%EF%BC%8C%E4%BD%A0%E7%9C%9F%E7%9A%84%E6%87%82%E5%90%97&#x2F;&quot;,&quot;path&quot;:&quot;2020&#x2F;01&#x2F;26&#x2F;iOS签名打包，你真的懂吗&#x2F;&quot;,&quot;title&quot;:&quot;iOS打包签名，你真的懂吗&quot;}</script>
 
-
-
-
-
-  <title> | C.J.Lian</title>
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>iOS打包签名，你真的懂吗 | C.J.Lian</title><script src="/js/config.js"></script>
   
 
 
 
 
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
 
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
 
-
-
-
-
-
-
-
-
-<meta name="generator" content="Hexo 5.4.0"></head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
-
-  
-  
-    
-  
-
-  <div class="container sidebar-position-left page-post-detail ">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">C.J.Lian</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
-      
-        <p class="site-subtitle"></p>
-      
   </div>
 
-  <div class="site-nav-toggle">
-    <button>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">C.J.Lian</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
   </div>
 </div>
 
+
+
 <nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu">
-      
-        
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            Home
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            Archives
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
-            
-            Tags
-          </a>
-        </li>
-      
-
-      
-    </ul>
-  
-
-  
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
 </nav>
 
 
 
- </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%AD%BE%E5%90%8D%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">1. 签名原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-%E4%B8%8D%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 不对称加密</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-%E6%95%B0%E6%8D%AE%E7%AD%BE%E5%90%8D"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 数据签名</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-2-1-%E4%BF%A1%E6%81%AF%E6%91%98%E8%A6%81"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.2.1 信息摘要</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-2-2-%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6"><span class="nav-number">1.2.2.</span> <span class="nav-text">1.2.2 签名证书</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-iOS%E7%AD%BE%E5%90%8D"><span class="nav-number">2.</span> <span class="nav-text">2. iOS签名</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-%E6%A6%82%E5%BF%B5%E8%A6%81%E7%82%B9"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 概念要点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-AppStore%E7%AD%BE%E5%90%8D"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 AppStore签名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-%E5%85%B6%E4%BB%96%E7%AD%BE%E5%90%8D"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 其他签名</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-ipa%E5%8C%85%E9%87%8D%E7%AD%BE%E5%90%8D"><span class="nav-number">3.</span> <span class="nav-text">3. ipa包重签名</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-%E7%AD%BE%E5%90%8D%E6%8C%87%E4%BB%A4"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 签名指令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-%E9%87%8D%E7%AD%BE%E5%90%8D"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 重签名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-%E6%B3%A8%E5%85%A5%E4%BB%A3%E7%A0%81%E9%87%8D%E7%AD%BE"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 注入代码重签</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-%E5%85%B3%E4%BA%8E%E9%87%8D%E7%AD%BE%E5%90%8D%E7%9A%84%E6%80%9D%E8%80%83"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 关于重签名的思考</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lele8446"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">lele8446</p>
+  <div class="site-description" itemprop="description">coding, learning...</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lele8446" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lele8446" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:lele8446@foxmail.com" title="E-Mail → mailto:lele8446@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.com/in/%E7%82%BD%E9%87%91-%E7%BB%83-966a4813b/" title="Linkedin → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;%E7%82%BD%E9%87%91-%E7%BB%83-966a4813b&#x2F;" rel="noopener" target="_blank"><i class="fab fa-linkedin fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
     </header>
 
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
     
 
-  
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
 
   
+
+
+<div class="post-block">
   
   
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="http://example.com/2020/01/26/iOS%E7%AD%BE%E5%90%8D%E6%89%93%E5%8C%85%EF%BC%8C%E4%BD%A0%E7%9C%9F%E7%9A%84%E6%87%82%E5%90%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="lele8446">
+      <meta itemprop="description" content="coding, learning...">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="C.J.Lian">
     </span>
-
-    
       <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          iOS打包签名，你真的懂吗
+        </h1>
 
-        
-        
-          <h1 class="post-title" itemprop="name headline"></h1>
-        
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
 
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-26T21:55:48+08:00">
-                2020-01-26
-              </time>
-            
+      <time title="创建时间：2020-01-26 21:55:03" itemprop="dateCreated datePublished" datetime="2020-01-26T21:55:03+08:00">2020-01-26</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-04-01 12:00:00" itemprop="dateModified" datetime="2020-04-01T12:00:00+08:00">2020-04-01</time>
+      </span>
 
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
+  
+</div>
 
         </div>
       </header>
-    
 
     
     
     
     <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <p>#iOS打包签名，你真的懂吗</p>
-<blockquote>
+        <blockquote>
 <p>导语：iOS签名类型有Development、AD-Hoc、In-House、App Store，而打包过程中又涉及到各种证书、Provision Profile、entitlements、CertificateSigningRequest、p12、AppID……各种概念一大堆，本文将从打包签名的原理说起，并梳理完全签名的整体流程，最后讲解重签名的实现以及签名机制中有哪些是需要注意防护的要点。</p>
 </blockquote>
 <p>为了保证App的分发平台是可控的，以及保证所有安装到iOS设备上的App都是经过苹果官方允许的，苹果建立了iOS签名打包机制。要了解iOS签名机制的实现，我们首先从签名机制的原理说起。</p>
+<span id="more"></span>
+
 <h3 id="1-签名原理"><a href="#1-签名原理" class="headerlink" title="1. 签名原理"></a>1. 签名原理</h3><h4 id="1-1-不对称加密"><a href="#1-1-不对称加密" class="headerlink" title="1.1 不对称加密"></a>1.1 不对称加密</h4><p>网络数据的传输可以使用对称加密以及不对称加密的方式进行安全防护，对称加密是指数据发送者（A）和接收者（B）双方进行加解密的密钥是一致的，但这样会增加密钥自身分发的不安全性：比如要如何保证密钥在传递过程中不被泄露。</p>
 <p>而不对称加密则由A、B持有一对公私钥进行加解密，公私钥钥匙对是成对出现的。对于一个私钥，有且只有一个与其对应的公钥，私钥保密、公钥公开，但是不能通过公钥推导出私钥，使用私钥加密的文件可用公钥解密，反过来公钥加密的文件也只能用私钥进行解密。加密过程如下：</p>
 <ol>
@@ -357,8 +264,7 @@
 </ol>
 <p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/%E4%B8%8D%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86.png" alt="不对称加密"></p>
 <h4 id="1-2-数据签名"><a href="#1-2-数据签名" class="headerlink" title="1.2 数据签名"></a>1.2 数据签名</h4><p>这里主要解决了两个问题，一个是加密数据大小的问题，另一个是如何验证公钥的有效性。</p>
-<p>#####1.2.1 信息摘要</p>
-<p>前面已经讲到，iOS打包安装的过程中会对ipa包进行加解密验证。然而ipa安装包大小动辄就有十几M，大的有好几G，那如果对这么大的数据量进行加解密，肯定效率是非常低的。而信息摘要则是解决了加密数据过大的问题，其原理是对信息内容通过一个很难被逆向推导的公式计算得到一段哈希数值，它具有以下特点：</p>
+<h5 id="1-2-1-信息摘要"><a href="#1-2-1-信息摘要" class="headerlink" title="1.2.1 信息摘要"></a>1.2.1 信息摘要</h5><p>前面已经讲到，iOS打包安装的过程中会对ipa包进行加解密验证。然而ipa安装包大小动辄就有十几M，大的有好几G，那如果对这么大的数据量进行加解密，肯定效率是非常低的。而信息摘要则是解决了加密数据过大的问题，其原理是对信息内容通过一个很难被逆向推导的公式计算得到一段哈希数值，它具有以下特点：</p>
 <ul>
 <li>计算得到的哈希值大小固定，不受原本信息内容大小的影响；</li>
 <li>不可逆，根据哈希值无法推断得到原本信息（实际上MD5以及SHA-1算法已经被证明可以被破解）；</li>
@@ -372,8 +278,7 @@
 <p>那为了保证获取公钥的安全性，这里引入CA认证（Certificate Authority）。CA是证明公钥合法性的权威机构（Apple就属于CA认证机构），它为每个使用公开密钥的用户发放一个数字证书，数字证书的作用是证明证书中列出的用户合法拥有证书中列出的公开密钥。用户使用 CA 的公钥对数字证书上的签名进行验证，如果验证通过，也就认为证书内包含的公钥是有效的。</p>
 <p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/CA%E7%AD%BE%E5%90%8D.png" alt="CA签名"></p>
 <p>CA认证确保了用户公钥使用过程中的安全性，iOS打包需要向苹果开发者中心上传<code>.certSigningRequest</code>文件，然后配置得到各种<code>.cer</code>证书，这些流程中便包括了开发者向Apple CA认证中心注册公钥的过程。</p>
-<h3 id="2-iOS签名"><a href="#2-iOS签名" class="headerlink" title="2. iOS签名"></a>2. iOS签名</h3><p>####2.1 概念要点</p>
-<ul>
+<h3 id="2-iOS签名"><a href="#2-iOS签名" class="headerlink" title="2. iOS签名"></a>2. iOS签名</h3><h4 id="2-1-概念要点"><a href="#2-1-概念要点" class="headerlink" title="2.1 概念要点"></a>2.1 概念要点</h4><ul>
 <li><p><strong>.certSigningRequest</strong> 文件。从Mac的钥匙串访问中生成<code>.certSigningRequest</code>文件，这个过程会从Mac终端生成一对钥匙对，私钥存储在Mac中，公钥则包含在<code>.certSigningRequest</code>中。再将<code>.certSigningRequest</code>文件上传到Apple后台即苹果开发者中心，则可以对应生成开发证书或者发布证书（<code>.cer</code>文件）。</p>
 <p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/certSigningRequest.png" alt="certSigningRequest"></p>
 </li>
@@ -403,9 +308,9 @@
 </li>
 <li><p>Apple已有一对公私钥钥匙对，<strong>私钥A</strong>在Apple后台，<strong>公钥A</strong>内置到每一台iOS设备终端（A：Apple）。</p>
 </li>
-<li><p>上传<strong>公钥L</strong>至Apple后台，使用<strong>私钥A</strong>对<strong>公钥L</strong>进行数字签名生成签名证书**.cer<strong>，同时使用</strong>私钥A<strong>对额外信息（使用什么证书打包、AppID、打包的App包含了哪些功能、可以在哪些设备上安装）进行签名生成描述文件</strong>Provisioning Profile<strong>，之后将</strong>.cer<strong>和</strong>Provisioning Profile**下载安装到Mac机器上。</p>
+<li><p>上传<strong>公钥L</strong>至Apple后台，使用<strong>私钥A</strong>对<strong>公钥L</strong>进行数字签名生成签名证书 <strong>.cer</strong> ，同时使用<strong>私钥A</strong>对额外信息（使用什么证书打包、AppID、打包的App包含了哪些功能、可以在哪些设备上安装）进行签名生成描述文件<strong>Provisioning Profile</strong>，之后将 <strong>.cer</strong>和<strong>Provisioning Profile</strong>下载安装到Mac机器上。</p>
 </li>
-<li><p>编译打包app，选择签名证书**.cer<strong>，打包指令会自动找到该证书对应的</strong>私钥L<strong>（能匹配是因为钥匙对是成对出现的，前提是本地必须已经存在L私钥，也就是p12的安装），然后使用</strong>私钥L**对app进行签名。</p>
+<li><p>编译打包app，选择签名证书 <strong>.cer</strong>，打包指令会自动找到该证书对应的<strong>私钥L</strong>（能匹配是因为钥匙对是成对出现的，前提是本地必须已经存在L私钥，也就是p12的安装），然后使用<strong>私钥L</strong>对app进行签名。</p>
 <ul>
 <li><p>这些签名数据包含两部分：<code>Mach-O</code>可执行文件会把签名直接写入这个文件中，其他资源文件则会保存在<code>_CodeSignature</code>目录下。你可以将打包生成的<code>.ipa</code>文件另存为<code>.zip</code>，解压后对<code>Payload</code>文件夹中的<code>.app</code>文件右键、显示包内容，就可以看到签名数据。</p>
 </li>
@@ -417,14 +322,15 @@
 </li>
 <li><p>打包的过程中会将描述文件<strong>Provisioning Profile</strong>命名为<strong>embedded.mobileprovision</strong>放入到打包app中。</p>
 </li>
-<li><p>安装/启动，iOS设备使用内置的<strong>公钥A</strong>验证<strong>embedded.mobileprovision</strong>是否有效（设备是否在允许安装列表内），同时再次验证里面包含的**.cer<strong>证书签名是否有效（证书过期与否）并取出</strong>公钥L**。</p>
+<li><p>安装/启动，iOS设备使用内置的<strong>公钥A</strong>验证<strong>embedded.mobileprovision</strong>是否有效（设备是否在允许安装列表内），同时再次验证里面包含的 <strong>.cer</strong> 证书签名是否有效（证书过期与否）并取出 <strong>公钥L</strong> 。</p>
 </li>
 <li><p><strong>embedded.mobileprovision</strong>验证通过，就使用<strong>公钥L</strong>解密验证app签名信息：AppID是否对应、权限开关是否跟app里的<code>entitlements</code>一致等等。</p>
 </li>
 <li><p>所有验证通过，安装/启动完成。</p>
 </li>
 </ol>
-<h2 id=""><a href="#" class="headerlink" title=""></a><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/%E7%AD%BE%E5%90%8D%E6%B5%81%E7%A8%8B.png" alt="签名流程"></h2><p>以上流程便是开发调试、AD-Hoc、In-House等方式打包安装App的过程，区别只在于第⑤步中<code>设备IDs</code>的匹配规则不一致。开发调试只安装当前联调的设备；AD-Hoc允许安装到已在开发者账号下注册过的设备，且每年最多允许100台；In-House无设备数量限制，常用于企业内部App的分发。</p>
+<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/%E7%AD%BE%E5%90%8D%E6%B5%81%E7%A8%8B.png" alt="签名流程"></p>
+<p>以上流程便是开发调试、AD-Hoc、In-House等方式打包安装App的过程，区别只在于第⑤步中<code>设备IDs</code>的匹配规则不一致。开发调试只安装当前联调的设备；AD-Hoc允许安装到已在开发者账号下注册过的设备，且每年最多允许100台；In-House无设备数量限制，常用于企业内部App的分发。</p>
 <h3 id="3-ipa包重签名"><a href="#3-ipa包重签名" class="headerlink" title="3. ipa包重签名"></a>3. ipa包重签名</h3><p>ipa包重签名主要针对的是非App Store的安装包，App Store分发最终是上传ipa文件到苹果后台审核，通过后使用Apple私钥加密，然后才能发布安装，不存在重签入侵的可能。而开发调试、AD-Hoc、In-House等分发途径生成的ipa包不存在苹果后台验证的步骤，这也就意味着你可以对任意的<code>.app、</code> <code>.ipa</code>文件进行重签名。</p>
 <p>回顾前面讲到的签名流程，真正对ipa包进行签名的关键步骤（④⑤）是在Mac本地进行的，签名过程中需要满足三个条件：<code>App</code>即软件代码编译生成的产物、<code>p12</code>证书以及<code>Provisioning Profile</code>配置文件。其中<code>App</code>的内容是动态变动的，Apple不会去验证它，实际上也无需验证，因为在开发调试过程中，所开发的App肯定是不停的迭代变化的，如果需要上线App Store那Apple只需在审核阶段对App内容进行把关验证即可，而其他分发渠道它则管不了。<code>p12</code>以及<code>Provisioning Profile</code>则是下载后主动安装的，大部分情况下都是由管理员创建下载好之后，导出分发给团队成员。</p>
 <h4 id="3-1-签名指令"><a href="#3-1-签名指令" class="headerlink" title="3.1 签名指令"></a>3.1 签名指令</h4><p>iOS签名调用的是<em><strong>codesign</strong></em>指令，你也可以直接使用相关指令进行签名，下面是codesign的常用指令：</p>
@@ -434,8 +340,7 @@
 <p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/Xcode%E7%AD%BE%E5%90%8D.png" alt="Xcode签名"></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 签名指令</span></span><br><span class="line">codesign -f -s &quot;iPhone Distribution: XXX（证书名称）&quot; --entitlements entitlements.plist（Profile配置文件） XXX.app（签名app）</span><br></pre></td></tr></table></figure>
 
-<p>####3.2 重签名</p>
-<ul>
+<h4 id="3-2-重签名"><a href="#3-2-重签名" class="headerlink" title="3.2 重签名"></a>3.2 重签名</h4><ul>
 <li><p>首先获取需要重签名的ipa包，注意该ipa包必须是未加密的。如果是从App Store下载的ipa，需要砸壳解密后才能进行重签名，你也可以从越狱平台下载。将获取的<code>.ipa</code>重命名为<code>.zip</code>，然后右键解压，将会生成一个 <strong>Payload</strong> 文件夹，里面包含<code>.app</code>文件。</p>
 </li>
 <li><p>将签名证书对应的<code>Provisioning Profile</code>文件重命名为 <strong>embedded.mobileprovision</strong>，并拷贝放到<strong>Payload</strong>文件夹中。同时右键<code>.app</code>文件，显示包内容，将前面的<strong>embedded.mobileprovision</strong>文件再拷贝一份放到<code>.app</code>文件夹中，替换掉原有的<code>embedded.mobileprovision</code>。</p>
@@ -450,14 +355,13 @@
 <p>或者在终端使用以下指令查看：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">security find-identity -v -p codesigning</span><br></pre></td></tr></table></figure></li>
 <li><p>准备工作完成，开始重签名。先右键<code>.app</code>显示包内容，查看动态库和插件（<code>Plugins、Watch、Frameworks</code>文件夹），如果是个人证书需要移除<code>Plugins、Watch</code>文件夹，因为个人证书没法签名Extention。如果存在<code>Frameworks</code>，则执行签名指令，有多个的话则每一个Frameworks都要重签一次。</p>
-</li>
-<li><p>```shell<br>codesign -fs “签名证书名称” “Frameworks/xxx.framework（动态库路径）”</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">* 最后对app进行重签名</span><br><span class="line"></span><br><span class="line">* &#96;&#96;&#96;shell</span><br><span class="line">  codesign -f -s &quot;iPhone Distribution: XXX（证书名称）&quot; --entitlements entitlements.plist（Profile配置文件） XXX.app（签名app）</span><br></pre></td></tr></table></figure></li>
+  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">codesign -fs &quot;签名证书名称&quot; &quot;Frameworks/xxx.framework（动态库路径）&quot;</span><br></pre></td></tr></table></figure></li>
+<li><p>最后对app进行重签名</p>
+  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">codesign -f -s &quot;iPhone Distribution: XXX（证书名称）&quot; --entitlements entitlements.plist（Profile配置文件） XXX.app（签名app）</span><br></pre></td></tr></table></figure></li>
 <li><p>最后将<strong>Payload</strong>文件夹下的资源移除，只保留**.app**文件，右键压缩，然后更改后缀为<code>.ipa</code>，这样重签后的ipa便已生成了，你可以通过iTunes、iTools或其他途径安装到iOS设备上。</p>
 </li>
 </ul>
-<p>####3.3 注入代码重签</p>
-<ul>
+<h4 id="3-3-注入代码重签"><a href="#3-3-注入代码重签" class="headerlink" title="3.3 注入代码重签"></a>3.3 注入代码重签</h4><ul>
 <li><p>ipa代码注入一般通过动态库来实现。新建动态库在Xcode中选择新建 <code>TARTETS — Framework &amp; Library — Framework</code>，然后在framework中添加自定义代码，一般都是使用Runtime来注入附加功能。最后选择framework要支持的架构，编译后便得到了最终动态库。</p>
 <p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/%E5%8A%A8%E6%80%81%E5%BA%93.png" alt="动态库"></p>
 </li>
@@ -468,313 +372,69 @@
 <p>这里整理了一份用于重签名的脚本 <a target="_blank" rel="noopener" href="https://github.com/lele8446/CJShellDemo/tree/master/CJCodeSign">CJCodeSign</a>，想了解更多关于签名指令的内容可点击查看详情。</p>
 </li>
 </ul>
-<p>####3.4 关于重签名的思考</p>
-<p>iOS重签名实现，可以发现用于签名的私钥资源（包括<code>.cer</code>证书和<code>Provisioning Profile</code>配置）和实际签名的app包是没有强关联关系的，这也就带来了两方面的问题。</p>
+<h4 id="3-4-关于重签名的思考"><a href="#3-4-关于重签名的思考" class="headerlink" title="3.4 关于重签名的思考"></a>3.4 关于重签名的思考</h4><p>iOS重签名实现，可以发现用于签名的私钥资源（包括<code>.cer</code>证书和<code>Provisioning Profile</code>配置）和实际签名的app包是没有强关联关系的，这也就带来了两方面的问题。</p>
 <ol>
 <li><code>.cer</code>证书和<code>Provisioning Profile</code>配置被用于其他App的分发签名，特别如果是In-House企业类型的证书，那是可以进行无限制分发的，而一旦苹果检测到这种违规签名的行为，轻则撤销证书，重则注销企业开发者账号！这也就是为什么一定要严格把控 <code>p12</code>、<code>Provisioning Profile</code> 文件外发的原因。</li>
 <li>自有App被注入代码后重签名，比如应用多开、添加插件、恶意抓包等等，对于这一类的防护除了对Bundle ID进行检查，以及对App动态库增加白名单检索外好像也没有更好的办法。当然这已经涉及到逆向防护的方向了，本人对此还未深入了解，有兴趣的同学可以一起参与探讨。</li>
 </ol>
 <p><strong>全文完</strong>！</p>
 <p>最后再附上重签名脚本地址： <a target="_blank" rel="noopener" href="https://github.com/lele8446/CJShellDemo/tree/master/CJCodeSign">CJCodeSign</a> </p>
-<p>作者简介：lele8446，iOS开发深耕者，爱好分享、深⼊探讨有温度的内容，<a target="_blank" rel="noopener" href="https://github.com/lele8446">GitHub</a>地址。</p>
 
-      
     </div>
-    
-    
-    
 
     
-
     
-
     
 
     <footer class="post-footer">
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
+          <div class="post-tags">
+              <a href="/tags/iOS%E6%89%93%E5%8C%85/" rel="tag"># iOS打包</a>
           </div>
 
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/04/01/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3iOS%E5%9B%BE%E6%96%87%E6%B7%B7%E6%8E%92%E5%8E%9F%E7%90%86%E5%B9%B6%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9B%BE%E6%96%87%E6%8E%A7%E4%BB%B6/" rel="prev" title="">
-                 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-
-    <div class="post-spread">
-      
-    </div>
-  </div>
-
-
-          </div>
-          
-
-
-          
-  <div class="comments" id="comments">
-    
-  </div>
-
-
-        </div>
         
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
 
-  <aside id="sidebar" class="sidebar">
-    
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            Overview
-          </li>
-        </ul>
-      
-
-      <section class="site-overview sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.gif"
-               alt="" />
-          <p class="site-author-name" itemprop="name"></p>
-           
-              <p class="site-description motion-element" itemprop="description"></p>
-          
-        </div>
-        <nav class="site-state motion-element">
-
-          
-            <div class="site-state-item site-state-posts">
-              <a href="/archives/">
-                <span class="site-state-item-count">3</span>
-                <span class="site-state-item-name">posts</span>
-              </a>
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/10/24/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3iOS%E5%9B%BE%E6%96%87%E6%B7%B7%E6%8E%92%E5%8E%9F%E7%90%86%E5%B9%B6%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9B%BE%E6%96%87%E6%8E%A7%E4%BB%B6/" rel="prev" title="深入理解iOS图文混排原理并自定义图文控件">
+                  <i class="fa fa-chevron-left"></i> 深入理解iOS图文混排原理并自定义图文控件
+                </a>
             </div>
-          
-
-          
-
-          
-
-        </nav>
-
-        
-
-        <div class="links-of-author motion-element">
-          
-        </div>
-
-        
-        
-
-        
-        
-
-        
-
-
-      </section>
-
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%AD%BE%E5%90%8D%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">1. 签名原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-%E4%B8%8D%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 不对称加密</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-%E6%95%B0%E6%8D%AE%E7%AD%BE%E5%90%8D"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 数据签名</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-2-2-%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.2.2 签名证书</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-iOS%E7%AD%BE%E5%90%8D"><span class="nav-number">2.</span> <span class="nav-text">2. iOS签名</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-AppStore%E7%AD%BE%E5%90%8D"><span class="nav-number">2.1.</span> <span class="nav-text">2.2 AppStore签名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-%E5%85%B6%E4%BB%96%E7%AD%BE%E5%90%8D"><span class="nav-number">2.2.</span> <span class="nav-text">2.3 其他签名</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number"></span> <span class="nav-text"></span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-ipa%E5%8C%85%E9%87%8D%E7%AD%BE%E5%90%8D"><span class="nav-number">1.</span> <span class="nav-text">3. ipa包重签名</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-%E7%AD%BE%E5%90%8D%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.</span> <span class="nav-text">3.1 签名指令</span></a></li></ol></li></ol></div>
-            
-
+            <div class="post-nav-item">
+            </div>
           </div>
-        </section>
-      <!--/noindex-->
-      
-
-      
-
-    </div>
-  </aside>
+    </footer>
+  </article>
+</div>
 
 
-        
-      </div>
-    </main>
 
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
+
+
+<script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2016 – 
   <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">lele8446</span>
 </div>
-
-
-<div class="powered-by">
-  Powered by <a class="theme-link" target="_blank" rel="noopener" href="https://hexo.io">Hexo</a>
-</div>
-
-<div class="theme-info">
-  Theme -
-  <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Muse
-  </a>
-</div>
-
-
-        
-
-        
-      </div>
-    </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
-    
-
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
-  
-
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
+    </div>
+  </footer>
 
   
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-
-  
-  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
-
-
-
-  
-  
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
-
-
-
-  
-
-
-  
-
-
-
-
-	
-
-
-
-
-
-  
-
-
-
-
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
 
   
 
@@ -788,18 +448,6 @@
 
 
 
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
 
 </body>
 </html>

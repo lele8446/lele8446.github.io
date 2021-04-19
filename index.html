@@ -1,1075 +1,450 @@
 <!DOCTYPE html>
-
-
-
-  
-
-
-<html class="theme-next muse use-motion" lang="zh-CN">
+<html lang="zh-Hans">
 <head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
 
-
-
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
-
-
-
-
-  
-  
-  
-  
-
-  
-    
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    
-    
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-  
-
-
-
-
-
-
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Hexo, NexT" />
-
-
-
-
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
-
-
-
-
-
-
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;example.com&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Pisces&quot;,&quot;version&quot;:&quot;8.3.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:&quot;disqus&quot;,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script>
+<meta name="description" content="coding, learning...">
 <meta property="og:type" content="website">
 <meta property="og:title" content="C.J.Lian">
 <meta property="og:url" content="http://example.com/index.html">
 <meta property="og:site_name" content="C.J.Lian">
-<meta property="og:locale" content="zh_CN">
+<meta property="og:description" content="coding, learning...">
+<meta property="og:locale">
 <meta property="article:author" content="lele8446">
 <meta name="twitter:card" content="summary">
 
 
-
-<script type="text/javascript" id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '',
-    scheme: 'Muse',
-    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: true,
-    tabs: true,
-    motion: true,
-    duoshuo: {
-      userId: '0',
-      author: 'Author'
-    },
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
+<link rel="canonical" href="http://example.com/">
 
 
 
-  <link rel="canonical" href="http://example.com/"/>
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:true,&quot;isPost&quot;:false,&quot;lang&quot;:&quot;zh-Hans&quot;,&quot;comments&quot;:&quot;&quot;,&quot;permalink&quot;:&quot;&quot;,&quot;path&quot;:&quot;index.html&quot;,&quot;title&quot;:&quot;&quot;}</script>
 
-
-
-
-
-  <title>C.J.Lian</title>
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>C.J.Lian</title><script src="/js/config.js"></script>
   
 
 
 
 
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
 
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
 
-
-
-
-
-
-
-
-
-<meta name="generator" content="Hexo 5.4.0"></head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
-
-  
-  
-    
-  
-
-  <div class="container sidebar-position-left 
-   page-home 
- ">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">C.J.Lian</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
-      
-        <p class="site-subtitle"></p>
-      
   </div>
 
-  <div class="site-nav-toggle">
-    <button>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">C.J.Lian</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
   </div>
 </div>
 
+
+
 <nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu">
-      
-        
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            Home
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            Archives
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
-            
-            Tags
-          </a>
-        </li>
-      
-
-      
-    </ul>
-  
-
-  
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
 </nav>
 
 
 
- </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lele8446"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">lele8446</p>
+  <div class="site-description" itemprop="description">coding, learning...</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lele8446" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lele8446" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:lele8446@foxmail.com" title="E-Mail → mailto:lele8446@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.com/in/%E7%82%BD%E9%87%91-%E7%BB%83-966a4813b/" title="Linkedin → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;%E7%82%BD%E9%87%91-%E7%BB%83-966a4813b&#x2F;" rel="noopener" target="_blank"><i class="fab fa-linkedin fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
     </header>
 
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
-            
-  <section id="posts" class="posts-expand">
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/15/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="C.J.Lian">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/04/15/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-15T18:27:22+08:00">
-                2021-04-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
     
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
 
-      
-      
 
-      
-        
-          
-            <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
+    <div class="main-inner index posts-expand">
 
     
 
-    
 
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
+<div class="post-block">
   
   
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/04/01/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3iOS%E5%9B%BE%E6%96%87%E6%B7%B7%E6%8E%92%E5%8E%9F%E7%90%86%E5%B9%B6%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9B%BE%E6%96%87%E6%8E%A7%E4%BB%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="C.J.Lian">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/04/01/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3iOS%E5%9B%BE%E6%96%87%E6%B7%B7%E6%8E%92%E5%8E%9F%E7%90%86%E5%B9%B6%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9B%BE%E6%96%87%E6%8E%A7%E4%BB%B6/" itemprop="url">Untitled</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-01T11:19:27+08:00">
-                2020-04-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##深入理解iOS图文混排原理并自定义图文控件</p>
-<p>iOS开发中一般用UILabel来展示文字、UIImageView用来显示图片、UIButton用于简单的图文点击响应事件，稍复杂一点的可以借助<code>NSAttributedString</code>来实现图文混排需求，又或者将图文内容转换为HTML由WKWebView（UIWebView）来展示。然而以上方案都有各自的局限性：UILabel绘制NSAttributedString不能灵活定位文本内的点击锚点区域，转换为HTML展示则带来Native与Web端交互成本以及WKWebView自身的性能问题。</p>
-<p>那么，是否能有一种控件，在满足富文本图文混排的同时还能响应自定义锚点点击事件？要实现以上需求，我们首先从iOS图文展示原理说起。</p>
-<p>###图文绘制架构</p>
-<p>iOS7之后的图文绘制架构如下图所示，越往上封装程度越高，但可定制程度也越低，本文涉及讲解的主要是<code>CoreText</code>以及<code>CoreGraphics</code>层级 。</p>
-<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/CoreText%E6%9E%B6%E6%9E%84.png" alt="CoreText架构"></p>
-<p>###CoreGraphics</p>
-<p>从下往上说，首先是<strong>CoreGraphics</strong>。这是一个C语言接口的核心图形库，而且它是跨平台的类库，iOS和macOS系统均可使用。虽然它很偏底层，但很多情况下其实你已经使用过它了：比如<strong>CGAffineTransform</strong>用于形变，<strong>CGBitmapContext</strong>用于截图或者图片绘制，<strong>CGContext</strong>用于获取上下文进行直线、曲线、不规则图形绘制等。</p>
-<p>这里着重说明下<strong>CGContext</strong>上下文。上下文类似于进行绘画时候的画布，使用<code>UIGraphicsGetCurrentContext()</code>可以快捷得到当前上下文，同时需要注意在CoreText下坐标系的原点为视图的左下角，x轴向右为正方向，y轴向上为正方向。而UIKit坐标系的原点是视图的左上角，x轴向右为正方向，y轴向下为正方向，所以我们在进行图文绘制前需要进行坐标反转，如图所示：</p>
-<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/CoreText%E5%9D%90%E6%A0%87.png" alt="CoreText坐标"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;获取上下文</span><br><span class="line">CGContextRef c &#x3D; UIGraphicsGetCurrentContext();</span><br><span class="line">&#x2F;&#x2F; 将当前图形状态推入堆栈</span><br><span class="line">CGContextSaveGState(c);</span><br><span class="line">&#x2F;&#x2F; 设置字形变换矩阵为CGAffineTransformIdentity，也就是说每一个字形都不做图形变换</span><br><span class="line">CGContextSetTextMatrix(c, CGAffineTransformIdentity);</span><br><span class="line">&#x2F;&#x2F; 坐标转换，UIKit 坐标原点在左上角，CoreText 坐标原点在左下角</span><br><span class="line">CGContextTranslateCTM(c, 0.0f, insetRect.size.height);</span><br><span class="line">CGContextScaleCTM(c, 1.0f, -1.0f);</span><br><span class="line">&#x2F;&#x2F; TODO:进行图文绘制操作</span><br><span class="line">&#x2F;&#x2F;...</span><br><span class="line">&#x2F;&#x2F; 绘制完成，将堆栈顶部的状态弹出，返回到之前的图形状态</span><br><span class="line">CGContextRestoreGState(c);</span><br></pre></td></tr></table></figure>
-
-<p>以上使用CoreGraphics进行图文绘制的过程，可以在<code>drawRect:</code>或 <code>drawTextInRect:</code>等相关方法中进行操作。</p>
-<p>###CoreText框架</p>
-<p><strong>CoreText</strong>是iOS中用于文本绘制的引擎，其位于<code>UIKit</code>中和<code>CoreGraphics/Quartz</code>之间。查看开发文档，可以看到CoreText架构主要包含以下类，其中标红部分是图文绘制需要使用到的相关类，我们逐个介绍。</p>
-<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/CoreText.png" alt="CoreText"></p>
-<h4 id="CTFramesetter"><a href="#CTFramesetter" class="headerlink" title="CTFramesetter"></a>CTFramesetter</h4><p>CTFramesetter是管理生成CTFrame的工厂类，其中记录了需要绘制的文本内容中不同字符串对应的富文本属性（加粗、颜色、字号等），通过NSAttributedString可生成CTFrameSetter。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">NSMutableAttributedString *attributedStr &#x3D; [[NSMutableAttributedString alloc] initWithString:text attributes:attributes];</span><br><span class="line">&#x2F;&#x2F;生成CTFramesetter</span><br><span class="line">CTFramesetterRef framesetter &#x3D; CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attributedStr);</span><br><span class="line">CFRelease(framesetter);</span><br></pre></td></tr></table></figure>
-
-<h4 id="CTFrame"><a href="#CTFrame" class="headerlink" title="CTFrame"></a>CTFrame</h4><p>CTFrame描述了总的文本绘制区域的<code>frame</code>，通过它你可以得到在指定区域内绘制的文本一共有多少行。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">CGRect rect &#x3D; CGRectMake(0, 0, 100, 100);</span><br><span class="line">&#x2F;&#x2F;生成绘制区域路径</span><br><span class="line">CGMutablePathRef path &#x3D; CGPathCreateMutable();</span><br><span class="line">CGPathAddRect(path, NULL, rect);</span><br><span class="line">&#x2F;&#x2F;生成CTFrame</span><br><span class="line">CTFrameRef frame &#x3D; CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [attributedStr length]), path, NULL);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;获取一共有多少行</span><br><span class="line">CFArrayRef lines &#x3D; CTFrameGetLines(frame);</span><br><span class="line"></span><br><span class="line">CFRelease(frame);</span><br><span class="line">CGPathRelease(path);</span><br></pre></td></tr></table></figure>
-
-<p>####CTLine</p>
-<p>CTLine记录了需要绘制的单行文本信息，通过它你可以得到当前行的上行高、下行高以及行间距等信息。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;获取第一行信息</span><br><span class="line">CTLineRef line &#x3D; CFArrayGetValueAtIndex(lines, 0);</span><br><span class="line">&#x2F;&#x2F;上行高、下行高、行间距</span><br><span class="line">CGFloat lineAscent &#x3D; 0.0f, lineDescent &#x3D; 0.0f, lineLeading &#x3D; 0.0f;</span><br><span class="line">&#x2F;&#x2F;获取行宽、行高信息</span><br><span class="line">CGFloat lineWidth &#x3D; CTLineGetTypographicBounds(line, &amp;lineAscent, &amp;lineDescent, &amp;lineLeading);</span><br></pre></td></tr></table></figure>
-
-<p>关于行文本的上下行高、行间距、原点、基线等的说明，可参照下图：</p>
-<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/%E8%A1%8C%E9%AB%98.png" alt="行高"></p>
-<p>系统绘制文本的时候，首先会以基线（Baseline）为基准，从当前行的基线最左侧的原点（Origin）开始，计算得到上行高（Ascent），下行高（Descent），不同行之间的行间距（Leading），以及行宽信息。</p>
-<h4 id="CTRun"><a href="#CTRun" class="headerlink" title="CTRun"></a>CTRun</h4><p>CTRun描述了单行文本中具有相同富文本属性的字符实体，每一行文字中可能有多个CTRun，也有可能只包含一个CTRun。如下图，这行文字中包含三个CTRun，分别为：<code>这是</code>     <code>一段</code>  <code>测试数据</code></p>
-<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/CTRun%E8%AF%B4%E6%98%8E.jpg" alt="CTRun说明"></p>
-<p>与CTLine一样，同样可以计算得到单个CTRun的绘制区域大小。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;初始化CTRun的区域大小为CGRectZero</span><br><span class="line">CGRect runBounds &#x3D; CGRectZero;</span><br><span class="line">&#x2F;&#x2F;初始化CTRun的上行高、下行高、行间距</span><br><span class="line">CGFloat runAscent &#x3D; 0.0f, runDescent &#x3D; 0.0f, runLeading &#x3D; 0.0f;</span><br><span class="line">&#x2F;&#x2F;计算得到上下行高、行间距以及CTRun绘制区域宽度</span><br><span class="line">runBounds.size.width &#x3D; (CGFloat)CTRunGetTypographicBounds(glyphRun, CFRangeMake(0, 0), &amp;runAscent, &amp;runDescent, &amp;runLeading);</span><br><span class="line">&#x2F;&#x2F;计算高度，注意下行高为负数的情况</span><br><span class="line">CGFloat runHeight &#x3D; runAscent + fabs(runDescent);</span><br><span class="line">runBounds.size.height &#x3D; runHeight;</span><br></pre></td></tr></table></figure>
-
-<p>####CTRunDelegate</p>
-<p>CTRunDelegate用于图文混排时候的图片绘制，因为CoreText本身并不能进行图文混排，但是可以使用CTRunDelegate在需要显示图片的地方添加占位符，当CoreText绘制到该位置的时候，会触发CTRunDelegate代理，在代理方法中可以获取到该区域的大小以及图片信息，然后调用 <code>CGContextDrawImage(c, runBounds, image.CGImage)</code> 绘制图片即可。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">NSDictionary *imgInfoDic &#x3D; @&#123;kCJImage:image,&#x2F;&#x2F;需要绘制的图片</span><br><span class="line">                             kCJImageWidth:@(size.width),&#x2F;&#x2F;需要绘制的图片区域宽度</span><br><span class="line">                             kCJImageHeight:@(size.height),&#x2F;&#x2F;需要绘制的图片区域高度&#125;;</span><br><span class="line">    </span><br><span class="line">&#x2F;&#x2F;创建CTRunDelegateRef并设置回调函数</span><br><span class="line">CTRunDelegateCallbacks imageCallbacks;</span><br><span class="line">imageCallbacks.version &#x3D; kCTRunDelegateVersion1;</span><br><span class="line">imageCallbacks.dealloc &#x3D; RunDelegateDeallocCallback;</span><br><span class="line">imageCallbacks.getWidth &#x3D; RunDelegateGetWidthCallback;&#x2F;&#x2F;图片区域宽度回调</span><br><span class="line">imageCallbacks.getAscent &#x3D; RunDelegateGetAscentCallback;&#x2F;&#x2F;图片区域上行高回调</span><br><span class="line">imageCallbacks.getDescent &#x3D; RunDelegateGetDescentCallback;&#x2F;&#x2F;图片区域下行高回调</span><br><span class="line">CTRunDelegateRef runDelegate &#x3D; CTRunDelegateCreate(&amp;imageCallbacks, (__bridge void *)imgInfoDic);</span><br><span class="line">&#x2F;&#x2F;初始化空白占位字符</span><br><span class="line">unichar imgReplacementChar &#x3D; 0xFFFC;</span><br><span class="line">NSString *imgReplacementString &#x3D; [NSString stringWithCharacters:&amp;imgReplacementChar length:1];</span><br><span class="line">&#x2F;&#x2F;插入图片 空白占位符</span><br><span class="line">NSMutableString *imgPlaceholderStr &#x3D; [[NSMutableString alloc]initWithCapacity:3];</span><br><span class="line">[imgPlaceholderStr appendString:imgReplacementString];</span><br><span class="line">NSRange imgRange &#x3D; NSMakeRange(0, imgPlaceholderStr.length);</span><br><span class="line">NSMutableAttributedString *imageAttributedString &#x3D; [[NSMutableAttributedString alloc] initWithString:imgPlaceholderStr];</span><br><span class="line">&#x2F;&#x2F;将CTRunDelegate记录到NSMutableAttributedString的富文本信息中</span><br><span class="line">[imageAttributedString addAttribute:(NSString *)kCTRunDelegateAttributeName value:(__bridge id)runDelegate range:imgRange];</span><br><span class="line">&#x2F;&#x2F;kCJImageAttributeName为自定义的记录图片信息的富文本属性</span><br><span class="line">[imageAttributedString addAttribute:kCJImageAttributeName value:imgInfoDic range:imgRange];</span><br></pre></td></tr></table></figure>
-
-
-
-<p>看完上面的概念介绍，相信你已经对iOS的图文绘制原理有了基础的认识，以上各个类的关联关系如图所示：</p>
-<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/CoreText%E8%AF%B4%E6%98%8E.png" alt="CoreText说明">完整的绘制流程如下：</p>
-<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/%E7%BB%98%E5%88%B6%E6%B5%81%E7%A8%8B.png" alt="绘制流程"></p>
-<p>###自定义图文混排控件</p>
-<p>自定义图文混排控件，可以基于UILabel来实现，UILabel本身已支持NSAttributedString富文本展示，我们只需在原有基础上扩展指定字符区域背景色、插入图片（或自定义view）展示、指定锚点点击响应事件、点击时候的字符高亮展示等功能即可。</p>
-<h4 id="绘制关键点说明"><a href="#绘制关键点说明" class="headerlink" title="绘制关键点说明"></a>绘制关键点说明</h4><p>首先在设置NSAttributedString富文本属性的时候，增加自定义属性。NSAttributedString的富文本属性Attributes其实就是字典，那么可以在其中添加自定义的key-value配置，类似以下说明：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> 删除线宽度。值为NSNumber。默认 &#96;0.0f&#96;，表示无删除线</span><br><span class="line"> *&#x2F;</span><br><span class="line">extern NSString * const kCJStrikethroughStyleAttributeName;</span><br><span class="line">&#x2F;**</span><br><span class="line"> 删除线颜色。值为UIColor。默认 &#96;[UIColor blackColor]&#96;。</span><br><span class="line"> *&#x2F;</span><br><span class="line">extern NSString * const kCJStrikethroughColorAttributeName;</span><br><span class="line">&#x2F;**</span><br><span class="line"> 对NSAttributedString文本设置锚点属性时候的唯一标识</span><br><span class="line"> *&#x2F;</span><br><span class="line">extern NSString * const kCJLinkStringIdentifierAttributesName;</span><br></pre></td></tr></table></figure>
-
-<p>第二步就是在遍历获取CTRun时，将属于锚点的CTRun的<code>frame</code>区域信息记录起来，同时还要记录该锚点对应的扩展参数，以及合并具有相同属性的CTRun。</p>
-<p>第三步是绘制字符，如果包含自定义属性，那么需要调用CoreGraphics的相关方法进行扩展属性的设置，比如先填充背景色<code>CGContextSetFillColorWithColor(c,color);</code> 再绘制文字<code>CTRunDraw(runRef, c, CFRangeMake(0, 0));</code>  再添加边框线、删除线<code>CGContextSetStrokeColorWithColor(c,color);</code> 你可以把这个过程想象是成在一张画布上绘画，绘制时候需要注意不同图层的层级关系，不然上面的图层会将下面的图层覆盖。</p>
-<p>最后一步是图片展示，如果CTRun是包含CTRunDelegate的显示区域，那么系统会将你设置好大小的区域空白出来，你只需在该位置上画出图片即可：<code>CGContextDrawImage(c, runBounds, image.CGImage);</code>另外我还在此基础上做了扩展，不单单支持图文混排，还可以在指定区域上插入任意UIView。原理是同样借助CTRunDelegate在对应位置上预留出指定大小的空白区域，然后将需要插入的UIView存储在NSAttributedString的Attributes属性中，当绘制到该位置时只需调用<code>[self addSubview:view];</code>即可。</p>
-<p>####点击响应</p>
-<p>UILabel继承自UIView和UIResponder，那么可以基于iOS的事件响应链机制来实现锚点点击事件。</p>
-<p>重写<code>hitTest: withEvent:</code>方法，在其中判断是否需要响应点击事件，否则将响应事件向下传递。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event &#123;</span><br><span class="line">    &#x2F;&#x2F; ![self linkAtPoint:point extendsLinkTouchArea:NO]表示不在锚点点击范围内</span><br><span class="line">    if (![self linkAtPoint:point extendsLinkTouchArea:NO] || !self.userInteractionEnabled || self.hidden || self.alpha &lt; 0.01) &#123;</span><br><span class="line">        &#x2F;&#x2F;如果支持选择复制</span><br><span class="line">        if (self.enableCopy) &#123;</span><br><span class="line">            return [super hitTest:point withEvent:event];</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            return nil;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return self;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>至于如何判断是否在锚点点击范围内，可参照<code>linkAtPoint: extendsLinkTouchArea:</code>伪函数说明：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">- (CJGlyphRunStrokeItem *)linkAtPoint:(CGPoint)point extendsLinkTouchArea:(BOOL)extendsLinkTouchArea &#123;</span><br><span class="line">    &#x2F;&#x2F; CJGlyphRunStrokeItem 对应 CTRun，其中记录了字符区域（bounds）的大小</span><br><span class="line">    CJGlyphRunStrokeItem *resultItem &#x3D; nil;</span><br><span class="line">    &#x2F;&#x2F; _linkStrokeItemArray 表示记录了所有锚点信息的数组</span><br><span class="line">    for (CJGlyphRunStrokeItem *item in _linkStrokeItemArray) &#123;</span><br><span class="line">        if (CGRectContainsPoint(item.bounds, point)) &#123;</span><br><span class="line">            resultItem &#x3D; item;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return resultItem;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>重写touches系列方法，首先在<code>touchesBegan: withEvent:</code>中判断是否点击了锚点区域，如果是则触发重绘以达到点击高亮效果。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event &#123;</span><br><span class="line">    UITouch *touch &#x3D; [touches anyObject];</span><br><span class="line">    CJGlyphRunStrokeItem *item &#x3D; [self linkAtPoint:[touch locationInView:self] extendsLinkTouchArea:self.extendsLinkTouchArea];</span><br><span class="line">    &#x2F;&#x2F;点击锚点存在</span><br><span class="line">    if (item) &#123;</span><br><span class="line">        &#x2F;&#x2F;TODO: 触发重绘操作，达到点击锚点高亮效果</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        [super touchesBegan:touches withEvent:event];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>然后在<code>touchesEnded: withEvent:</code>中处理点击事件的响应操作</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event &#123;</span><br><span class="line">    &#x2F;&#x2F;  如果是长按点击，交由长按点击手势UILongPressGestureRecognizer响应</span><br><span class="line">    if (_longPress) &#123;</span><br><span class="line">        [super touchesEnded:touches withEvent:event];</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        if (_currentClickRunStrokeItem) &#123;</span><br><span class="line">            &#x2F;&#x2F; 如果当前是点击锚点事件，抛出点击回调事件</span><br><span class="line">            if (self.delegate &amp;&amp; [self.delegate respondsToSelector:@selector(CJLable:didClickLink:)]) &#123;</span><br><span class="line">                [self.delegate CJLable:self didClickLink:linkModel];</span><br><span class="line">            &#125;</span><br><span class="line">            &#x2F;&#x2F; TODO: 再次重绘，还原点击前的文本显示</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            [super touchesEnded:touches withEvent:event];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这里需要注意一下，如果是双击点击事件或者长按点击事件，那么在touches系列的回调方法中是不能处理的，交互处理应该放到<code>UITapGestureRecognizer</code>和<code>UILongPressGestureRecognizer</code>的响应方法中判断。另外手势事件的响应方法中是无法得到当前点击位置的点坐标<code>CGPoint</code>的，这里用到了比较取巧的方式（通过Rumtime关联属性）达到了判断点击响应的效果。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 在此时刚接收到手势事件的回调中，将UITouch关联到 UIGestureRecognizer实例</span><br><span class="line">- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch &#123;</span><br><span class="line">    if (gestureRecognizer &#x3D;&#x3D; self.longPressGestureRecognizer) &#123;</span><br><span class="line">        objc_setAssociatedObject(self.longPressGestureRecognizer, &amp;kAssociatedUITouchKey, touch, OBJC_ASSOCIATION_RETAIN_NONATOMIC);</span><br><span class="line">    &#125;</span><br><span class="line">    else if (gestureRecognizer &#x3D;&#x3D; self.doubleTapGes) &#123;</span><br><span class="line">        objc_setAssociatedObject(self.doubleTapGes, &amp;kAssociatedUITouchKey, touch, OBJC_ASSOCIATION_RETAIN_NONATOMIC);</span><br><span class="line">    &#125;</span><br><span class="line">    return YES;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; 双击点击事件</span><br><span class="line">- (void)tapTwoAct:(UITapGestureRecognizer *)sender &#123;</span><br><span class="line">    &#x2F;&#x2F; Runtime属性关联，获取到对应的UITouch，并计算得到点击坐标：[touch locationInView:self]</span><br><span class="line">    UITouch *touch &#x3D; objc_getAssociatedObject(self.doubleTapGes, &amp;kAssociatedUITouchKey);</span><br><span class="line">    CJGlyphRunStrokeItem *item &#x3D; [self linkAtPoint:[touch locationInView:self] extendsLinkTouchArea:self.extendsLinkTouchArea];</span><br><span class="line">    if (item) &#123;</span><br><span class="line">        &#x2F;&#x2F;TODO: 如果当前是双击点击锚点事件，抛出点击回调事件</span><br><span class="line">        if (self.delegate &amp;&amp; [self.delegate respondsToSelector:@selector(CJLable:didClickLink:)]) &#123;</span><br><span class="line">            [self.delegate CJLable:self didClickLink:linkModel];</span><br><span class="line">        &#125;</span><br><span class="line">        &#x2F;&#x2F; TODO: 再次重绘，还原点击前的文本显示</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F;如果不是点击锚点且开启了选择复制功能</span><br><span class="line">    else &#123;</span><br><span class="line">        if (self.enableCopy) &#123;</span><br><span class="line">            &#x2F;&#x2F;TODO: 显示选择复制提示视图</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; 长按点击事件</span><br><span class="line">- (void)longPressGestureDidFire:(UILongPressGestureRecognizer *)sender &#123;</span><br><span class="line">    &#x2F;&#x2F; Runtime属性关联，获取到对应的UITouch，并计算得到点击坐标：[touch locationInView:self]</span><br><span class="line">    UITouch *touch &#x3D; objc_getAssociatedObject(self.longPressGestureRecognizer, &amp;kAssociatedUITouchKey);</span><br><span class="line">    CGPoint point &#x3D; [touch locationInView:self];</span><br><span class="line">    BOOL isLinkItem &#x3D; [self containslinkAtPoint:[touch locationInView:self]];</span><br><span class="line">    switch (sender.state) &#123;</span><br><span class="line">        &#x2F;&#x2F;TODO: 如果当前是长按锚点事件，抛出长按回调事件</span><br><span class="line">        case UIGestureRecognizerStateBegan: &#123;</span><br><span class="line">            if (isLinkItem) &#123;</span><br><span class="line">                if (self.delegate &amp;&amp; [self.delegate respondsToSelector:@selector(CJLable:didLongPressLink:)]) &#123;</span><br><span class="line">                        [self.delegate CJLable:self didLongPressLink:linkModel];</span><br><span class="line">                    &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            &#x2F;&#x2F;如果不是点击锚点且开启了选择复制功能</span><br><span class="line">    		else &#123;</span><br><span class="line">        		if (self.enableCopy) &#123;</span><br><span class="line">            		&#x2F;&#x2F;TODO: 长按显示放大镜</span><br><span class="line">                &#125;</span><br><span class="line">        	&#125;</span><br><span class="line">    	&#125;</span><br><span class="line">            break;</span><br><span class="line">        &#125;</span><br><span class="line">        case UIGestureRecognizerStateEnded:&#123;</span><br><span class="line">            &#x2F;&#x2F;TODO: 再次重绘，还原长按前的文本显示</span><br><span class="line">            &#x2F;&#x2F;如果支持复制</span><br><span class="line">            if (self.enableCopy) &#123;</span><br><span class="line">                &#x2F;&#x2F;TODO: 显示选择复制提示视图</span><br><span class="line">            &#125;</span><br><span class="line">            break;</span><br><span class="line">        &#125;</span><br><span class="line">        case UIGestureRecognizerStateChanged:</span><br><span class="line">    		&#x2F;&#x2F;如果支持复制</span><br><span class="line">            if (self.enableCopy) &#123;</span><br><span class="line">                &#x2F;&#x2F;TODO: 更新放大镜位置，以及更新选择复制区域</span><br><span class="line">            &#125;</span><br><span class="line">            break;</span><br><span class="line">        default:</span><br><span class="line">            break;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>来看一下自定义点击控件的效果图</p>
-<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/%E7%82%B9%E5%87%BB%E5%93%8D%E5%BA%94.gif" alt="点击响应"></p>
-<h4 id="选择、复制"><a href="#选择、复制" class="headerlink" title="选择、复制"></a>选择、复制</h4><p>自定义图文混排控件还可以支持选择复制功能，当然这里说的选择复制不是指点击唤起<code>UIMenuController</code>菜单，然后出现复制剪切选项，点击则只能复制所有文本。那样的例子网上已经有很多，没有必要在这里再大费周章地罗列说明。 其需要具备的是类似于UITextView或UIWebView那样双击或长按，可出现<code>拷贝、选择、全选</code>选项，同时选中字符左右出现指示大头针，拖动则有放大镜提示当前选中的字符，并且要尽量做到与系统行为一致。</p>
-<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/%E9%80%89%E6%8B%A9%E5%A4%8D%E5%88%B6.gif" alt="选择复制"></p>
-<p>需求细化后选择复制的要点主要包含以下：</p>
-<ul>
-<li>选中字符后出现<code>拷贝、选择 全选 </code>菜单，这个使用系统的<code>UIMenuController</code>功能即可实现，不存在难点问题。</li>
-<li>对于选中的文字，起始要有大头针标识，中间填充浅蓝色背景，而且这一部分区域会是一块不规则多边形。系统没有提供现成可复用的对应UI控件，但只要我们能够判断到选中区域，就能在左右画上大头针，中间填充颜色，所以这一块也不存在问题。</li>
-<li>拖动选择的过程中，出现放大镜来提示选中字符的更改。在能够准确获取到当前触摸点坐标的前提下，只需要将触摸点周围区域的图层截取并作<code>CGContextScaleCTM</code>缩放，然后再将放大后的图层显示出来即可，所以这个也是可以实现的。</li>
-<li>最后便是重点了，如何判断每一个字符对应的<code>frame</code>坐标位置，并要求在手指移动时能够准确判断选择区域的变化。</li>
-</ul>
-<p>前面已经讲到，单行文本中具有相同富文本属性的字符会被绘制到同一个<code>CTRun</code>中，而通过<code>CTRun</code>可以计算得到它的<code>frame</code>大小。那么重点则变成如何使得每一个字符（图片或插入UIView）对应一个<code>CTRun</code>。</p>
-<p>解决很简单：只要保证NSAttributedString中每一个字符的Attributes属性不一样就可以了。我开始的做法是添加一个自定义属性<code>kCJIndexAttributesName</code>，然后给每个字符存储不同的index值，并且在全部图文遍历绘制过一次后将<code>kCJIndexAttributesName</code>移除，这样在后续的重绘中就会减少<code>CTRun</code>的拆分数量，提高了效率。</p>
-<p>然而，理想很美好，现实很打击。就算自定义属性<code>kCJIndexAttributesName</code>移除了，可<code>CTRun</code>还是会被拆分为单个字符，但是如果使用系统自带的属性则不会如此。无奈只能从系统方法中寻找解决思路，幸好发现了<code>NSLinkAttributeName</code>属性，这是UITextView中用来设置http链接的扩展属性，存储的对象是<code>NSURL</code>或<code>NSString</code>类型，而UILabel默认是不支持http链点的，使用<code>NSLinkAttributeName</code>属性可以最大限度的降低UILabel对默认NSAttributedString展示的影响。同时为了更好的判断计算，我将存储的对象改为NSURL的子类<code>CJCTRunUrl</code>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;给每一个字符设置index值，enableCopy&#x3D;YES时生效</span><br><span class="line">__block NSInteger index &#x3D; 0;</span><br><span class="line">[attText.string enumerateSubstringsInRange:NSMakeRange(0, [attText length]) options:NSStringEnumerationByComposedCharacterSequences usingBlock:</span><br><span class="line"> ^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) &#123;</span><br><span class="line">     CJCTRunUrl *runUrl &#x3D; nil;</span><br><span class="line">     if (!runUrl) &#123;</span><br><span class="line">         NSString *urlStr &#x3D; [NSString stringWithFormat:@&quot;https:&#x2F;&#x2F;www.CJLabel%@&quot;,@(index)];</span><br><span class="line">         runUrl &#x3D; [CJCTRunUrl URLWithString:urlStr];</span><br><span class="line">     &#125;</span><br><span class="line">     runUrl.index &#x3D; index;</span><br><span class="line">     runUrl.rangeValue &#x3D; [NSValue valueWithRange:substringRange];</span><br><span class="line">     [attText addAttribute:NSLinkAttributeName</span><br><span class="line">                     value:runUrl</span><br><span class="line">                     range:substringRange];</span><br><span class="line">     index++;</span><br><span class="line"> &#125;];</span><br></pre></td></tr></table></figure>
-
-<p>选择复制视图展示的交互逻辑则在双击或长按手势中实现，前面 <strong>点击响应</strong> 的伪代码示意中已经说明。另外讲解一下选择复制视图的实现细节：</p>
-<p>其中的<code>拷贝、选择、全选</code>菜单使用系统提供的<code>UIMenuController</code>实现，在双击或长按时只要将它显示到手指点击对应的位置上就行。</p>
-<p>放大镜则是自定义UIView，并在上面添加一个<code>CALayer</code>，再在<code>CALayer</code>上根据更新的点坐标做放大效果，<code>CALayer</code>的放大境处理逻辑如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">- (void)drawInContext:(CGContextRef)ctx &#123;</span><br><span class="line">	CGContextTranslateCTM(ctx, self.frame.size.width&#x2F;2, self.frame.size.height&#x2F;2);</span><br><span class="line">	CGContextScaleCTM(ctx, 1.40, 1.40);</span><br><span class="line">	&#x2F;&#x2F;self.pointToMagnify是更新的放大点坐标</span><br><span class="line">	CGContextTranslateCTM(ctx, -1 * self.pointToMagnify.x, -1 * self.pointToMagnify.y);</span><br><span class="line">	[CJkeyWindow().layer renderInContext:ctx];</span><br><span class="line">	CJkeyWindow().layer.contents &#x3D; (id)nil;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>大头针包含的提示用户选中区域，同样由自定义UIView实现，在自定义view上面填充颜色以及在起始结束位置画出大头针，其中的填充颜色区域包含三部分<code>headRect</code> <code>middleRect</code> <code>tailRect</code></p>
-<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/%E9%80%89%E6%8B%A9%E5%8C%BA%E5%9F%9F.png" alt="选择区域"></p>
-<p>这三部分存在任意组合的情况，填充颜色的时候要对这三部分区分开来分别进行填充。因为有可能存在只有<code>headRect</code> <code>middleRect</code> 或只有<code>middleRect</code> <code>tailRect</code>，又或者只有 <code>middleRect</code> 的情况，而且填充颜色使用的是<code>CoreGraphics</code>中的绘图API：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CGContextRef ctx &#x3D; UIGraphicsGetCurrentContext();</span><br><span class="line">&#x2F;&#x2F;填充的背景色</span><br><span class="line">UIColor *backColor &#x3D; CJUIRGBColor(0,84,166,0.2);</span><br><span class="line">[backColor set];</span><br><span class="line">CGContextAddRect(ctx, self.headRect);</span><br><span class="line">CGContextStrokePath(ctx);</span><br></pre></td></tr></table></figure>
-
-<p>接下来便是如何显示这三个选择复制相关的视图了，一开始我只是简单的将它们添加到<code>Label</code>上面来统一管理，但这样会存在一个问题。那就是当页面中存在多个<code>Label</code>，并且对每个<code>Label</code>分别执行选择复制操作时，那么不同的<code>label</code>上都会出现选择复制视图，这是与系统的默认行为是不一致的。权衡之后将以上三个视图的显示作为单例处理，全局只初始化一次，避免了重复初始化的开销。并且将它添加到<code>UIWindow</code>层，这样在不同的<code>Label</code>之间进行选择复制时，也只会显示一个选择复制视图。</p>
-<h3 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h3><p>以上便是iOS图文绘制原理以及自定义图文控件的说明，关键点是充分理解你看到的每一个字符在底层绘制显示的时候与<code>CTFrame</code> <code>CTLine</code> <code>CTRun</code>等实体类的对应关系，并借助其计算得到每一个字符的区域<code>frame</code>信息，有了区域<code>frame</code>信息便能够扩展实现各种自定义功能（点击响应、插入图片、选择拷贝等）。</p>
-<p>全文完，更多的实现可以查看源码<a target="_blank" rel="noopener" href="https://github.com/lele8446/CJLabel">CJLabel</a>。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="http://example.com/2020/01/26/iOS%E7%AD%BE%E5%90%8D%E6%89%93%E5%8C%85%EF%BC%8C%E4%BD%A0%E7%9C%9F%E7%9A%84%E6%87%82%E5%90%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="lele8446">
+      <meta itemprop="description" content="coding, learning...">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="C.J.Lian">
     </span>
-
-    
       <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/01/26/iOS%E7%AD%BE%E5%90%8D%E6%89%93%E5%8C%85%EF%BC%8C%E4%BD%A0%E7%9C%9F%E7%9A%84%E6%87%82%E5%90%97/" class="post-title-link" itemprop="url">iOS打包签名，你真的懂吗</a>
+        </h2>
 
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/26/iOS%E7%AD%BE%E5%90%8D%E6%89%93%E5%8C%85%EF%BC%8C%E4%BD%A0%E7%9C%9F%E7%9A%84%E6%87%82%E5%90%97/" itemprop="url">Untitled</a></h1>
-        
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
 
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-26T21:55:48+08:00">
-                2020-01-26
-              </time>
-            
+      <time title="创建时间：2020-01-26 21:55:03" itemprop="dateCreated datePublished" datetime="2020-01-26T21:55:03+08:00">2020-01-26</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-04-01 12:00:00" itemprop="dateModified" datetime="2020-04-01T12:00:00+08:00">2020-04-01</time>
+      </span>
 
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
+  
+</div>
 
         </div>
       </header>
-    
 
     
     
     
     <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#iOS打包签名，你真的懂吗</p>
-<blockquote>
+          <blockquote>
 <p>导语：iOS签名类型有Development、AD-Hoc、In-House、App Store，而打包过程中又涉及到各种证书、Provision Profile、entitlements、CertificateSigningRequest、p12、AppID……各种概念一大堆，本文将从打包签名的原理说起，并梳理完全签名的整体流程，最后讲解重签名的实现以及签名机制中有哪些是需要注意防护的要点。</p>
 </blockquote>
 <p>为了保证App的分发平台是可控的，以及保证所有安装到iOS设备上的App都是经过苹果官方允许的，苹果建立了iOS签名打包机制。要了解iOS签名机制的实现，我们首先从签名机制的原理说起。</p>
-<h3 id="1-签名原理"><a href="#1-签名原理" class="headerlink" title="1. 签名原理"></a>1. 签名原理</h3><h4 id="1-1-不对称加密"><a href="#1-1-不对称加密" class="headerlink" title="1.1 不对称加密"></a>1.1 不对称加密</h4><p>网络数据的传输可以使用对称加密以及不对称加密的方式进行安全防护，对称加密是指数据发送者（A）和接收者（B）双方进行加解密的密钥是一致的，但这样会增加密钥自身分发的不安全性：比如要如何保证密钥在传递过程中不被泄露。</p>
-<p>而不对称加密则由A、B持有一对公私钥进行加解密，公私钥钥匙对是成对出现的。对于一个私钥，有且只有一个与其对应的公钥，私钥保密、公钥公开，但是不能通过公钥推导出私钥，使用私钥加密的文件可用公钥解密，反过来公钥加密的文件也只能用私钥进行解密。加密过程如下：</p>
-<ol>
-<li><p>发送方（A）首先生成一对公私钥钥匙对，私钥自己保管，公钥则任意分发出去（每台iOS设备终端其实已经包含Apple的公钥）。</p>
-</li>
-<li><p>发送数据时，发送方使用私钥对原数据加密成密文传输（加密打包ipa）；</p>
-</li>
-<li><p>接收方（B）收到密文后，使用之前已经获取到的公钥进行解密得到数据内容（iOS设备验证安装ipa）。</p>
-</li>
-</ol>
-<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/%E4%B8%8D%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86.png" alt="不对称加密"></p>
-<h4 id="1-2-数据签名"><a href="#1-2-数据签名" class="headerlink" title="1.2 数据签名"></a>1.2 数据签名</h4><p>这里主要解决了两个问题，一个是加密数据大小的问题，另一个是如何验证公钥的有效性。</p>
-<p>#####1.2.1 信息摘要</p>
-<p>前面已经讲到，iOS打包安装的过程中会对ipa包进行加解密验证。然而ipa安装包大小动辄就有十几M，大的有好几G，那如果对这么大的数据量进行加解密，肯定效率是非常低的。而信息摘要则是解决了加密数据过大的问题，其原理是对信息内容通过一个很难被逆向推导的公式计算得到一段哈希数值，它具有以下特点：</p>
-<ul>
-<li>计算得到的哈希值大小固定，不受原本信息内容大小的影响；</li>
-<li>不可逆，根据哈希值无法推断得到原本信息（实际上MD5以及SHA-1算法已经被证明可以被破解）；</li>
-<li>唯一性，原本信息内容一致，那么哈希值也一致；原数据不同，也不会存在重复的哈希结果。</li>
-</ul>
-<p>使用信息摘要技术在数据加密传输时，发送方先对文件内容使用哈希算法进行信息摘要计算，再对摘要内容进行加密，之后将文件内容以及摘要内容（已加密）发送出去。</p>
-<p>接收方收到数据后，先解密得到摘要内容，再依据相同的哈希算法对文件内容进行信息摘要计算，最后匹配接收到的哈希值与计算得到的哈希值是否一致，如果一致那就说明传输过程是安全的。</p>
-<p>这样也就避免了对整体原数据加解密的计算过程，从而提高了验证效率。</p>
-<h5 id="1-2-2-签名证书"><a href="#1-2-2-签名证书" class="headerlink" title="1.2.2 签名证书"></a>1.2.2 签名证书</h5><p>不对称加密中的公钥是公开的，谁都可以得到，这样也就存在了不安全性。比如主动攻击者C冒充数据发送者A，将自己伪装后的公钥分发给数据接收者B，从而达到监听A、B之间通信的目的，又或者是对A、B之间的通信数据进行注入攻击。</p>
-<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6.png" alt="签名证书"></p>
-<p>那为了保证获取公钥的安全性，这里引入CA认证（Certificate Authority）。CA是证明公钥合法性的权威机构（Apple就属于CA认证机构），它为每个使用公开密钥的用户发放一个数字证书，数字证书的作用是证明证书中列出的用户合法拥有证书中列出的公开密钥。用户使用 CA 的公钥对数字证书上的签名进行验证，如果验证通过，也就认为证书内包含的公钥是有效的。</p>
-<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/CA%E7%AD%BE%E5%90%8D.png" alt="CA签名"></p>
-<p>CA认证确保了用户公钥使用过程中的安全性，iOS打包需要向苹果开发者中心上传<code>.certSigningRequest</code>文件，然后配置得到各种<code>.cer</code>证书，这些流程中便包括了开发者向Apple CA认证中心注册公钥的过程。</p>
-<h3 id="2-iOS签名"><a href="#2-iOS签名" class="headerlink" title="2. iOS签名"></a>2. iOS签名</h3><p>####2.1 概念要点</p>
-<ul>
-<li><p><strong>.certSigningRequest</strong> 文件。从Mac的钥匙串访问中生成<code>.certSigningRequest</code>文件，这个过程会从Mac终端生成一对钥匙对，私钥存储在Mac中，公钥则包含在<code>.certSigningRequest</code>中。再将<code>.certSigningRequest</code>文件上传到Apple后台即苹果开发者中心，则可以对应生成开发证书或者发布证书（<code>.cer</code>文件）。</p>
-<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/certSigningRequest.png" alt="certSigningRequest"></p>
-</li>
-<li><p><strong>.cer</strong> 文件：Apple后台使用Apple私钥对Mac公钥进行签名后生成的证书。</p>
-</li>
-<li><p><strong>.p12</strong> 文件：Mac本地生成的钥匙对私钥。由于私钥是本地私有的，但你可以使用<code>.p12</code>将私钥导出给其他团队成员使用。</p>
-</li>
-<li><p><strong>Identifiers</strong>。<code>Identifiers</code>是iOS设备安装应用时用来识别不同App的唯一标识，点击创建App IDs，同时勾选app所包含的权限：APNs、HealthKit、iCloud等。</p>
-</li>
-<li><p><strong>entitlements</strong>。App使用到的各种权限（APNs、HealthKit、iCloud等），也是需要Apple验证通过后才能生效的，Apple将这些权限开关统一称为Entitlements。当第一次在Xcode中勾选权限时，项目中会自动生成一个.entitlements后缀的文件，里面记录了App所拥有的权限。</p>
-</li>
-<li><p><strong>Profiles</strong>。<code>.cer</code>文件只是声明了证书的类型，比如Apple Development、Apple Distribution、APNs推送等等，而至于使用什么证书打包、AppID是什么、打包的App包含了哪些功能、可以在哪些设备上安装，则是通过<code>Provisioning Profile</code> 描述文件（<code>.mobileprovision</code>后缀）来说明的，苹果后台将所有这些信息组合后再使用Apple私钥进行签名，最后生成<code>Provisioning Profile</code>描述文件：</p>
-<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/Profiles.png" alt="Profiles"></p>
-</li>
-</ul>
-<h4 id="2-2-AppStore签名"><a href="#2-2-AppStore签名" class="headerlink" title="2.2 AppStore签名"></a>2.2 AppStore签名</h4><p>发布App至AppStore之前需要经过苹果后台审核，审核通过苹果后台会用Apple私钥对App数据进行加密签名生成ipa包；用户从AppStore下载App后，使用设备内置的Apple公钥解密验证，验证通过安装成功。由于AppStore分发的过程中上传审核、下载安装的整个过程都处在苹果的生态链内，所以只需要一次验证就能保证安全性。</p>
-<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/AppStore.png" alt="AppStore"></p>
-<h4 id="2-3-其他签名"><a href="#2-3-其他签名" class="headerlink" title="2.3 其他签名"></a>2.3 其他签名</h4><p>从AppStore下载安装App只需要一次数字签名就足以保证安全性，但除了这种途径苹果还有其他的安装方式：</p>
-<ul>
-<li>开发中连接设备到Xcode进行调试安装</li>
-<li>AD-Hoc内部测试安装，需要先获取设备UDID并注册，并且有最多100台设备的限制</li>
-<li>In-House企业内部分发，安装设备数量无限制，但安装后需主动在设置中选择信任证书</li>
-</ul>
-<p>那这些安装App的过程中苹果又是怎样保证流程安全性的呢？答案就是<strong>双重签名机制</strong>，苹果使用前面讲到的Mac本地钥匙对以及Apple后台钥匙对进行多次数字签名，从而保证整体流程的可控。</p>
-<ol>
-<li><p>Mac <code>钥匙串访问</code> 在本地生成一对公私钥钥匙对，下面默认为<strong>公钥L</strong>、<strong>私钥L</strong>（L：Local）。</p>
-</li>
-<li><p>Apple已有一对公私钥钥匙对，<strong>私钥A</strong>在Apple后台，<strong>公钥A</strong>内置到每一台iOS设备终端（A：Apple）。</p>
-</li>
-<li><p>上传<strong>公钥L</strong>至Apple后台，使用<strong>私钥A</strong>对<strong>公钥L</strong>进行数字签名生成签名证书**.cer<strong>，同时使用</strong>私钥A<strong>对额外信息（使用什么证书打包、AppID、打包的App包含了哪些功能、可以在哪些设备上安装）进行签名生成描述文件</strong>Provisioning Profile<strong>，之后将</strong>.cer<strong>和</strong>Provisioning Profile**下载安装到Mac机器上。</p>
-</li>
-<li><p>编译打包app，选择签名证书**.cer<strong>，打包指令会自动找到该证书对应的</strong>私钥L<strong>（能匹配是因为钥匙对是成对出现的，前提是本地必须已经存在L私钥，也就是p12的安装），然后使用</strong>私钥L**对app进行签名。</p>
-<ul>
-<li><p>这些签名数据包含两部分：<code>Mach-O</code>可执行文件会把签名直接写入这个文件中，其他资源文件则会保存在<code>_CodeSignature</code>目录下。你可以将打包生成的<code>.ipa</code>文件另存为<code>.zip</code>，解压后对<code>Payload</code>文件夹中的<code>.app</code>文件右键、显示包内容，就可以看到签名数据。</p>
-</li>
-<li><p>另外签名过程中对于App内包含的动态库以及插件（<code>Plugins、Watch、Frameworks</code>文件夹），每一个都会单独进行一次签名，并生成各自的<code>Mach-O</code>可执行文件和<code>_CodeSignature</code>。</p>
-</li>
-<li><p>签名数据指代码内容、App包含的所有资源文件，只要其中有任何改动，都必须重新签名才有效。</p>
-</li>
-</ul>
-</li>
-<li><p>打包的过程中会将描述文件<strong>Provisioning Profile</strong>命名为<strong>embedded.mobileprovision</strong>放入到打包app中。</p>
-</li>
-<li><p>安装/启动，iOS设备使用内置的<strong>公钥A</strong>验证<strong>embedded.mobileprovision</strong>是否有效（设备是否在允许安装列表内），同时再次验证里面包含的**.cer<strong>证书签名是否有效（证书过期与否）并取出</strong>公钥L**。</p>
-</li>
-<li><p><strong>embedded.mobileprovision</strong>验证通过，就使用<strong>公钥L</strong>解密验证app签名信息：AppID是否对应、权限开关是否跟app里的<code>entitlements</code>一致等等。</p>
-</li>
-<li><p>所有验证通过，安装/启动完成。</p>
-</li>
-</ol>
-<h2 id=""><a href="#" class="headerlink" title=""></a><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/%E7%AD%BE%E5%90%8D%E6%B5%81%E7%A8%8B.png" alt="签名流程"></h2><p>以上流程便是开发调试、AD-Hoc、In-House等方式打包安装App的过程，区别只在于第⑤步中<code>设备IDs</code>的匹配规则不一致。开发调试只安装当前联调的设备；AD-Hoc允许安装到已在开发者账号下注册过的设备，且每年最多允许100台；In-House无设备数量限制，常用于企业内部App的分发。</p>
-<h3 id="3-ipa包重签名"><a href="#3-ipa包重签名" class="headerlink" title="3. ipa包重签名"></a>3. ipa包重签名</h3><p>ipa包重签名主要针对的是非App Store的安装包，App Store分发最终是上传ipa文件到苹果后台审核，通过后使用Apple私钥加密，然后才能发布安装，不存在重签入侵的可能。而开发调试、AD-Hoc、In-House等分发途径生成的ipa包不存在苹果后台验证的步骤，这也就意味着你可以对任意的<code>.app、</code> <code>.ipa</code>文件进行重签名。</p>
-<p>回顾前面讲到的签名流程，真正对ipa包进行签名的关键步骤（④⑤）是在Mac本地进行的，签名过程中需要满足三个条件：<code>App</code>即软件代码编译生成的产物、<code>p12</code>证书以及<code>Provisioning Profile</code>配置文件。其中<code>App</code>的内容是动态变动的，Apple不会去验证它，实际上也无需验证，因为在开发调试过程中，所开发的App肯定是不停的迭代变化的，如果需要上线App Store那Apple只需在审核阶段对App内容进行把关验证即可，而其他分发渠道它则管不了。<code>p12</code>以及<code>Provisioning Profile</code>则是下载后主动安装的，大部分情况下都是由管理员创建下载好之后，导出分发给团队成员。</p>
-<h4 id="3-1-签名指令"><a href="#3-1-签名指令" class="headerlink" title="3.1 签名指令"></a>3.1 签名指令</h4><p>iOS签名调用的是<em><strong>codesign</strong></em>指令，你也可以直接使用相关指令进行签名，下面是codesign的常用指令：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> MAC终端输入： codesign --<span class="built_in">help</span></span></span><br><span class="line">codesign --help</span><br><span class="line">Usage: codesign -s identity [-fv*] [-o flags] [-r reqs] [-i ident] path ... # sign</span><br><span class="line">       codesign -v [-v*] [-R=&lt;req string&gt;|-R &lt;req file path&gt;] path|[+]pid ... # verify</span><br><span class="line">       codesign -d [options] path ... # display contents</span><br><span class="line">       codesign -h pid ... # display hosting paths</span><br></pre></td></tr></table></figure>
-
-<p>查看Xcode的编译日志，也可以看到签名的详细信息</p>
-<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/Xcode%E7%AD%BE%E5%90%8D.png" alt="Xcode签名"></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 签名指令</span></span><br><span class="line">codesign -f -s &quot;iPhone Distribution: XXX（证书名称）&quot; --entitlements entitlements.plist（Profile配置文件） XXX.app（签名app）</span><br></pre></td></tr></table></figure>
-
-<p>####3.2 重签名</p>
-<ul>
-<li><p>首先获取需要重签名的ipa包，注意该ipa包必须是未加密的。如果是从App Store下载的ipa，需要砸壳解密后才能进行重签名，你也可以从越狱平台下载。将获取的<code>.ipa</code>重命名为<code>.zip</code>，然后右键解压，将会生成一个 <strong>Payload</strong> 文件夹，里面包含<code>.app</code>文件。</p>
-</li>
-<li><p>将签名证书对应的<code>Provisioning Profile</code>文件重命名为 <strong>embedded.mobileprovision</strong>，并拷贝放到<strong>Payload</strong>文件夹中。同时右键<code>.app</code>文件，显示包内容，将前面的<strong>embedded.mobileprovision</strong>文件再拷贝一份放到<code>.app</code>文件夹中，替换掉原有的<code>embedded.mobileprovision</code>。</p>
-</li>
-<li><p><strong>entitlements.plist</strong>是由签名证书对应的<strong>Profile</strong>配置导出的签名文件，它与前面截图Xcode签名日志中的<code>XXX.xcent</code>文件的作用相同。终端cd到<strong>Payload</strong>文件夹路径，执行指令</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">cd</span> xxx/Payload，然后执行下面指令</span></span><br><span class="line">security cms -D -i embedded.mobileprovision</span><br></pre></td></tr></table></figure>
-
-<p>将会打印出Profile配置的内容，找到<code>&lt;key&gt;Entitlements&lt;/key&gt;</code>，然后把<code>&lt;key&gt;Entitlements&lt;/key&gt;</code>下面<code>&lt;dict&gt;...&lt;/dict&gt;</code>的内容拷贝到新建的<code>entitlements.plist</code>文件中（可以通过Xcode生成plist文件，选Property List类型），最后将<code>entitlements.plist</code>文件放到<strong>Payload</strong>文件夹中。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 拷贝内容为：<span class="tag">&lt;<span class="name">dict</span>&gt;</span> ... <span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">key</span>&gt;</span>Entitlements<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">key</span>&gt;</span>application-identifier<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">string</span>&gt;</span>xxx<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">key</span>&gt;</span>keychain-access-groups<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">array</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">string</span>&gt;</span>xxx<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">array</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">key</span>&gt;</span>get-task-allow<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">false</span>/&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">key</span>&gt;</span>com.apple.developer.team-identifier<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">string</span>&gt;</span>xxx<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
-<li><p><strong>签名证书名称</strong>可以在安装证书后从钥匙串中心查看</p>
-<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/%E8%AF%81%E4%B9%A6%E5%90%8D%E7%A7%B0.png" alt="证书名称"></p>
-<p>或者在终端使用以下指令查看：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">security find-identity -v -p codesigning</span><br></pre></td></tr></table></figure></li>
-<li><p>准备工作完成，开始重签名。先右键<code>.app</code>显示包内容，查看动态库和插件（<code>Plugins、Watch、Frameworks</code>文件夹），如果是个人证书需要移除<code>Plugins、Watch</code>文件夹，因为个人证书没法签名Extention。如果存在<code>Frameworks</code>，则执行签名指令，有多个的话则每一个Frameworks都要重签一次。</p>
-</li>
-<li><p>```shell<br>codesign -fs “签名证书名称” “Frameworks/xxx.framework（动态库路径）”</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">* 最后对app进行重签名</span><br><span class="line"></span><br><span class="line">* &#96;&#96;&#96;shell</span><br><span class="line">  codesign -f -s &quot;iPhone Distribution: XXX（证书名称）&quot; --entitlements entitlements.plist（Profile配置文件） XXX.app（签名app）</span><br></pre></td></tr></table></figure></li>
-<li><p>最后将<strong>Payload</strong>文件夹下的资源移除，只保留**.app**文件，右键压缩，然后更改后缀为<code>.ipa</code>，这样重签后的ipa便已生成了，你可以通过iTunes、iTools或其他途径安装到iOS设备上。</p>
-</li>
-</ul>
-<p>####3.3 注入代码重签</p>
-<ul>
-<li><p>ipa代码注入一般通过动态库来实现。新建动态库在Xcode中选择新建 <code>TARTETS — Framework &amp; Library — Framework</code>，然后在framework中添加自定义代码，一般都是使用Runtime来注入附加功能。最后选择framework要支持的架构，编译后便得到了最终动态库。</p>
-<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/%E5%8A%A8%E6%80%81%E5%BA%93.png" alt="动态库"></p>
-</li>
-<li><p>对需要重签名的**.app<strong>右键显示包内容，然后将动态库拷贝到<code>Framework</code>文件夹（没有则新建）中。然而此时动态库与app还没建立关联关系，动态库需要注入<code>MachO</code>中才能生效。注入使用</strong><a target="_blank" rel="noopener" href="https://github.com/KJCracks/yololib">yololib</a>**工具，下载yololib并编译，将生产的命令复制到<code>/usr/local/bin</code>或<code>$PATH</code>中的其他路径，便可以在终端使用<code>yololib</code>指令</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## 通过yololib工具实现注入动态库</span></span><br><span class="line">yololib <span class="string">&quot;MachO文件路径&quot;</span> <span class="string">&quot;需要注入的动态库路径&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>注入成功后再对所有Framework签名，最后对app重签名，然后生成ipa文件。</p>
-<p>这里整理了一份用于重签名的脚本 <a target="_blank" rel="noopener" href="https://github.com/lele8446/CJShellDemo/tree/master/CJCodeSign">CJCodeSign</a>，想了解更多关于签名指令的内容可点击查看详情。</p>
-</li>
-</ul>
-<p>####3.4 关于重签名的思考</p>
-<p>iOS重签名实现，可以发现用于签名的私钥资源（包括<code>.cer</code>证书和<code>Provisioning Profile</code>配置）和实际签名的app包是没有强关联关系的，这也就带来了两方面的问题。</p>
-<ol>
-<li><code>.cer</code>证书和<code>Provisioning Profile</code>配置被用于其他App的分发签名，特别如果是In-House企业类型的证书，那是可以进行无限制分发的，而一旦苹果检测到这种违规签名的行为，轻则撤销证书，重则注销企业开发者账号！这也就是为什么一定要严格把控 <code>p12</code>、<code>Provisioning Profile</code> 文件外发的原因。</li>
-<li>自有App被注入代码后重签名，比如应用多开、添加插件、恶意抓包等等，对于这一类的防护除了对Bundle ID进行检查，以及对App动态库增加白名单检索外好像也没有更好的办法。当然这已经涉及到逆向防护的方向了，本人对此还未深入了解，有兴趣的同学可以一起参与探讨。</li>
-</ol>
-<p><strong>全文完</strong>！</p>
-<p>最后再附上重签名脚本地址： <a target="_blank" rel="noopener" href="https://github.com/lele8446/CJShellDemo/tree/master/CJCodeSign">CJCodeSign</a> </p>
-<p>作者简介：lele8446，iOS开发深耕者，爱好分享、深⼊探讨有温度的内容，<a target="_blank" rel="noopener" href="https://github.com/lele8446">GitHub</a>地址。</p>
-
-          
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/01/26/iOS%E7%AD%BE%E5%90%8D%E6%89%93%E5%8C%85%EF%BC%8C%E4%BD%A0%E7%9C%9F%E7%9A%84%E6%87%82%E5%90%97/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
         
       
     </div>
-    
-    
-    
 
     
-
     
-
     
 
     <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
         <div class="post-eof"></div>
       
     </footer>
-  </div>
-  
-  
-  
   </article>
+</div>
+
+
 
 
     
-  </section>
 
+
+<div class="post-block">
+  
   
 
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2019/10/24/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3iOS%E5%9B%BE%E6%96%87%E6%B7%B7%E6%8E%92%E5%8E%9F%E7%90%86%E5%B9%B6%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9B%BE%E6%96%87%E6%8E%A7%E4%BB%B6/">
 
-          </div>
-          
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="lele8446">
+      <meta itemprop="description" content="coding, learning...">
+    </span>
 
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="C.J.Lian">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2019/10/24/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3iOS%E5%9B%BE%E6%96%87%E6%B7%B7%E6%8E%92%E5%8E%9F%E7%90%86%E5%B9%B6%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9B%BE%E6%96%87%E6%8E%A7%E4%BB%B6/" class="post-title-link" itemprop="url">深入理解iOS图文混排原理并自定义图文控件</a>
+        </h2>
 
-          
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-10-24 11:50:03" itemprop="dateCreated datePublished" datetime="2019-10-24T11:50:03+08:00">2019-10-24</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2019-10-25 12:15:00" itemprop="dateModified" datetime="2019-10-25T12:15:00+08:00">2019-10-25</time>
+      </span>
+
+  
+</div>
 
         </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
+      </header>
 
-  <aside id="sidebar" class="sidebar">
     
-    <div class="sidebar-inner">
-
-      
-
-      
-
-      <section class="site-overview sidebar-panel sidebar-panel-active">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.gif"
-               alt="" />
-          <p class="site-author-name" itemprop="name"></p>
-           
-              <p class="site-description motion-element" itemprop="description"></p>
-          
-        </div>
-        <nav class="site-state motion-element">
-
-          
-            <div class="site-state-item site-state-posts">
-              <a href="/archives/">
-                <span class="site-state-item-count">3</span>
-                <span class="site-state-item-name">posts</span>
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>iOS开发中一般用UILabel来展示文字、UIImageView用来显示图片、UIButton用于简单的图文点击响应事件，稍复杂一点的可以借助<code>NSAttributedString</code>来实现图文混排需求，又或者将图文内容转换为HTML由WKWebView（UIWebView）来展示。然而以上方案都有各自的局限性：UILabel绘制NSAttributedString不能灵活定位文本内的点击锚点区域，转换为HTML展示则带来Native与Web端交互成本以及WKWebView自身的性能问题。</p>
+<p>那么，是否能有一种控件，在满足富文本图文混排的同时还能响应自定义锚点点击事件？要实现以上需求，我们首先从iOS图文展示原理说起。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/10/24/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3iOS%E5%9B%BE%E6%96%87%E6%B7%B7%E6%8E%92%E5%8E%9F%E7%90%86%E5%B9%B6%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9B%BE%E6%96%87%E6%8E%A7%E4%BB%B6/#more" rel="contents">
+                阅读全文 &raquo;
               </a>
             </div>
-          
-
-          
-
-          
-
-        </nav>
-
+          <!--/noindex-->
         
-
-        <div class="links-of-author motion-element">
-          
-        </div>
-
-        
-        
-
-        
-        
-
-        
-
-
-      </section>
-
       
-
-      
-
     </div>
-  </aside>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
 
 
-        
-      </div>
-    </main>
 
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright" >
+
+    
+
+
+<div class="post-block">
   
-  &copy; 
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2018/09/07/iOS12%20%E8%B8%A9%E5%9D%91%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="lele8446">
+      <meta itemprop="description" content="coding, learning...">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="C.J.Lian">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/09/07/iOS12%20%E8%B8%A9%E5%9D%91%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0/" class="post-title-link" itemprop="url">iOS12 踩坑持续更新</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-09-07 16:46:03" itemprop="dateCreated datePublished" datetime="2018-09-07T16:46:03+08:00">2018-09-07</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2018-10-11 12:00:00" itemprop="dateModified" datetime="2018-10-11T12:00:00+08:00">2018-10-11</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p>iOS12很快就要发布，项目的坑都填好了吗？没有！那还不赶紧填……</p>
+</blockquote>
+<h4 id="info-plist文件重复"><a href="#info-plist文件重复" class="headerlink" title="info.plist文件重复"></a>info.plist文件重复</h4><p>Xcode10编译提示<code>Multiple commands produce &#39;xxx/Info.plist&#39;</code>，这是由于项目中存在重复命名的info.plist文件。</p>
+<p>解决方式：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/09/07/iOS12%20%E8%B8%A9%E5%9D%91%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+<script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2016 – 
   <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">lele8446</span>
 </div>
-
-
-<div class="powered-by">
-  Powered by <a class="theme-link" target="_blank" rel="noopener" href="https://hexo.io">Hexo</a>
-</div>
-
-<div class="theme-info">
-  Theme -
-  <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Muse
-  </a>
-</div>
-
-
-        
-
-        
-      </div>
-    </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
-    
-
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
-  
-
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
+    </div>
+  </footer>
 
   
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-
-  
-  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
-
-
-
-  
-  
-
-  
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
-
-  
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
-
-
-
-  
-
-
-  
-
-
-
-
-	
-
-
-
-
-
-  
-
-
-
-
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
 
   
 
@@ -1083,18 +458,6 @@
 
 
 
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
 
 </body>
 </html>
