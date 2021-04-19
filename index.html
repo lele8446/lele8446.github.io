@@ -130,7 +130,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -231,6 +231,9 @@
     
     <div class="post-body" itemprop="articleBody">
           <blockquote>
+<p>本文初次发表于<a target="_blank" rel="noopener" href="https://www.oschina.net/"><strong>OSCHINA</strong> </a> <a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/zCaHftxdoM-R9L_0oO2ahw">iOS打包签名，你真的懂吗？</a></p>
+</blockquote>
+<blockquote>
 <p>导语：iOS签名类型有Development、AD-Hoc、In-House、App Store，而打包过程中又涉及到各种证书、Provision Profile、entitlements、CertificateSigningRequest、p12、AppID……各种概念一大堆，本文将从打包签名的原理说起，并梳理完全签名的整体流程，最后讲解重签名的实现以及签名机制中有哪些是需要注意防护的要点。</p>
 </blockquote>
 <p>为了保证App的分发平台是可控的，以及保证所有安装到iOS设备上的App都是经过苹果官方允许的，苹果建立了iOS签名打包机制。要了解iOS签名机制的实现，我们首先从签名机制的原理说起。</p>
@@ -267,7 +270,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2019/10/24/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3iOS%E5%9B%BE%E6%96%87%E6%B7%B7%E6%8E%92%E5%8E%9F%E7%90%86%E5%B9%B6%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9B%BE%E6%96%87%E6%8E%A7%E4%BB%B6/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2019/10/24/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E5%9B%BE%E6%96%87%E6%B7%B7%E6%8E%92%E5%8E%9F%E7%90%86%E5%B9%B6%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9B%BE%E6%96%87%E6%8E%A7%E4%BB%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -280,7 +283,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2019/10/24/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3iOS%E5%9B%BE%E6%96%87%E6%B7%B7%E6%8E%92%E5%8E%9F%E7%90%86%E5%B9%B6%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9B%BE%E6%96%87%E6%8E%A7%E4%BB%B6/" class="post-title-link" itemprop="url">深入理解iOS图文混排原理并自定义图文控件</a>
+          <a href="/2019/10/24/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E5%9B%BE%E6%96%87%E6%B7%B7%E6%8E%92%E5%8E%9F%E7%90%86%E5%B9%B6%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9B%BE%E6%96%87%E6%8E%A7%E4%BB%B6/" class="post-title-link" itemprop="url">深入理解图文混排原理并自定义图文控件</a>
         </h2>
 
         <div class="post-meta-container">
@@ -311,11 +314,14 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>iOS开发中一般用UILabel来展示文字、UIImageView用来显示图片、UIButton用于简单的图文点击响应事件，稍复杂一点的可以借助<code>NSAttributedString</code>来实现图文混排需求，又或者将图文内容转换为HTML由WKWebView（UIWebView）来展示。然而以上方案都有各自的局限性：UILabel绘制NSAttributedString不能灵活定位文本内的点击锚点区域，转换为HTML展示则带来Native与Web端交互成本以及WKWebView自身的性能问题。</p>
+          <blockquote>
+<p>本文初次发表于<a target="_blank" rel="noopener" href="https://www.infoq.cn/"><strong>InfoQ</strong> </a> <a target="_blank" rel="noopener" href="https://www.infoq.cn/article/cy916KUJYK7GA3p2VjZH">深入理解 iOS 图文混排原理并自定义图文控件</a></p>
+</blockquote>
+<p>iOS开发中一般用UILabel来展示文字、UIImageView用来显示图片、UIButton用于简单的图文点击响应事件，稍复杂一点的可以借助<code>NSAttributedString</code>来实现图文混排需求，又或者将图文内容转换为HTML由WKWebView（UIWebView）来展示。然而以上方案都有各自的局限性：UILabel绘制NSAttributedString不能灵活定位文本内的点击锚点区域，转换为HTML展示则带来Native与Web端交互成本以及WKWebView自身的性能问题。</p>
 <p>那么，是否能有一种控件，在满足富文本图文混排的同时还能响应自定义锚点点击事件？要实现以上需求，我们首先从iOS图文展示原理说起。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/10/24/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3iOS%E5%9B%BE%E6%96%87%E6%B7%B7%E6%8E%92%E5%8E%9F%E7%90%86%E5%B9%B6%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9B%BE%E6%96%87%E6%8E%A7%E4%BB%B6/#more" rel="contents">
+              <a class="btn" href="/2019/10/24/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E5%9B%BE%E6%96%87%E6%B7%B7%E6%8E%92%E5%8E%9F%E7%90%86%E5%B9%B6%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9B%BE%E6%96%87%E6%8E%A7%E4%BB%B6/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -398,6 +404,86 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2018/09/07/iOS12%20%E8%B8%A9%E5%9D%91%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2018/04/20/%E6%87%92%E5%88%B0%E6%9E%81%E8%87%B4%E4%B9%8B%E6%80%92%E6%92%B8%E4%B8%80%E9%94%AE%E6%89%93%E5%8C%85%E5%8F%91%E5%B8%83%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="lele8446">
+      <meta itemprop="description" content="coding, learning...">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="C.J.Lian">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/04/20/%E6%87%92%E5%88%B0%E6%9E%81%E8%87%B4%E4%B9%8B%E6%80%92%E6%92%B8%E4%B8%80%E9%94%AE%E6%89%93%E5%8C%85%E5%8F%91%E5%B8%83%E7%B3%BB%E7%BB%9F/" class="post-title-link" itemprop="url">懒到极致之怒撸一键打包发布系统</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-04-20 21:15:03" itemprop="dateCreated datePublished" datetime="2018-04-20T21:15:03+08:00">2018-04-20</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2018-04-21 16:20:00" itemprop="dateModified" datetime="2018-04-21T16:20:00+08:00">2018-04-21</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>一切得从上个版本的打包发布说起。</p>
+<p>开发中本人负责了iOS包的版本发布工作。iOS打包：不就是选一下证书，再在Xcode上点几下按钮，IDE全都给你设置好流程了，有必要这么麻烦吗？</p>
+<p>诚然，如果只是打包，在不考虑团队协同合作、打包效率、重复工作量的前提下，使用Xcode自带的打包方式当然是没问题的。但实际开发中，每次打包大概包含以下流程：<br><code>拉取最新代码（SVN或Git）</code> → <code>编译通过</code> → <code>设置打包环境（开发、测试、生产等）</code> → <code>导出IPA包</code> → <code>上传IPA包（App Store或者企业包上传至指定服务器）</code></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/04/20/%E6%87%92%E5%88%B0%E6%9E%81%E8%87%B4%E4%B9%8B%E6%80%92%E6%92%B8%E4%B8%80%E9%94%AE%E6%89%93%E5%8C%85%E5%8F%91%E5%B8%83%E7%B3%BB%E7%BB%9F/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
