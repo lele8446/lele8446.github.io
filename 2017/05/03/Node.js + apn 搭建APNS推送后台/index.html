@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;example.com&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Pisces&quot;,&quot;version&quot;:&quot;8.3.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script>
+<meta name="description" content="本文重点关注的是APNS推送后台的搭建，不涉及推送证书Certificate 、Profiles 文件，iOS客户端推送代码的介绍。 需求背景iOS开发，在接收到APNS推送消息后打开App，然后跳转到App内任意模块、或者打开webView页面、或者执行升级操作、或者跳转打开第三方应用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Node.js + apn 搭建APNS推送后台">
+<meta property="og:url" content="http://example.com/2017/05/03/Node.js%20+%20apn%20%E6%90%AD%E5%BB%BAAPNS%E6%8E%A8%E9%80%81%E5%90%8E%E5%8F%B0/index.html">
+<meta property="og:site_name" content="C.J.Lian">
+<meta property="og:description" content="本文重点关注的是APNS推送后台的搭建，不涉及推送证书Certificate 、Profiles 文件，iOS客户端推送代码的介绍。 需求背景iOS开发，在接收到APNS推送消息后打开App，然后跳转到App内任意模块、或者打开webView页面、或者执行升级操作、或者跳转打开第三方应用。">
+<meta property="og:locale">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429982-6a7d458bb426e048.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2017-05-03T02:55:03.000Z">
+<meta property="article:modified_time" content="2017-05-03T09:52:00.000Z">
+<meta property="article:author" content="lele8446">
+<meta property="article:tag" content="APNS">
+<meta property="article:tag" content="iOS开发">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1429982-6a7d458bb426e048.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+<link rel="canonical" href="http://example.com/2017/05/03/Node.js%20+%20apn%20%E6%90%AD%E5%BB%BAAPNS%E6%8E%A8%E9%80%81%E5%90%8E%E5%8F%B0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-Hans&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;http:&#x2F;&#x2F;example.com&#x2F;2017&#x2F;05&#x2F;03&#x2F;Node.js%20+%20apn%20%E6%90%AD%E5%BB%BAAPNS%E6%8E%A8%E9%80%81%E5%90%8E%E5%8F%B0&#x2F;&quot;,&quot;path&quot;:&quot;2017&#x2F;05&#x2F;03&#x2F;Node.js + apn 搭建APNS推送后台&#x2F;&quot;,&quot;title&quot;:&quot;Node.js + apn 搭建APNS推送后台&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>Node.js + apn 搭建APNS推送后台 | C.J.Lian</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">C.J.Lian</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9C%80%E6%B1%82%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">需求背景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%99%E5%9C%A8%E5%BC%80%E5%A4%B4"><span class="nav-number">2.</span> <span class="nav-text">写在开头</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B9%B2%E8%B4%A7"><span class="nav-number">3.</span> <span class="nav-text">干货</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E7%94%9F%E6%88%90-pem%E6%96%87%E4%BB%B6"><span class="nav-number">3.1.</span> <span class="nav-text">1. 生成 pem文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E7%BC%96%E8%BE%91js%E6%96%87%E4%BB%B6%EF%BC%88APNS-js%EF%BC%89"><span class="nav-number">3.2.</span> <span class="nav-text">2. 编辑js文件（APNS.js）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-%E9%85%8D%E7%BD%AE"><span class="nav-number">3.3.</span> <span class="nav-text">3. 配置</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lele8446"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">lele8446</p>
+  <div class="site-description" itemprop="description">coding, learning...</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lele8446" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lele8446" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:lele8446@foxmail.com" title="E-Mail → mailto:lele8446@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.com/in/%E7%82%BD%E9%87%91-%E7%BB%83-966a4813b/" title="Linkedin → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;%E7%82%BD%E9%87%91-%E7%BB%83-966a4813b&#x2F;" rel="noopener" target="_blank"><i class="fab fa-linkedin fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2017/05/03/Node.js%20+%20apn%20%E6%90%AD%E5%BB%BAAPNS%E6%8E%A8%E9%80%81%E5%90%8E%E5%8F%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="lele8446">
+      <meta itemprop="description" content="coding, learning...">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="C.J.Lian">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Node.js + apn 搭建APNS推送后台
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2017-05-03 10:55:03 / 修改时间：17:52:00" itemprop="dateCreated datePublished" datetime="2017-05-03T10:55:03+08:00">2017-05-03</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>本文重点关注的是APNS推送后台的搭建，不涉及推送证书Certificate 、Profiles 文件，iOS客户端推送代码的介绍。</p>
+<h4 id="需求背景"><a href="#需求背景" class="headerlink" title="需求背景"></a>需求背景</h4><p>iOS开发，在接收到APNS推送消息后打开App，然后跳转到App内任意模块、或者打开webView页面、或者执行升级操作、或者跳转打开第三方应用。</p>
+<span id="more"></span>
+<p>对于这样的需求，开发测试的时候需要频繁发送APNS推送，如果每次都让后台服务器的兄弟来配合测试，那肯定是心好累，最好的方案就是自己搭建服务，想怎么推就怎么推！！</p>
+<h4 id="写在开头"><a href="#写在开头" class="headerlink" title="写在开头"></a>写在开头</h4><p> 网上关于APNS推送的文章有很多，但对于推送后台介绍的文章却不多（有很多都是介绍java后台的，本人曾经参照教程用java实现过，那是在Android Studio上运行的，为了推送消息这个小小的功能，却要安装Android Studio那么大一个IDE，同时还要新建工程来运行项目，想想都头大😓）</p>
+<p>在探寻的过程中发现了Node.js + apn是一个不错方案，只是网上关于这方面的介绍不多，有的也是<a target="_blank" rel="noopener" href="http://blog.csdn.net/freedom2028/article/details/12243187">同一篇文章</a>在相互转载。<br>文章最后对于后台的介绍只一句带过<code>最后，安装apn，把key.pem和cert.pem拷贝到项目目录。执行以下代码可以推送通知到指定设备</code>，这对于我这个js门外汉来说完全就是懵逼。。。</p>
+<p>无奈只能实践出真理，并将摸索过程中的一些经验做了总结。</p>
+<h4 id="干货"><a href="#干货" class="headerlink" title="干货"></a>干货</h4><h5 id="1-生成-pem文件"><a href="#1-生成-pem文件" class="headerlink" title="1. 生成 pem文件"></a>1. 生成 pem文件</h5><p><em>请先确保已安装对应的Apple Push Services证书，如果没有请网上搜索Apple Push Notification service SSL关键字</em></p>
+<p>打开<code>钥匙串访问</code>- 找到对应的推送证书，分别导出<code>apns-dev-cert.p12</code>以及<code>apns-dev-key.p12</code>文件，这里我导出的是development环境下的p12，这个可以在Xcode连真机build的时候收到推送。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1429982-6a7d458bb426e048.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="导出p12.png"></p>
+<p>导出的时候会提示设置密码，这里我设置的是：123456，后面生成pem和js文件中会用到。</p>
+<p>然后通过终端命令将两个文件转换为PEM格式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">openssl pkcs12 -clcerts -nokeys -out apns-dev-cert.pem -in apns-dev-cert.p12</span><br><span class="line"></span><br><span class="line">openssl pkcs12 -nocerts -out apns-dev-key.pem -in apns-dev-key.p12</span><br></pre></td></tr></table></figure>
+
+<p>上述转PEM文件语句可能转换不成功（终端中其实是不会提示你的，你可以对比下转换前后的p12 与pem文件，如果两者的文件大小相差太多，那就可能是失败了。当然如果转换失败，那最终在执行推送的时候肯定是不会成功的，那时也能发现到错误）</p>
+<p>如果转换失败，可以试下以下转换语句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl pkcs12 -in apns-dev-key.p12 -out apns-dev-key.pem -nodes</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-编辑js文件（APNS-js）"><a href="#2-编辑js文件（APNS-js）" class="headerlink" title="2. 编辑js文件（APNS.js）"></a>2. 编辑js文件（APNS.js）</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&quot;use strict&quot;;</span><br><span class="line"></span><br><span class="line">const apn &#x3D; require(&quot;apn&quot;);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; token 数组</span><br><span class="line">let tokens &#x3D; [&quot;45c0bc9952a930e96cd50df871dfc0f6a8382bb0ded0821c1111495507f8f5c3&quot;, &quot;4a633149803b1721590802eac88003ed024be210a3053ad51fa7a657d3b2a531&quot;];</span><br><span class="line"></span><br><span class="line">let service &#x3D; new apn.Provider(&#123;</span><br><span class="line">  cert: &quot;&#x2F;你电脑上的绝对路径&#x2F;apns-dev-cert.pem&quot;,</span><br><span class="line">  key: &quot;&#x2F;你电脑上的绝对路径&#x2F;apns-dev-key.pem&quot;,</span><br><span class="line">  gateway: &quot;gateway.sandbox.push.apple.com&quot;,</span><br><span class="line">  &#x2F;&#x2F; gateway: &quot;gateway.push.apple.com&quot;; &#x2F;&#x2F;线上地址</span><br><span class="line">  &#x2F;&#x2F; port: 2195, &#x2F;&#x2F;端口</span><br><span class="line">  passphrase: &quot;123456&quot; &#x2F;&#x2F;pem证书密码</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">let note &#x3D; new apn.Notification(&#123;</span><br><span class="line">    alert:  &quot;Breaking News: I just sent my first Push Notification&quot;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 主题 一般取应用标识符（bundle identifier）</span><br><span class="line">note.topic &#x3D; &quot;com.xxx.xxx</span><br><span class="line"></span><br><span class="line">console.log(&#96;Sending: $&#123;note.compile()&#125; to $&#123;tokens&#125;&#96;);</span><br><span class="line">service.send(note, tokens).then( result &#x3D;&gt; &#123;</span><br><span class="line">    console.log(&quot;sent:&quot;, result.sent.length);</span><br><span class="line">    console.log(&quot;failed:&quot;, result.failed.length);</span><br><span class="line">    console.log(result.failed);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">service.shutdown();</span><br></pre></td></tr></table></figure>
+
+<h5 id="3-配置"><a href="#3-配置" class="headerlink" title="3. 配置"></a>3. 配置</h5><p>安装Node.js地址 <a target="_blank" rel="noopener" href="https://nodejs.org/">https://nodejs.org</a></p>
+<p>安装apn，终端执行：</p>
+<blockquote>
+<p>$  sudo npm install apn</p>
+</blockquote>
+<p>配置node_modules环境变量 ，终端执行：</p>
+<blockquote>
+<p>// 进入当前用户目录，创建.bash_profile文件（如果没有会新建）<br>$  touch ~/.bash_profile</p>
+</blockquote>
+<p>打开.bash_profile文件，添加以下内容并保存</p>
+<blockquote>
+<p>export NODE_PATH=/usr/local/lib/node_modules/</p>
+</blockquote>
+<p>完成后在终端运行：</p>
+<blockquote>
+<p>$ node APNS.js</p>
+</blockquote>
+<p>不出意外，等待若干秒后可以收到推送消息，如果有问题可以根据终端提示修改。<br>更多关于apn的介绍看这里：<a target="_blank" rel="noopener" href="https://github.com/node-apn/node-apn">https://github.com/node-apn/node-apn</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/APNS/" rel="tag"># APNS</a>
+              <a href="/tags/iOS%E5%BC%80%E5%8F%91/" rel="tag"># iOS开发</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/03/03/Shell%E8%84%9A%E6%9C%AC%E2%80%94%E2%80%94Xcode%E8%84%9A%E6%9C%AC%E6%89%93%E5%8C%85%E7%9A%84%E5%89%AF%E6%9C%AC/" rel="prev" title="Shell脚本——Xcode脚本打包">
+                  <i class="fa fa-chevron-left"></i> Shell脚本——Xcode脚本打包
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/06/21/Runtime%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5%E2%80%94%E2%80%94hook%E9%BB%91%E9%AD%94%E6%B3%95%E4%BB%A5%E5%8F%8A%E6%89%A9%E5%B1%95%E7%B1%BB/" rel="next" title="Runtime应用实践——hook黑魔法以及扩展类">
+                  Runtime应用实践——hook黑魔法以及扩展类 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+<script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lele8446</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

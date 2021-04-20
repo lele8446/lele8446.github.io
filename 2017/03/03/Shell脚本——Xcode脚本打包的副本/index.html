@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;example.com&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Pisces&quot;,&quot;version&quot;:&quot;8.3.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script>
+<meta name="description" content="最近有好一段时间没有整理博客了，也不是因为忙，就是太懒。或者说程序员都自带懒属性😅，表现在对于一些机械性重复性的工作，宁愿一次性多花些精力去封装、去写出各种各样的工具来替自己干活，也不愿意多次重复劳动（就算那是很简单的工作）。这不，我结合最近的工作，研究着写了两份Shell脚本，一是关于Xcode脚本打包，还有一个是关于crash log解析（这个将在下一篇文章说明）。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shell脚本——Xcode脚本打包">
+<meta property="og:url" content="http://example.com/2017/03/03/Shell%E8%84%9A%E6%9C%AC%E2%80%94%E2%80%94Xcode%E8%84%9A%E6%9C%AC%E6%89%93%E5%8C%85%E7%9A%84%E5%89%AF%E6%9C%AC/index.html">
+<meta property="og:site_name" content="C.J.Lian">
+<meta property="og:description" content="最近有好一段时间没有整理博客了，也不是因为忙，就是太懒。或者说程序员都自带懒属性😅，表现在对于一些机械性重复性的工作，宁愿一次性多花些精力去封装、去写出各种各样的工具来替自己干活，也不愿意多次重复劳动（就算那是很简单的工作）。这不，我结合最近的工作，研究着写了两份Shell脚本，一是关于Xcode脚本打包，还有一个是关于crash log解析（这个将在下一篇文章说明）。">
+<meta property="og:locale">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429982-a749b05d47be9dd0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429982-731170b26679c196.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429982-98a992b7ffba67d7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2017-03-03T02:25:03.000Z">
+<meta property="article:modified_time" content="2017-03-03T06:00:00.000Z">
+<meta property="article:author" content="lele8446">
+<meta property="article:tag" content="签名打包">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1429982-a749b05d47be9dd0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+<link rel="canonical" href="http://example.com/2017/03/03/Shell%E8%84%9A%E6%9C%AC%E2%80%94%E2%80%94Xcode%E8%84%9A%E6%9C%AC%E6%89%93%E5%8C%85%E7%9A%84%E5%89%AF%E6%9C%AC/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-Hans&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;http:&#x2F;&#x2F;example.com&#x2F;2017&#x2F;03&#x2F;03&#x2F;Shell%E8%84%9A%E6%9C%AC%E2%80%94%E2%80%94Xcode%E8%84%9A%E6%9C%AC%E6%89%93%E5%8C%85%E7%9A%84%E5%89%AF%E6%9C%AC&#x2F;&quot;,&quot;path&quot;:&quot;2017&#x2F;03&#x2F;03&#x2F;Shell脚本——Xcode脚本打包的副本&#x2F;&quot;,&quot;title&quot;:&quot;Shell脚本——Xcode脚本打包&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>Shell脚本——Xcode脚本打包 | C.J.Lian</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">C.J.Lian</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Shell%E6%89%93%E5%8C%85%E8%84%9A%E6%9C%AC%E5%AE%9E%E7%8E%B0%E4%BA%86%E5%A6%82%E4%B8%8B%E5%8A%9F%E8%83%BD"><span class="nav-number">1.</span> <span class="nav-text">Shell打包脚本实现了如下功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%93%E5%8C%85%E8%84%9A%E6%9C%AC"><span class="nav-number">2.</span> <span class="nav-text">打包脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%84%9A%E6%9C%AC%E8%AF%A6%E8%A7%A3"><span class="nav-number">3.</span> <span class="nav-text">脚本详解</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lele8446"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">lele8446</p>
+  <div class="site-description" itemprop="description">coding, learning...</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lele8446" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lele8446" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:lele8446@foxmail.com" title="E-Mail → mailto:lele8446@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.com/in/%E7%82%BD%E9%87%91-%E7%BB%83-966a4813b/" title="Linkedin → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;%E7%82%BD%E9%87%91-%E7%BB%83-966a4813b&#x2F;" rel="noopener" target="_blank"><i class="fab fa-linkedin fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2017/03/03/Shell%E8%84%9A%E6%9C%AC%E2%80%94%E2%80%94Xcode%E8%84%9A%E6%9C%AC%E6%89%93%E5%8C%85%E7%9A%84%E5%89%AF%E6%9C%AC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="lele8446">
+      <meta itemprop="description" content="coding, learning...">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="C.J.Lian">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Shell脚本——Xcode脚本打包
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2017-03-03 10:25:03 / 修改时间：14:00:00" itemprop="dateCreated datePublished" datetime="2017-03-03T10:25:03+08:00">2017-03-03</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>最近有好一段时间没有整理博客了，也不是因为忙，就是太懒。或者说程序员都自带懒属性😅，表现在对于一些机械性重复性的工作，宁愿一次性多花些精力去封装、去写出各种各样的工具来替自己干活，也不愿意多次重复劳动（就算那是很简单的工作）。这不，我结合最近的工作，研究着写了两份Shell脚本，一是关于<a target="_blank" rel="noopener" href="https://github.com/lele8446/ReleaseDir">Xcode脚本打包</a>，还有一个是关于<a target="_blank" rel="noopener" href="http://www.jianshu.com/p/392d801062d1">crash log解析</a>（这个将在下一篇文章说明）。</p>
+<span id="more"></span>
+
+<hr>
+<h3 id="Shell打包脚本实现了如下功能"><a href="#Shell打包脚本实现了如下功能" class="headerlink" title="Shell打包脚本实现了如下功能"></a>Shell打包脚本实现了如下功能</h3><ol>
+<li>指定打包项目的Build号，Version版本号——Version号可选择自增或自定义（在测试阶段打包时，每次手动改变Version号很是麻烦，而且不方便管理；而如果能打包时通过脚本参数控制，so easy～）</li>
+<li>导出xcarchive文件，通过xcarchive文件得到dSYM文件，这是很重要的。查找线上crash时，缺它不可！<a target="_blank" rel="noopener" href="http://www.jianshu.com/p/392d801062d1">crash log解析</a>请看这里。</li>
+<li>打包生成ipa文件，这个就是最终需要的渠道包了。</li>
+</ol>
+<p>另外打包脚本可以根据项目配置，每一次成功打包后，都会生成对应目录，并生成记录本次打包的log日志文件。</p>
+<hr>
+<h3 id="打包脚本"><a href="#打包脚本" class="headerlink" title="打包脚本"></a>打包脚本</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;bash</span><br><span class="line"></span><br><span class="line">#--------------------------------------------------------------------------------</span><br><span class="line"># 脚本说明：</span><br><span class="line"># 1、实现功能：</span><br><span class="line">#     1）、指定打包项目的Build号，Version版本号（Version号可选择自增或自定义）</span><br><span class="line">#     2）、导出xcarchive文件</span><br><span class="line">#     3）、打包生成ipa文件</span><br><span class="line"># 2、使用方式：</span><br><span class="line">#     1）、将ReleaseDir文件夹，放到跟所要打包的项目的根目录（TestDemo）同级别的目录下</span><br><span class="line">#     2）、cd至ReleaseDir，运行脚本.&#x2F;Release.sh TestDemo，并选择输入相关参数，开始打包</span><br><span class="line">#     3）、完成打包后，生成的目标文件在如下目录：</span><br><span class="line">#          &#x2F;ReleaseDir&#x2F;ArchivePath&#x2F;TestDemo&#x2F;1.0.0&#x2F;2017_03_03_10:37:34</span><br><span class="line">#         (&#x2F;ReleaseDir&#x2F;ArchivePath&#x2F;打包项目名称&#x2F;打包版本号&#x2F;打包时间)</span><br><span class="line">#--------------------------------------------------------------------------------</span><br><span class="line">#</span><br><span class="line">#--------------------------------------------------------------------------------</span><br><span class="line"># 打包project</span><br><span class="line">#        .&#x2F;Release.sh  &lt;Project directory name&gt; [-s &lt;Name&gt;] [-e] [-d] [-a] [-b &lt;Build number&gt;]</span><br><span class="line"># 打包workspace</span><br><span class="line">#        .&#x2F;Release.sh  &lt;Project directory name&gt; [-w] [-s &lt;Name&gt;] [-e] [-d] [-b &lt;Build number&gt;] [-v &lt;Version number&gt;]</span><br><span class="line"># 参数说明：</span><br><span class="line">#     &lt;Project directory name&gt;    第一个参数：所要打包的项目的根目录文件夹名称         </span><br><span class="line">#     -w 				         workspace打包，不传默认为project打包</span><br><span class="line">#     -s &lt;Name&gt;			       对应workspace下需要编译的scheme（不传默认取xcodeproj根目录文件名）</span><br><span class="line">#     -e 	        	         打包前是否先编译工程（不传默认不编译）</span><br><span class="line">#     -d 		                 工程的configuration为 Debug 模式，不传默认为Release</span><br><span class="line">#     -a 			             打包，Version版本号自动＋1（针对多次打测试包时的版本号修改）</span><br><span class="line">#	 -b &lt;Build Num&gt;              Build版本号，指定项目Build号</span><br><span class="line">#	 -v &lt;Version Num&gt;            Version版本号，指定项目Version号</span><br><span class="line">#  注意，参数-a 与 -v 互斥，只能选择传其中一种参数！！</span><br><span class="line">#--------------------------------------------------------------------------------</span><br><span class="line">#</span><br><span class="line">#--------------------------------------------------------------------------------</span><br><span class="line"># ReleaseDir文件目录说明：</span><br><span class="line">#</span><br><span class="line"># |___TestDemo                                所要打包的项目的根目录</span><br><span class="line"># |___ReleaseDir                              打包相关资源的根目录</span><br><span class="line">#    |___Release.sh                           Release.sh打包脚本</span><br><span class="line">#    |___ExportOptions.plist                  -exportOptionsPlist 配置文件</span><br><span class="line">#    |___ArchivePath                          打包文件输出路径</span><br><span class="line">#       |___TestDemo                          打包项目名称</span><br><span class="line">#          |___1.0.0                          打包版本号</span><br><span class="line">#             |___2017_03_02_16&#x2F;23&#x2F;28         打包时间（格式：年_月_日_时&#x2F;分&#x2F;秒）</span><br><span class="line">#                |___TestDemo_1.0.0.xcarchive 导出的.xcarchive文件</span><br><span class="line">#                |___TestDemo.ipa             导出的.ipa文件</span><br><span class="line">#                |___LogPath                  打包日志</span><br><span class="line">#</span><br><span class="line">#--------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">#计时</span><br><span class="line">SECONDS&#x3D;0</span><br><span class="line">#--------------------------------------------</span><br><span class="line"># 参数判断</span><br><span class="line">#--------------------------------------------</span><br><span class="line"># 如果参数个数少于1</span><br><span class="line">if [ $# -lt 1 ];then</span><br><span class="line">    echo -e  &quot;\033[31m第一个参数请输入 Xcode project 文件所在的根目录文件夹名称！！\033[0m&quot;</span><br><span class="line">    exit 2</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line"># 脚本文件所在根目录</span><br><span class="line">Release_path&#x3D;$(pwd)</span><br><span class="line">Project_dir&#x3D;$1</span><br><span class="line">Project_path&#x3D;&quot;&quot;</span><br><span class="line"></span><br><span class="line">if [ &quot;&#96;pwd&#96;&quot; !&#x3D; &quot;&#x2F;&quot; ]; then</span><br><span class="line">    cd ..</span><br><span class="line">    Root_path&#x3D;$(pwd)</span><br><span class="line">    Project_path&#x3D;&quot;$&#123;Root_path&#125;&#x2F;$&#123;Project_dir&#125;&quot;</span><br><span class="line">else</span><br><span class="line">    echo -e &quot;\033[31m脚本路径错误\033[0m&quot;</span><br><span class="line">    exit 1;</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">if [ ! -d &quot;$&#123;Project_path&#125;&quot; ];then</span><br><span class="line">    echo -e &quot;\033[31m首参数必须是有效的文件夹名称！！\033[0m&quot;</span><br><span class="line">    exit 2</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">#Xcode project 文件路径</span><br><span class="line">cd $&#123;Project_path&#125;</span><br><span class="line">Valid_dic&#x3D;false</span><br><span class="line">for i in &#96;ls&#96;;</span><br><span class="line">do </span><br><span class="line">    #获取文件后缀名</span><br><span class="line">    extension&#x3D;$&#123;i##*.&#125;</span><br><span class="line">    if [[ $&#123;extension&#125; &#x3D;&#x3D; &quot;xcodeproj&quot; ]]; then</span><br><span class="line">	    Valid_dic&#x3D;true</span><br><span class="line">    elif [[ $&#123;extension&#125; &#x3D;&#x3D; &quot;xcworkspace&quot; ]]; then</span><br><span class="line">	    Valid_dic&#x3D;true</span><br><span class="line">    fi</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">if [[ $&#123;Valid_dic&#125; &#x3D;&#x3D; false ]]; then</span><br><span class="line">    echo -e &quot;\033[31m请输入包含xcodeproj或xcworkspace的文件夹名称！！\033[0m&quot;</span><br><span class="line">    exit 2</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">Archive_type&#x3D;&quot;project&quot;</span><br><span class="line">Scheme_name&#x3D;&quot;default&quot;</span><br><span class="line">Edit&#x3D;&quot;NO&quot;</span><br><span class="line">Configuration&#x3D;&quot;Release&quot;</span><br><span class="line">Auto_increment_version_num&#x3D;&quot;NO&quot;</span><br><span class="line">Build_str&#x3D;&quot;custom&quot;</span><br><span class="line">Version_str&#x3D;&quot;custom&quot;</span><br><span class="line"></span><br><span class="line"># 参数处理</span><br><span class="line">param_pattern&#x3D;&quot;:ws:edab:v:&quot;</span><br><span class="line">OPTIND&#x3D;2</span><br><span class="line">while getopts $param_pattern optname</span><br><span class="line">  do</span><br><span class="line">    case &quot;$optname&quot; in</span><br><span class="line">      &quot;w&quot;)        </span><br><span class="line">	    Archive_type&#x3D;&quot;workspace&quot;	</span><br><span class="line">        ;;</span><br><span class="line">      &quot;s&quot;)</span><br><span class="line">	    tmp_optind&#x3D;$OPTIND</span><br><span class="line">	    tmp_optname&#x3D;$optname</span><br><span class="line">	    tmp_optarg&#x3D;$OPTARG</span><br><span class="line"></span><br><span class="line">	    OPTIND&#x3D;$OPTIND-1</span><br><span class="line">	    if getopts $param_pattern optname ;then</span><br><span class="line">		    echo  -e &quot;\033[31m选项参数错误 $tmp_optname\033[0m&quot;</span><br><span class="line">		    exit 2</span><br><span class="line">	    fi</span><br><span class="line">	    OPTIND&#x3D;$tmp_optind</span><br><span class="line">	    Scheme_name&#x3D;$tmp_optarg</span><br><span class="line">        ;;</span><br><span class="line">      &quot;e&quot;)        </span><br><span class="line">	    Edit&#x3D;&quot;YES&quot;	</span><br><span class="line">        ;;     </span><br><span class="line">      &quot;d&quot;)        </span><br><span class="line">	    Configuration&#x3D;&quot;Debug&quot;	</span><br><span class="line">        ;;</span><br><span class="line">      &quot;a&quot;)</span><br><span class="line">	    Auto_increment_version_num&#x3D;&quot;YES&quot;</span><br><span class="line">	    ;;</span><br><span class="line">      &quot;b&quot;)</span><br><span class="line">	    tmp_optind&#x3D;$OPTIND</span><br><span class="line">	    tmp_optname&#x3D;$optname</span><br><span class="line">	    tmp_optarg&#x3D;$OPTARG</span><br><span class="line"></span><br><span class="line">	    OPTIND&#x3D;$OPTIND-1</span><br><span class="line">	    if getopts $param_pattern optname ;then</span><br><span class="line">		    echo  -e &quot;\033[31m选项参数错误 $tmp_optname\033[0m&quot;</span><br><span class="line">		    exit 2</span><br><span class="line">	    fi</span><br><span class="line">	    OPTIND&#x3D;$tmp_optind</span><br><span class="line">	    Build_str&#x3D;$tmp_optarg</span><br><span class="line">        ;;</span><br><span class="line">      &quot;v&quot;)        </span><br><span class="line">	    tmp_optind&#x3D;$OPTIND</span><br><span class="line">	    tmp_optname&#x3D;$optname</span><br><span class="line">	    tmp_optarg&#x3D;$OPTARG</span><br><span class="line"></span><br><span class="line">	    OPTIND&#x3D;$OPTIND-1</span><br><span class="line">	    if getopts $param_pattern optname ;then</span><br><span class="line">		    echo  -e &quot;\033[31m选项参数错误 $tmp_optname\033[0m&quot;</span><br><span class="line">		    exit 2</span><br><span class="line">	    fi</span><br><span class="line">	    OPTIND&#x3D;$tmp_optind</span><br><span class="line">	    Version_str&#x3D;$tmp_optarg</span><br><span class="line">        ;;</span><br><span class="line">      &quot;?&quot;)</span><br><span class="line">        echo -e &quot;\033[31m选项错误: $OPTARG\033[0m&quot;</span><br><span class="line">	    exit 2</span><br><span class="line">        ;;</span><br><span class="line">      &quot;:&quot;)</span><br><span class="line">        echo -e &quot;\033[31m选项 $OPTARG 必须带参数\033[0m&quot;</span><br><span class="line">	    exit 2</span><br><span class="line">        ;;</span><br><span class="line">      *)</span><br><span class="line">        echo -e &quot;\033[31m参数错误\033[0m&quot;</span><br><span class="line">	    exit 2</span><br><span class="line">        ;;</span><br><span class="line">    esac</span><br><span class="line">  done</span><br><span class="line"></span><br><span class="line"># echo &quot;Project_path &#x3D; $&#123;Project_path&#125;&quot;</span><br><span class="line">#app文件名称</span><br><span class="line">appname&#x3D;$(basename .&#x2F;*.xcodeproj)</span><br><span class="line">#通过app文件名获得工程target名字</span><br><span class="line">target_name&#x3D;$(echo $appname | awk -F. &#39;&#123;print $1&#125;&#39;)</span><br><span class="line">#app文件中Info.plist文件路径</span><br><span class="line">App_infoplist_path&#x3D;$&#123;Project_path&#125;&#x2F;$&#123;target_name&#125;&#x2F;Info.plist</span><br><span class="line"># 获取version值</span><br><span class="line">Version_initial&#x3D;$(&#x2F;usr&#x2F;libexec&#x2F;PlistBuddy -c &quot;print CFBundleShortVersionString&quot; $&#123;App_infoplist_path&#125;)</span><br><span class="line"># 获取build值</span><br><span class="line">Build_initial&#x3D;$(&#x2F;usr&#x2F;libexec&#x2F;PlistBuddy -c &quot;print CFBundleVersion&quot; $&#123;App_infoplist_path&#125;)</span><br><span class="line"></span><br><span class="line">if [[ $&#123;Scheme_name&#125; &#x3D;&#x3D; &quot;default&quot; ]]; then</span><br><span class="line">    Scheme_name&#x3D;$&#123;target_name&#125;</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">echo &quot;*************************************************&quot;</span><br><span class="line">echo -e &quot;\033[36m* 打包项目： $&#123;target_name&#125;\033[0m&quot;</span><br><span class="line">echo &quot;*************************************************&quot;</span><br><span class="line">echo &#39;&#39;</span><br><span class="line"></span><br><span class="line"># 将数字123转换为1.2.3的格式输出</span><br><span class="line">Num_str&#x3D;&quot;&quot;</span><br><span class="line">caculate()&#123;</span><br><span class="line">    Parameter_num&#x3D;$1;</span><br><span class="line">    if [[ $&#123;Parameter_num&#125; &lt; 10 ]]; then</span><br><span class="line">	    if [[ $&#123;Num_str&#125; &#x3D;&#x3D; &quot;&quot; ]]; then</span><br><span class="line">		    Num_str&#x3D;&quot;$&#123;Parameter_num&#125;&quot;</span><br><span class="line">	    else</span><br><span class="line">		    Num_str&#x3D;&quot;$&#123;Parameter_num&#125;.$&#123;Num_str&#125;&quot;</span><br><span class="line">	    fi</span><br><span class="line">    else</span><br><span class="line">	    #商</span><br><span class="line">	    quotient&#x3D;&quot;$[$&#123;Parameter_num&#125;&#x2F;10]&quot;</span><br><span class="line">	    #余数</span><br><span class="line">	    remainder&#x3D;&quot;$[$&#123;Parameter_num&#125;%10]&quot;</span><br><span class="line">	    if [[ $&#123;Num_str&#125; &#x3D;&#x3D; &quot;&quot; ]]; then</span><br><span class="line">		    Num_str&#x3D;&quot;$&#123;remainder&#125;&quot;</span><br><span class="line">	    else</span><br><span class="line">		    Num_str&#x3D;&quot;$&#123;remainder&#125;.$&#123;Num_str&#125;&quot;</span><br><span class="line">	    fi</span><br><span class="line">	    if [[ $&#123;quotient&#125; &gt; 0 ]]; then</span><br><span class="line">		    caculate $&#123;quotient&#125;</span><br><span class="line">	    fi</span><br><span class="line">    fi</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#--------------------------------------------</span><br><span class="line"># 处理Version版本号</span><br><span class="line">#--------------------------------------------</span><br><span class="line"># Version版本号自增</span><br><span class="line">if [[ $&#123;Auto_increment_version_num&#125; &#x3D;&#x3D; &quot;YES&quot; ]]; then</span><br><span class="line">    if [[ $&#123;Version_str&#125; !&#x3D; &quot;custom&quot; ]]; then</span><br><span class="line">	    echo  -e &quot;\033[31m选项-a 与 -v 不能同时存在\033[0m&quot;</span><br><span class="line">	    exit 2</span><br><span class="line">    else</span><br><span class="line">	    #取Version版本号</span><br><span class="line">	    Version_str&#x3D;$(&#x2F;usr&#x2F;libexec&#x2F;PlistBuddy -c &quot;print CFBundleShortVersionString&quot; $&#123;App_infoplist_path&#125;)</span><br><span class="line">	    #把Version_str字符串根据.分割为数组</span><br><span class="line">	    Array&#x3D;($(echo $Version_str | tr &#39;.&#39; &#39; &#39; | tr -s &#39; &#39;))</span><br><span class="line">	    #数组长度</span><br><span class="line">	    Array_length&#x3D;$(echo $&#123;#Array[@]&#125;)</span><br><span class="line">	    # 获取版本号数字</span><br><span class="line">	    Version_num&#x3D;0</span><br><span class="line">	    for (( i &#x3D; 0; i &lt; $&#123;Array_length&#125;; i++ )); do</span><br><span class="line">		    index_num&#x3D;$&#123;Array[$i]&#125;</span><br><span class="line">		    sum_num&#x3D;&quot;$[10**($&#123;Array_length&#125;-$&#123;i&#125;-1)]&quot;</span><br><span class="line">		    index_num&#x3D;&quot;$[$&#123;index_num&#125;*$&#123;sum_num&#125;]&quot;</span><br><span class="line">		    Version_num&#x3D;&quot;$[$&#123;Version_num&#125;+$&#123;index_num&#125;]&quot;</span><br><span class="line">	    done</span><br><span class="line"></span><br><span class="line">	    Version_num&#x3D;&quot;$[$Version_num+1]&quot;</span><br><span class="line">	    Num_str&#x3D;&quot;&quot;</span><br><span class="line">	    caculate $&#123;Version_num&#125;</span><br><span class="line">	    Version_str&#x3D;$&#123;Num_str&#125;</span><br><span class="line">    fi</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">#--------------------------------------------</span><br><span class="line"># 修改Version版本号以及Build号</span><br><span class="line">#--------------------------------------------</span><br><span class="line">if [[ $&#123;Version_str&#125; !&#x3D; &quot;custom&quot; ]]; then</span><br><span class="line">    echo &quot;初始Version &#x3D; $&#123;Version_initial&#125;&quot;</span><br><span class="line">    &#x2F;usr&#x2F;libexec&#x2F;Plistbuddy -c &quot;Set CFBundleShortVersionString $Version_str&quot; &quot;$&#123;App_infoplist_path&#125;&quot;</span><br><span class="line">    Version_result&#x3D;$(&#x2F;usr&#x2F;libexec&#x2F;PlistBuddy -c &quot;print CFBundleShortVersionString&quot; $&#123;App_infoplist_path&#125;)</span><br><span class="line">    echo &quot;Version改变后 &#x3D; $&#123;Version_result&#125;&quot;</span><br><span class="line">fi</span><br><span class="line">if [[ $&#123;Build_str&#125; !&#x3D; &quot;custom&quot; ]]; then</span><br><span class="line">    echo &quot;初始Build &#x3D; $&#123;Build_initial&#125;&quot;</span><br><span class="line">    &#x2F;usr&#x2F;libexec&#x2F;Plistbuddy -c &quot;Set CFBundleVersion $Build_str&quot; &quot;$&#123;App_infoplist_path&#125;&quot;</span><br><span class="line">    Build_result&#x3D;$(&#x2F;usr&#x2F;libexec&#x2F;PlistBuddy -c &quot;print CFBundleVersion&quot; $&#123;App_infoplist_path&#125;)</span><br><span class="line">    echo &quot;Build改变后 &#x3D; $&#123;Build_result&#125;&quot;</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">if [ $? !&#x3D; 0 ]; then</span><br><span class="line">    &#x2F;usr&#x2F;libexec&#x2F;Plistbuddy -c &quot;Set CFBundleShortVersionString $Version_initial&quot; &quot;$&#123;App_infoplist_path&#125;&quot;</span><br><span class="line">    &#x2F;usr&#x2F;libexec&#x2F;Plistbuddy -c &quot;Set CFBundleVersion $Build_initial&quot; &quot;$&#123;App_infoplist_path&#125;&quot;</span><br><span class="line">    echo -e &quot;\033[31m*************     修改版本号出错     **************\033[0m&quot;</span><br><span class="line">    exit 2</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">#--------------------------------------------</span><br><span class="line"># 准备打包</span><br><span class="line">#--------------------------------------------</span><br><span class="line">ExportOptionsPlist&#x3D;&quot;$&#123;Release_path&#125;&#x2F;ExportOptions.plist&quot;</span><br><span class="line">#取当前时间字符串</span><br><span class="line">Now&#x3D;$(date +&quot;%Y_%m_%d_%H:%M:%S&quot;)</span><br><span class="line">Project_version&#x3D;$(&#x2F;usr&#x2F;libexec&#x2F;PlistBuddy -c &quot;print CFBundleShortVersionString&quot; $&#123;App_infoplist_path&#125;)</span><br><span class="line">Version_output_path&#x3D;&quot;$&#123;Release_path&#125;&#x2F;ArchivePath&#x2F;$&#123;target_name&#125;&#x2F;$&#123;Project_version&#125;&quot;</span><br><span class="line">IPA_path&#x3D;&quot;$&#123;Version_output_path&#125;&#x2F;$&#123;Now&#125;&quot;</span><br><span class="line">Archive_file_name&#x3D;&quot;$&#123;target_name&#125;_$&#123;Project_version&#125;&quot;</span><br><span class="line">Archive_path&#x3D;&quot;$&#123;IPA_path&#125;&#x2F;$&#123;Archive_file_name&#125;.xcarchive&quot;</span><br><span class="line"></span><br><span class="line">mkdir -p &quot;$&#123;IPA_path&#125;&quot;</span><br><span class="line">Log_path&#x3D;&quot;$&#123;IPA_path&#125;&#x2F;LogPath&quot;</span><br><span class="line"></span><br><span class="line">echo &quot;************* xcodebuild clean 项目 **************&quot;</span><br><span class="line"></span><br><span class="line"># 清除项目</span><br><span class="line"># xcodebuild clean -configuration $&#123;Configuration&#125; &amp;&gt;&#x2F;dev&#x2F;null</span><br><span class="line">xcodebuild clean -configuration $&#123;Configuration&#125; &gt;&gt; $Log_path</span><br><span class="line"># if [[ $&#123;Edit&#125; &#x3D;&#x3D; &quot;YES&quot; ]]; then</span><br><span class="line">    # cd &quot;~&#x2F;Library&#x2F;Developer&#x2F;Xcode&quot;</span><br><span class="line">    # user&#x3D;$USER</span><br><span class="line">    # Xcode_path&#x3D;&quot;&#x2F;Users&#x2F;$&#123;user&#125;&#x2F;Library&#x2F;Developer&#x2F;Xcode&quot;</span><br><span class="line">    # cd $&#123;Xcode_path&#125;</span><br><span class="line">    # for i in &#96;ls&#96;;</span><br><span class="line">    # do </span><br><span class="line">    # 	if [[ $&#123;i&#125; &#x3D;&#x3D; &quot;DerivedData&quot; ]]; then</span><br><span class="line">    # 		if [ -d &quot;$&#123;i&#125;&quot; ];then</span><br><span class="line">    # 			# 删除~&#x2F;Library&#x2F;Developer&#x2F;Xcode&#x2F;DerivedData文件夹</span><br><span class="line">    # 			rm -rf $&#123;i&#125;</span><br><span class="line">    # 		fi</span><br><span class="line">    # 	fi</span><br><span class="line">    # done</span><br><span class="line"># fi</span><br><span class="line"></span><br><span class="line">revertVersionNum()&#123;</span><br><span class="line">    &#x2F;usr&#x2F;libexec&#x2F;Plistbuddy -c &quot;Set CFBundleShortVersionString $Version_initial&quot; &quot;$&#123;App_infoplist_path&#125;&quot;</span><br><span class="line">    &#x2F;usr&#x2F;libexec&#x2F;Plistbuddy -c &quot;Set CFBundleVersion $Build_initial&quot; &quot;$&#123;App_infoplist_path&#125;&quot;</span><br><span class="line">    rm -rf &quot;$&#123;IPA_path&#125;&quot;</span><br><span class="line">    files&#x3D;&#96;ls $&#123;Version_output_path&#125;&#96;</span><br><span class="line">    if [ -z &quot;$files&quot; ]; then</span><br><span class="line">	    # 该版本号下没打过包，把该版本号文件夹删除 </span><br><span class="line">        rm -rf &quot;$&#123;Version_output_path&#125;&quot;</span><br><span class="line">    fi</span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line">if [ $? &#x3D; 0 ]; then</span><br><span class="line">    echo -e &quot;\033[32m************* xcodebuild clean 完成 **************\033[0m&quot;</span><br><span class="line">    echo &#39;&#39;</span><br><span class="line">    cd $&#123;Project_path&#125;</span><br><span class="line">else</span><br><span class="line">    revertVersionNum;</span><br><span class="line">    echo -e &quot;\033[31m************* xcodebuild clean 失败 **************\033[0m&quot;</span><br><span class="line">    echo &#39;&#39;</span><br><span class="line">    exit 1;</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">Workspace_name&#x3D;&quot;$&#123;Project_path&#125;&#x2F;$&#123;target_name&#125;.xcworkspace&quot;</span><br><span class="line">Project_name&#x3D;&quot;$&#123;Project_path&#125;&#x2F;$&#123;target_name&#125;.xcodeproj&quot;</span><br><span class="line">if [[ $&#123;Edit&#125; &#x3D;&#x3D; &quot;YES&quot; ]]; then</span><br><span class="line">    if [[ $&#123;Archive_type&#125; &#x3D;&#x3D; &quot;workspace&quot; ]];then</span><br><span class="line">	    #编译workspace</span><br><span class="line">	    xcodebuild -workspace &quot;$&#123;Workspace_name&#125;&quot; -scheme &quot;$&#123;Scheme_name&#125;&quot; -configuration &quot;$&#123;Configuration&#125;&quot; &gt;&gt; $Log_path</span><br><span class="line">    else</span><br><span class="line">	    #编译project</span><br><span class="line">	    xcodebuild -configuration &quot;$&#123;Configuration&#125;&quot; &gt;&gt; $Log_path</span><br><span class="line">    fi</span><br><span class="line"></span><br><span class="line">    if [ $? &#x3D; 0 ]; then</span><br><span class="line">	    echo -e &quot;\033[32m************* xcodebuild 编译 完成 **************\033[0m&quot;</span><br><span class="line">	    echo &#39;&#39;</span><br><span class="line">    else</span><br><span class="line">	    revertVersionNum;</span><br><span class="line">	    echo -e &quot;\033[31m************* xcodebuild 编译 失败 **************\033[0m&quot;</span><br><span class="line">	    echo &#39;&#39;</span><br><span class="line">	    exit 1;</span><br><span class="line">    fi</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">echo -e &quot;\033[36m*************    打包 版本号 $&#123;Project_version&#125;    **************\033[0m&quot;</span><br><span class="line">echo &quot;************* 开始导出xcarchive文件  *************&quot;</span><br><span class="line">if [[ $&#123;Archive_type&#125; &#x3D;&#x3D; &quot;workspace&quot; ]];then</span><br><span class="line">    #打包workspace</span><br><span class="line">    xcodebuild archive -workspace &quot;$&#123;Workspace_name&#125;&quot; -scheme &quot;$&#123;Scheme_name&#125;&quot; -configuration &quot;$&#123;Configuration&#125;&quot; -archivePath &quot;$&#123;Archive_path&#125;&quot; &gt;&gt; $Log_path</span><br><span class="line">else</span><br><span class="line">    #打包project</span><br><span class="line">    xcodebuild archive -project &quot;$&#123;Project_name&#125;&quot; -scheme &quot;$&#123;Scheme_name&#125;&quot; -configuration &quot;$&#123;Configuration&#125;&quot; -archivePath &quot;$&#123;Archive_path&#125;&quot; &gt;&gt; $Log_path</span><br><span class="line">fi</span><br><span class="line">if [ $? &#x3D; 0 ]; then</span><br><span class="line">    echo -e &quot;\033[32m************* 导出xcarchive文件 完成 **************\033[0m&quot;</span><br><span class="line">    echo &#39;&#39;</span><br><span class="line">else</span><br><span class="line">    revertVersionNum;</span><br><span class="line">    echo -e &quot;\033[31m************* 导出xcarchive文件 失败 **************\033[0m&quot;</span><br><span class="line">    echo &#39;&#39;</span><br><span class="line">    exit 1;</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">echo &quot;*************   开始导出 ipa 文件    **************&quot;</span><br><span class="line"># xcodebuild -exportArchive -archivePath &quot;$&#123;Archive_path&#125;&quot; -exportPath &quot;$&#123;IPA_path&#125;&quot; -exportOptionsPlist &quot;$&#123;ExportOptionsPlist&#125;&quot; &amp;&gt;&#x2F;dev&#x2F;null</span><br><span class="line">xcodebuild -exportArchive -archivePath &quot;$&#123;Archive_path&#125;&quot; -exportPath &quot;$&#123;IPA_path&#125;&quot; -exportOptionsPlist &quot;$&#123;ExportOptionsPlist&#125;&quot; &gt;&gt; $Log_path</span><br><span class="line">if [ $? &#x3D; 0 ]; then</span><br><span class="line">    echo -e &quot;\033[32m*************    导出 ipa 包完成     **************\033[0m&quot;</span><br><span class="line">    echo &#39;&#39;</span><br><span class="line">else</span><br><span class="line">    revertVersionNum;</span><br><span class="line">    echo -e &quot;\033[31m*************    导出 ipa 包失败     **************\033[0m&quot;</span><br><span class="line">    echo &#39;&#39;</span><br><span class="line">    exit 1;</span><br><span class="line">fi</span><br><span class="line">#输出总用时</span><br><span class="line">echo -e &quot;\033[32m*************  打包完成. 耗时: $&#123;SECONDS&#125;s   **************\033[0m&quot;</span><br><span class="line">echo &#39;&#39;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="脚本详解"><a href="#脚本详解" class="headerlink" title="脚本详解"></a>脚本详解</h3><ul>
+<li><p>开始部分，对输入参数进行了判断，脚本命令： <strong><code>[]表示可选参数，&lt;&gt;表示必填参数</code></strong> </p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;Release.sh  &lt;Project directory name&gt; [-w] [-s &lt;Name&gt;] [-e] [-d] [-a] [-b &lt;Build number&gt;] [-v &lt;Version number&gt;]</span><br></pre></td></tr></table></figure></li>
+<li><p>第二步，判断并修改Build号以及Version号， <strong><code>-b &lt;Build number&gt;  -v &lt;Version number&gt;</code></strong> ，分别取对应的值；如果是<code>-a</code>则Version号自增，在旧版本号的基础上＋1，其中的主版本号、副版本号、发布号默认采用的是10进制规则，举例</p>
+<blockquote>
+<p><code>1.0.0</code> 执行<code>-a</code>后为 <code>1.0.1</code></p>
+<p><code>1.1.9</code> 执行<code>-a</code>后为 <code>1.2.0</code></p>
+</blockquote>
+</li>
+<li><p>导出xcarchive文件，这里要区分是project项目，还是workspace项目，如果你使用了CocoPads管理项目，那么打包的就是workspace项目</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">if [[ $&#123;Archive_type&#125; &#x3D;&#x3D; &quot;workspace&quot; ]];then</span><br><span class="line">  #打包workspace</span><br><span class="line">  xcodebuild archive -workspace &quot;$&#123;Workspace_name&#125;&quot; -scheme &quot;$&#123;Scheme_name&#125;&quot; -configuration &quot;$&#123;Configuration&#125;&quot; -archivePath &quot;$&#123;Archive_path&#125;&quot; &gt;&gt; $Log_path</span><br><span class="line">else</span><br><span class="line">  #打包project</span><br><span class="line">  xcodebuild archive -project &quot;$&#123;Project_name&#125;&quot; -scheme &quot;$&#123;Scheme_name&#125;&quot; -configuration &quot;$&#123;Configuration&#125;&quot; -archivePath &quot;$&#123;Archive_path&#125;&quot; &gt;&gt; $Log_path</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<p><code>$&#123;Workspace_name&#125;</code>是.xcworkspace文件的完整路径（<code>$&#123;Project_name&#125; </code>一样），<code>$&#123;Scheme_name&#125;</code>表示项目Scheme的名称，<code>$&#123;Configuration&#125;</code>有两个值：Debug和Release，<code>$&#123;Archive_path&#125;</code>是生成的xcarchive文件的导出路径，<code>&gt;&gt; $Log_path</code>表示将log日志输出到Log_path文件</p>
+</li>
+<li><p>生成ipa文件</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xcodebuild -exportArchive -archivePath &quot;$&#123;Archive_path&#125;&quot; -exportPath &quot;$&#123;IPA_path&#125;&quot; -exportOptionsPlist &quot;$&#123;ExportOptionsPlist&#125;&quot; &gt;&gt; $Log_path</span><br></pre></td></tr></table></figure>
+<p><code>$&#123;ExportOptionsPlist&#125;</code>指向ReleaseDir文件夹下的ExportOptions.plist文件，可以在文件内填写跟打包相关的配置<br><img src="http://upload-images.jianshu.io/upload_images/1429982-a749b05d47be9dd0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="QQ20170303-150057@2x.png"></p>
+</li>
+<li><p>compileBitcode：不上架App Store，Xcode是否启用Bitcode重新编译，默认为YES。</p>
+</li>
+<li><p>method：归档类型，包括app-store、ad-hoc、<br>package、enterprise、development以及developer-id。</p>
+</li>
+<li><p>uploadBitcode：上线App Store是否开启Bitcode，默认为YES。</p>
+</li>
+<li><p>uploadSymbols：上线App Store，是否开启符号序列化，这是与查crash相关的，默认为YES。</p>
+</li>
+</ul>
+<p>关于更多的xcodebuild指令，可以通过<code>xcodebuild -help</code>查看。</p>
+<hr>
+<p>最后附上两张打包成功的图片</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1429982-731170b26679c196.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="QQ20170303-151520@2x.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1429982-98a992b7ffba67d7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="QQ20170303-151638@2x.png"><br><a target="_blank" rel="noopener" href="https://github.com/lele8446/ReleaseDir">脚本资源</a>👆看这里。另外补充一点，脚本打包前请先在Xcode，General—Targets—Signing中选择好对应的证书。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%AD%BE%E5%90%8D%E6%89%93%E5%8C%85/" rel="tag"># 签名打包</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/02/17/iOS%20crash%20%E8%A7%A3%E6%9E%90%E5%AE%9A%E4%BD%8D%EF%BC%8Cshell%E8%84%9A%E6%9C%AC%E6%9F%A5%E6%89%BEcrash/" rel="prev" title="iOS crash 解析定位，shell脚本查找crash">
+                  <i class="fa fa-chevron-left"></i> iOS crash 解析定位，shell脚本查找crash
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/05/03/Node.js%20+%20apn%20%E6%90%AD%E5%BB%BAAPNS%E6%8E%A8%E9%80%81%E5%90%8E%E5%8F%B0/" rel="next" title="Node.js + apn 搭建APNS推送后台">
+                  Node.js + apn 搭建APNS推送后台 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+<script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lele8446</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
