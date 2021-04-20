@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;example.com&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Pisces&quot;,&quot;version&quot;:&quot;8.3.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script>
+<meta name="description" content="导语： CJMethodLog 对于Objective-C中的任意类、任意方法，均可实时根据用户的操作行为，监控还原对应的函数调用日志，而且能够自定义记录当前函数的参数类型、返回类型、执行时间……  CJMethodLog上一篇介绍了 Runtime 原理 CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起这里就来讲讲 CJMethodLog 的具体实现。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CJMethodLog 二：从监控还原APP运行的每一行代码说起">
+<meta property="og:url" content="http://example.com/2018/03/22/CJMethodLog%20%E4%BA%8C%EF%BC%9A%E4%BB%8E%E7%9B%91%E6%8E%A7%E8%BF%98%E5%8E%9FAPP%E8%BF%90%E8%A1%8C%E7%9A%84%E6%AF%8F%E4%B8%80%E8%A1%8C%E4%BB%A3%E7%A0%81%E8%AF%B4%E8%B5%B7/index.html">
+<meta property="og:site_name" content="C.J.Lian">
+<meta property="og:description" content="导语： CJMethodLog 对于Objective-C中的任意类、任意方法，均可实时根据用户的操作行为，监控还原对应的函数调用日志，而且能够自定义记录当前函数的参数类型、返回类型、执行时间……  CJMethodLog上一篇介绍了 Runtime 原理 CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起这里就来讲讲 CJMethodLog 的具体实现。">
+<meta property="og:locale">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1429982-8814f2bf88617576.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/540">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1429982-7560f633f2727ec3.gif?imageMogr2/auto-orient/strip">
+<meta property="og:image" content="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/CJMethodLog%E8%AE%BE%E7%BD%AE.png">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1429982-7c0e8d790cb65d90.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/500">
+<meta property="article:published_time" content="2018-03-22T05:15:03.000Z">
+<meta property="article:modified_time" content="2018-03-22T10:20:00.000Z">
+<meta property="article:author" content="lele8446">
+<meta property="article:tag" content="runtime">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1429982-8814f2bf88617576.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/540">
+
+
+<link rel="canonical" href="http://example.com/2018/03/22/CJMethodLog%20%E4%BA%8C%EF%BC%9A%E4%BB%8E%E7%9B%91%E6%8E%A7%E8%BF%98%E5%8E%9FAPP%E8%BF%90%E8%A1%8C%E7%9A%84%E6%AF%8F%E4%B8%80%E8%A1%8C%E4%BB%A3%E7%A0%81%E8%AF%B4%E8%B5%B7/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-Hans&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;http:&#x2F;&#x2F;example.com&#x2F;2018&#x2F;03&#x2F;22&#x2F;CJMethodLog%20%E4%BA%8C%EF%BC%9A%E4%BB%8E%E7%9B%91%E6%8E%A7%E8%BF%98%E5%8E%9FAPP%E8%BF%90%E8%A1%8C%E7%9A%84%E6%AF%8F%E4%B8%80%E8%A1%8C%E4%BB%A3%E7%A0%81%E8%AF%B4%E8%B5%B7&#x2F;&quot;,&quot;path&quot;:&quot;2018&#x2F;03&#x2F;22&#x2F;CJMethodLog 二：从监控还原APP运行的每一行代码说起&#x2F;&quot;,&quot;title&quot;:&quot;CJMethodLog 二：从监控还原APP运行的每一行代码说起&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>CJMethodLog 二：从监控还原APP运行的每一行代码说起 | C.J.Lian</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">C.J.Lian</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E8%AF%AD%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">导语：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CJMethodLog"><span class="nav-number">2.</span> <span class="nav-text">CJMethodLog</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">2.1.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%A5%E5%BF%97%E6%95%B0%E6%8D%AE"><span class="nav-number">2.2.</span> <span class="nav-text">日志数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">2.3.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">实现原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E5%A4%9A"><span class="nav-number">4.</span> <span class="nav-text">更多</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lele8446"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">lele8446</p>
+  <div class="site-description" itemprop="description">coding, learning...</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lele8446" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lele8446" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:lele8446@foxmail.com" title="E-Mail → mailto:lele8446@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.com/in/%E7%82%BD%E9%87%91-%E7%BB%83-966a4813b/" title="Linkedin → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;%E7%82%BD%E9%87%91-%E7%BB%83-966a4813b&#x2F;" rel="noopener" target="_blank"><i class="fab fa-linkedin fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2018/03/22/CJMethodLog%20%E4%BA%8C%EF%BC%9A%E4%BB%8E%E7%9B%91%E6%8E%A7%E8%BF%98%E5%8E%9FAPP%E8%BF%90%E8%A1%8C%E7%9A%84%E6%AF%8F%E4%B8%80%E8%A1%8C%E4%BB%A3%E7%A0%81%E8%AF%B4%E8%B5%B7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="lele8446">
+      <meta itemprop="description" content="coding, learning...">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="C.J.Lian">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CJMethodLog 二：从监控还原APP运行的每一行代码说起
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2018-03-22 13:15:03 / 修改时间：18:20:00" itemprop="dateCreated datePublished" datetime="2018-03-22T13:15:03+08:00">2018-03-22</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="导语："><a href="#导语：" class="headerlink" title="导语："></a>导语：</h3><blockquote>
+<p>CJMethodLog 对于Objective-C中的任意类、任意方法，均可实时根据用户的操作行为，监控还原对应的函数调用日志，而且能够自定义记录当前函数的参数类型、返回类型、执行时间……</p>
+</blockquote>
+<h3 id="CJMethodLog"><a href="#CJMethodLog" class="headerlink" title="CJMethodLog"></a>CJMethodLog</h3><p>上一篇介绍了 Runtime 原理<br> <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/9838c7d93087">CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起</a><br>这里就来讲讲 <a target="_blank" rel="noopener" href="https://github.com/lele8446/CJMethodLog">CJMethodLog</a> 的具体实现。</p>
+<span id="more"></span>
+
+<p><img src="https://upload-images.jianshu.io/upload_images/1429982-8814f2bf88617576.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/540" alt="CJMethodLogSource.png"></p>
+<p>上图展示了CJMethodLog的文件结构，其中<code>CJMethodLog.h CJMethodLog.m</code>是核心部分</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 初始化类名监听配置</span><br><span class="line"> * 注意！！！所有设置的hook类不能存在继承关系</span><br><span class="line"> *</span><br><span class="line"> * @param classNameList 需要hook的类名</span><br><span class="line"> * @param options       日志选项</span><br><span class="line"> * @param value         是否打印监听日志，（设置为YES，会输出方法监听的log信息，该值只在 DEBUG 环境有效）</span><br><span class="line"> *&#x2F;</span><br><span class="line">+ (void)forwardingClasses:(NSArray &lt;NSString *&gt;*)classNameList logOptions:(CJLogOptions)options logEnabled:(BOOL)value;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * 获取日志文件</span><br><span class="line"> *</span><br><span class="line"> * @param finishBlock 获取日志文件回调block</span><br><span class="line"> *&#x2F;</span><br><span class="line">+ (void)syncLogData:(SyncDataBlock)finishBlock;</span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * 删除日志数据</span><br><span class="line"> *&#x2F;</span><br><span class="line">+ (void)clearLogData;</span><br></pre></td></tr></table></figure>
+
+<p><code>CJMethodLog.h</code> 暂时提供三个方法：初始化配置、获取日志文件、删除日志数据。</p>
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><p>在 <code>main.m</code> 文件中设置需要监听的类名配置，理论上任意时刻都可以重设监听配置，但不建议这么做！！因为每次重设监听配置都会修改监听类的方法链表（methodLists）中方法的IMP实现，随意修改可能会出现替换指定IMP的同时刚好调用了该IMP的实现，造成不可预知错误。另外在 <code>main.m</code>中初始化配置可以确保所有的hook类都生效，比如如果你hook的是 <code>AppDelegate</code> 类。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#import &lt;UIKit&#x2F;UIKit.h&gt;</span><br><span class="line">#import &quot;AppDelegate.h&quot;</span><br><span class="line">#import &quot;CJMethodLog.h&quot;</span><br><span class="line"></span><br><span class="line">int main(int argc, char * argv[]) &#123;</span><br><span class="line">    @autoreleasepool &#123;</span><br><span class="line">        &#x2F;*</span><br><span class="line">         * 利用消息转发，hook指定类的调用方法</span><br><span class="line">         *&#x2F;</span><br><span class="line">        [CJMethodLog forwardingClasses:@[</span><br><span class="line">                                         @&quot;AppDelegate&quot;,</span><br><span class="line">                                         @&quot;TestViewController&quot;</span><br><span class="line">                                         ]</span><br><span class="line">                            logOptions:CJLogDefault</span><br><span class="line">                            logEnabled:NO];</span><br><span class="line">        return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下图展示了hook <code>TestViewController</code>类之后的函数调用情况：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1429982-7560f633f2727ec3.gif?imageMogr2/auto-orient/strip" alt="CJMethodLog.gif"></p>
+<p>日志格式说明：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- &lt;TestViewController&gt;  begin:  -clickManagerTest:</span><br><span class="line">-- &lt;TestViewController&gt;  begin:  +managerTest</span><br><span class="line">-- &lt;TestViewController&gt;  finish: +managerTest ; time&#x3D;0.000110</span><br><span class="line">- &lt;TestViewController&gt;  finish: -clickManagerTest: ; time&#x3D;0.000416</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>最开始的<code>-</code> 表示函数调用层级；</li>
+<li><code>&lt;TestViewController&gt;</code> 表示当前调用函数的类名；</li>
+<li><code>begin:</code> <code>finish:</code> 分别表示函数执行起始阶段（只会在设置了<strong>CJLogMethodTimer</strong>选项的时候出现）；</li>
+<li><code>-clickManagerTest:</code> 表示执行的是实例方法，<code>+managerTest</code> 表示执行的是类方法；</li>
+<li><code>time=0.000110</code> 表示函数耗时</li>
+<li>之后会补充函数参数以及返回结果说明</li>
+</ul>
+<h4 id="日志数据"><a href="#日志数据" class="headerlink" title="日志数据"></a>日志数据</h4><p>获取日志数据使用 <code>+ (void)syncLogData:(SyncDataBlock)finishBlock</code> ，你可以根据需要获取。比如这里在app启动的时候获取，判断当数据量大于10*1024的时候上传服务器并删除客户端数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">- (void)applicationDidBecomeActive:(UIApplication *)application &#123;</span><br><span class="line">    [CJMethodLog syncLogData:^void(NSData *logData) &#123;</span><br><span class="line">        NSLog(@&quot;CJMethodLog: logData &#x3D; %@&quot;,@([logData length]));</span><br><span class="line">        if ([logData length] &gt; 10*1024) &#123;</span><br><span class="line">            &#x2F;&#x2F; TODO: 上传到服务器等自定义处理</span><br><span class="line">            &#x2F;&#x2F; 删除日志数据</span><br><span class="line">            [CJMethodLog clearLogData];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p><code>CJLogger.h</code> <code>CJLogger.mm</code> 是日志数据存储与获取的实现类，这是一个由OC和C++混编实现的类。<br><code>CJMethodLog+CJMessage.h</code> 是处理一些通用设置的分类。</p>
+<h3 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h3><p>CJMethodLog 借助 Runtime 的消息转发机制，在调用方法的时候主动触发消息转发，然后在 <code>- (void)forwardInvocation:(NSInvocation *)anInvocation</code> 方法中还原当前selector的实现，同时记录监控日志信息。下面是具体的实现流程图：</p>
+<p><strong>初始设置阶段：</strong><br><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/CJMethodLog%E8%AE%BE%E7%BD%AE.png" alt="CJMethodLog设置.png"></p>
+<p><strong>方法执行阶段：</strong><br><img src="https://upload-images.jianshu.io/upload_images/1429982-7c0e8d790cb65d90.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/500" alt="CJMethodLog执行.png"></p>
+<p><strong>一些关键点</strong></p>
+<ol>
+<li><p><em><strong>默认不 hook 系统类</strong></em>。CJMethodLog 理论上可以 hook 记录任意类、任意类的任意方法的执行日志，但实际上很少会这样做；我们关注的应该是基于具体的业务需求对应到代码层面是怎样的函数执行逻辑，而且这里的函数执行逻辑信息一般只需要到达app层级的逻辑实现就可以了，没必要更进一步去关注系统层级的实现。当然我也不介意你在初始阶段设置指定系统类或三方类，分析其内部的逻辑实现，然后做些坏坏的事😀。</p>
+<blockquote>
+<p>附：设置不 hook 系统类的另一个原因是，hook 某个类，准确的做法应该要将该类的方法、它的父类的方法、父类的父类的方法……全都 hook 上，这样才能完整的还原出它在整个生命周期内的函数调用日志。那如果将父类方法也 hook，这时就需要一个出口了，不然会导致继承链的判断过长。我的做法是判断当父类为系统类时则停止。<br> <em><strong>其实 hook 父类方法部分还未实现，因为遇到了难题，具体后面会讲到</strong></em></p>
+</blockquote>
+<pre><code> 判断是否为自定义类：
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">BOOL inMainBundle(Class hookClass) &#123;</span><br><span class="line">    NSBundle *currentBundle &#x3D; [NSBundle bundleForClass:hookClass];</span><br><span class="line">    return [currentBundle.bundlePath hasPrefix:[NSBundle mainBundle].bundlePath];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li><p><em><strong>过滤属性的setter和getter方法</strong></em>。属性的setter和getter方法不hook，不然每调用一次 <code>self.</code> 语法就产生一条监控日志，造成太多没必要的干扰信息。注意默认过滤规则：getter方法（属性名），setter方法（setXXX:），其他自定义的setter和getter方法无法过滤。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line">+ (void)enumerateClassMethods:(Class)hookClass forwardMsg:(BOOL)forwardMsg logOptions:(CJLogOptions)options &#123;</span><br><span class="line">    NSString *hookClassName &#x3D; NSStringFromClass(hookClass);</span><br><span class="line">    &#x2F;&#x2F; hookClass中已经被hook过的方法</span><br><span class="line">    NSArray *hookClassMethodList &#x3D; [_hookClassMethodDic objectForKey:hookClassName];</span><br><span class="line">    NSMutableArray *methodList &#x3D; [NSMutableArray arrayWithArray:hookClassMethodList];</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F;属性的 setter 与 getter 方法不hook</span><br><span class="line">    NSMutableArray *propertyMethodList &#x3D; [NSMutableArray array];</span><br><span class="line">    unsigned int propertyCount &#x3D; 0;</span><br><span class="line">    objc_property_t *properties &#x3D; class_copyPropertyList(hookClass, &amp;propertyCount);</span><br><span class="line">    for (int i &#x3D; 0; i &lt; propertyCount; i++) &#123;</span><br><span class="line">        objc_property_t property &#x3D; properties[i];</span><br><span class="line">        &#x2F;&#x2F; getter 方法</span><br><span class="line">        NSString *propertyName &#x3D; [[NSString alloc]initWithCString:property_getName(property) encoding:NSUTF8StringEncoding];</span><br><span class="line">        [propertyMethodList addObject:propertyName];</span><br><span class="line">        &#x2F;&#x2F; setter 方法</span><br><span class="line">        NSString *firstCharacter &#x3D; [propertyName substringToIndex:1];</span><br><span class="line">        firstCharacter &#x3D; [firstCharacter uppercaseString];</span><br><span class="line">        NSString *endCharacter &#x3D; [propertyName substringFromIndex:1];</span><br><span class="line">        NSMutableString *propertySetName &#x3D; [[NSMutableString alloc]initWithString:@&quot;set&quot;];</span><br><span class="line">        [propertySetName appendString:firstCharacter];</span><br><span class="line">        [propertySetName appendString:endCharacter];</span><br><span class="line">        [propertySetName appendString:@&quot;:&quot;];</span><br><span class="line">        [propertyMethodList addObject:propertySetName];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    unsigned int outCount;</span><br><span class="line">    Method *methods &#x3D; class_copyMethodList(hookClass,&amp;outCount);</span><br><span class="line">    for (int i &#x3D; 0; i &lt; outCount; i ++) &#123;</span><br><span class="line">        &#x2F;&#x2F; Method tempMethod &#x3D; *(methods + i);</span><br><span class="line">        Method tempMethod &#x3D; methods[i];</span><br><span class="line">        SEL selector &#x3D; method_getName(tempMethod);</span><br><span class="line">        </span><br><span class="line">        BOOL needHook &#x3D; YES;</span><br><span class="line">        for (NSString *selStr in propertyMethodList) &#123;</span><br><span class="line">            SEL propertySel &#x3D; NSSelectorFromString(selStr);</span><br><span class="line">            if (sel_isEqual(selector, propertySel)) &#123;</span><br><span class="line">                needHook &#x3D; NO;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        if (needHook) &#123;</span><br><span class="line">            if (forwardMsg) &#123;</span><br><span class="line">                &#x2F;*</span><br><span class="line">                 * 方案一：利用消息转发，hook forwardInvocation: 方法</span><br><span class="line">                 *&#x2F;</span><br><span class="line">                BOOL canHook &#x3D; enableHook(tempMethod);</span><br><span class="line">                if (canHook) &#123;</span><br><span class="line">                    forwardInvocationReplaceMethod(hookClass, selector, options);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;else&#123;</span><br><span class="line">&#x2F;&#x2F;                char *returnType &#x3D; method_copyReturnType(tempMethod);</span><br><span class="line">&#x2F;&#x2F;                &#x2F;*</span><br><span class="line">&#x2F;&#x2F;                 * 方案二：hook每一个方法（未实现）</span><br><span class="line">&#x2F;&#x2F;                 *&#x2F;</span><br><span class="line">&#x2F;&#x2F;                cjlHookMethod(hookClass, selector, returnType);</span><br><span class="line">&#x2F;&#x2F;                free(returnType);</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            [methodList addObject:NSStringFromSelector(selector)];</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    free(methods);</span><br><span class="line">    </span><br><span class="line">    [_hookedClassList addObject:hookClassName];</span><br><span class="line">    [_hookClassMethodDic setObject:methodList forKey:hookClassName];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p><em><strong>一些系统方法不应该 hook</strong></em>。具体如下：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">@[  &#x2F;*UIViewController的:*&#x2F;</span><br><span class="line">    @&quot;.cxx_destruct&quot;,</span><br><span class="line">    @&quot;dealloc&quot;,</span><br><span class="line">    @&quot;_isDeallocating&quot;,</span><br><span class="line">    @&quot;release&quot;,</span><br><span class="line">    @&quot;autorelease&quot;,</span><br><span class="line">    @&quot;retain&quot;,</span><br><span class="line">    @&quot;Retain&quot;,</span><br><span class="line">    @&quot;_tryRetain&quot;,</span><br><span class="line">    @&quot;copy&quot;,</span><br><span class="line">	</span><br><span class="line">    &#x2F;*UIView的:*&#x2F;</span><br><span class="line">    @&quot;nsis_descriptionOfVariable:&quot;,</span><br><span class="line">    </span><br><span class="line">    &#x2F;*NSObject的:*&#x2F;</span><br><span class="line">    @&quot;respondsToSelector:&quot;,</span><br><span class="line">    @&quot;class&quot;,</span><br><span class="line">    @&quot;allowsWeakReference&quot;,</span><br><span class="line">    @&quot;retainWeakReference&quot;,</span><br><span class="line">    @&quot;init&quot;,</span><br><span class="line">    @&quot;resolveInstanceMethod:&quot;,</span><br><span class="line">    @&quot;resolveClassMethod:&quot;,</span><br><span class="line">    @&quot;forwardingTargetForSelector:&quot;,</span><br><span class="line">    @&quot;methodSignatureForSelector:&quot;,</span><br><span class="line">    @&quot;forwardInvocation:&quot;,</span><br><span class="line">    @&quot;doesNotRecognizeSelector:&quot;,</span><br><span class="line">    @&quot;description&quot;,</span><br><span class="line">    @&quot;debugDescription&quot;,</span><br><span class="line">    @&quot;self&quot;,</span><br><span class="line">    @&quot;lockFocus&quot;,</span><br><span class="line">    @&quot;lockFocusIfCanDraw&quot;,</span><br><span class="line">    @&quot;lockFocusIfCanDraw&quot;</span><br><span class="line">];</span><br></pre></td></tr></table></figure></li>
+<li><p><em><strong>CACurrentMediaTime()</strong></em> 。如果选择了日志选项<code>CJLogMethodTimer</code>，那么在计算函数执行时间时采用 <code>CACurrentMediaTime()</code> 计算，<code>CACurrentMediaTime()</code>是基于内建时钟的，能够更精确更原子化地测量，并且不会因为外部时间变化而变化（例如时区变化、夏时制、秒突变等），可以最小化的减少性能损耗。</p>
+</li>
+<li><p><em><strong>mmap</strong></em>。日志数据采用 <code>mmap</code> 内存映射的方式存储，具体请看 <code>CJLogger.mm</code> 中的相关实现。</p>
+<blockquote>
+<p> 引用自—— <a target="_blank" rel="noopener" href="http://www.cnblogs.com/huxiao-tee/p/4660352.html">认真分析mmap：是什么 为什么 怎么用</a> <br><br><code>mmap</code>是一种内存映射文件的方法，即将一个文件或者其它对象映射到进程的地址空间，实现文件磁盘地址和进程虚拟地址空间中一段虚拟地址的一一对映关系。实现这样的映射关系后，进程就可以采用指针的方式读写操作这一段内存，而系统会自动回写脏页面到对应的文件磁盘上，即完成了对文件的操作而不必再调用read,write等系统调用函数。相反，内核空间对这段区域的修改也直接反映用户空间，从而可以实现不同进程间的文件共享。</p>
+</blockquote>
+</li>
+<li><p><em><strong>forwardInvocationReplaceMethod</strong></em> 这个方法是实现 CJMethodLog   的核心部分：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br></pre></td><td class="code"><pre><span class="line">BOOL forwardInvocationReplaceMethod(Class cls, SEL originSelector, CJLogOptions options) &#123;</span><br><span class="line">    Method originMethod &#x3D; class_getInstanceMethod(cls, originSelector);</span><br><span class="line">    if (originMethod &#x3D;&#x3D; nil) &#123;</span><br><span class="line">        return NO;</span><br><span class="line">    &#125;</span><br><span class="line">    const char *originTypes &#x3D; method_getTypeEncoding(originMethod);</span><br><span class="line">    </span><br><span class="line">    IMP msgForwardIMP &#x3D; _objc_msgForward;</span><br><span class="line">#if !defined(__arm64__)</span><br><span class="line">    if (isStructType(originTypes)) &#123;</span><br><span class="line">        &#x2F;&#x2F;Reference JSPatch:</span><br><span class="line">        &#x2F;&#x2F;In some cases that returns struct, we should use the &#39;_stret&#39; API:</span><br><span class="line">        &#x2F;&#x2F;http:&#x2F;&#x2F;sealiesoftware.com&#x2F;blog&#x2F;archive&#x2F;2008&#x2F;10&#x2F;30&#x2F;objc_explain_objc_msgSend_stret.html</span><br><span class="line">        &#x2F;&#x2F;NSMethodSignature knows the detail but has no API to return, we can only get the info from debugDescription.</span><br><span class="line">        NSMethodSignature *methodSignature &#x3D; [NSMethodSignature signatureWithObjCTypes:originTypes];</span><br><span class="line">        if ([methodSignature.debugDescription rangeOfString:@&quot;is special struct return? YES&quot;].location !&#x3D; NSNotFound) &#123;</span><br><span class="line">            msgForwardIMP &#x3D; (IMP)_objc_msgForward_stret;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">#endif</span><br><span class="line">    </span><br><span class="line">    IMP originIMP &#x3D; method_getImplementation(originMethod);</span><br><span class="line">    if (originIMP &#x3D;&#x3D; nil || originIMP &#x3D;&#x3D; msgForwardIMP) &#123;</span><br><span class="line">        return NO;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F;添加一个新方法，该方法的IMP是原方法的IMP，并且在hook到的forwardInvocation里调用新方法</span><br><span class="line">    SEL newSelecotr &#x3D; createNewSelector(originSelector);</span><br><span class="line">    BOOL addSucess &#x3D; class_addMethod(cls, newSelecotr, originIMP, originTypes);</span><br><span class="line">    if (!addSucess) &#123;</span><br><span class="line">        NSString *str &#x3D; NSStringFromSelector(newSelecotr);</span><br><span class="line">        CJLNSLog(@&quot;CJMethodLog: Class addMethod fail : %@，%@&quot;,cls,str);</span><br><span class="line">        return NO;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F;替换当前方法的IMP为msgForwardIMP，从而在调用时候触发消息转发</span><br><span class="line">    class_replaceMethod(cls, originSelector, msgForwardIMP, originTypes);</span><br><span class="line">    </span><br><span class="line">    Method forwardInvocationMethod &#x3D; class_getInstanceMethod(cls, @selector(forwardInvocation:));</span><br><span class="line">    _VIMP originMethod_IMP &#x3D; (_VIMP)method_getImplementation(forwardInvocationMethod);</span><br><span class="line">    method_setImplementation(forwardInvocationMethod, imp_implementationWithBlock(^(id target, NSInvocation *invocation)&#123;</span><br><span class="line">        </span><br><span class="line">        SEL originSelector &#x3D; invocation.selector;</span><br><span class="line">        BOOL isInstance &#x3D; isInstanceType(target);</span><br><span class="line">        Class targetClass &#x3D; isInstance?[target class]:object_getClass(target);</span><br><span class="line">        if (class_respondsToSelector(targetClass, originSelector)) &#123;</span><br><span class="line">            </span><br><span class="line">            _CJDeep ++;</span><br><span class="line">            NSString *originSelectorStr &#x3D; NSStringFromSelector(originSelector);</span><br><span class="line">            NSMutableString *methodlog &#x3D; [[NSMutableString alloc]initWithCapacity:3];</span><br><span class="line">            for (NSInteger deepLevel &#x3D; 0; deepLevel &lt;&#x3D; _CJDeep; deepLevel ++) &#123;</span><br><span class="line">                [methodlog appendString:@&quot;-&quot;];</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            [methodlog appendFormat:@&quot; &lt;%@&gt; &quot;,targetClass];</span><br><span class="line">            </span><br><span class="line">            CFTimeInterval startTimeInterval &#x3D; 0;</span><br><span class="line">            BOOL beginAndEnd &#x3D; NO;</span><br><span class="line">            if ((options &amp; CJLogMethodTimer) || (options &amp; CJLogMethodArgs)) &#123;</span><br><span class="line">                [methodlog appendFormat:@&quot; begin: &quot;];</span><br><span class="line">                if (options &amp; CJLogMethodTimer) &#123;</span><br><span class="line">                    startTimeInterval &#x3D; CACurrentMediaTime();</span><br><span class="line">                &#125;</span><br><span class="line">                beginAndEnd &#x3D; YES;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            if (isInstance) &#123;</span><br><span class="line">                [methodlog appendFormat:@&quot; -%@&quot;,originSelectorStr];</span><br><span class="line">            &#125;else&#123;</span><br><span class="line">                [methodlog appendFormat:@&quot; +%@&quot;,originSelectorStr];</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            if (options &amp; CJLogMethodArgs) &#123;</span><br><span class="line">                NSDictionary *methodArguments &#x3D; CJMethodArguments(invocation);</span><br><span class="line">                NSArray *argumentArray &#x3D; methodArguments[_CJMethodArgsListKey];</span><br><span class="line">                NSMutableString *argStr &#x3D; [[NSMutableString alloc]initWithCapacity:3];</span><br><span class="line"></span><br><span class="line">                for (NSInteger i &#x3D; 0; i &lt; argumentArray.count; i++) &#123;</span><br><span class="line">                    id arg &#x3D; argumentArray[i];</span><br><span class="line">                    if (i &#x3D;&#x3D; 0) &#123;</span><br><span class="line">                        [argStr appendFormat:@&quot; ; args&#x3D;[ argIndex:%@ argValue:%@&quot;,@(i),[arg description]];</span><br><span class="line">                    &#125;else&#123;</span><br><span class="line">                        [argStr appendFormat:@&quot;, argIndex:%@ argValue:%@&quot;,@(i),[arg description]];</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                if (argumentArray.count &gt; 0) &#123;</span><br><span class="line">                    [argStr appendString:@&quot; ]&quot;];</span><br><span class="line">                &#125;</span><br><span class="line">                [methodlog appendString:argStr];</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            if (_logEnable) &#123;</span><br><span class="line">                CJLNSLog(@&quot;%@&quot;,methodlog);</span><br><span class="line">            &#125;</span><br><span class="line">            [_logger flushAllocationStack:[NSString stringWithFormat:@&quot;%@\n&quot;,methodlog]];</span><br><span class="line">            </span><br><span class="line">            [invocation setSelector:createNewSelector(originSelector)];</span><br><span class="line">            [invocation setTarget:target];            </span><br><span class="line">            [invocation invoke];</span><br><span class="line">            </span><br><span class="line">            if (beginAndEnd) &#123;</span><br><span class="line">                [methodlog setString:[methodlog stringByReplacingOccurrencesOfString:@&quot;begin: &quot; withString:@&quot;finish:&quot;]];</span><br><span class="line">                </span><br><span class="line">                if (options &amp; CJLogMethodTimer) &#123;</span><br><span class="line">                    CFTimeInterval endTimeInterval &#x3D; CACurrentMediaTime();</span><br><span class="line">                    [methodlog appendFormat:@&quot; ; time&#x3D;%f&quot;,(endTimeInterval-startTimeInterval)];</span><br><span class="line">                &#125;</span><br><span class="line">                </span><br><span class="line">                if (options &amp; CJLogMethodReturnValue) &#123;</span><br><span class="line">                    id returnValue &#x3D; getReturnValue(invocation);</span><br><span class="line">                    [methodlog appendFormat:@&quot; ; return&#x3D; %@&quot;,[returnValue description]];</span><br><span class="line">                &#125;</span><br><span class="line">                </span><br><span class="line">                if (_logEnable) &#123;</span><br><span class="line">                    CJLNSLog(@&quot;%@&quot;,methodlog);</span><br><span class="line">                &#125;</span><br><span class="line">                [_logger flushAllocationStack:[NSString stringWithFormat:@&quot;%@\n&quot;,methodlog]];</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            _CJDeep --;</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">        &#x2F;&#x2F;如果target本身已经实现了对无法执行的方法的消息转发(forwardInvocation:)，则这里要还原其本来的实现</span><br><span class="line">        else &#123;</span><br><span class="line">            originMethod_IMP(target,@selector(forwardInvocation:),invocation);</span><br><span class="line">        &#125;</span><br><span class="line">        if (_CJDeep &#x3D;&#x3D; -1) &#123;</span><br><span class="line">            if (_logEnable) &#123;</span><br><span class="line">                CJLNSLog(@&quot;\n&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">            [_logger flushAllocationStack:@&quot;\n&quot;];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;));</span><br><span class="line">    return YES;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>首先判断SEL对应的Method是否存在</li>
+<li>然后获取消息转发IMP （<code>msgForwardIMP</code>），注意 <code>_objc_msgForward</code> 与 <code>_objc_msgForward_stret</code> 的判断</li>
+<li>判断当前方法的IMP（<code>originIMP</code>）不为nil，并且不等于<code>msgForwardIMP</code></li>
+<li>添加一个指定前缀（<code>&quot;cjlMethod_&quot;</code>）开头的新方法，该方法的IMP是原方法的IMP</li>
+<li>替换当前方法的IMP为<code>msgForwardIMP</code>，从而在调用时候触发消息转发</li>
+<li>获取记录当前class的 <code>@selector(forwardInvocation:)</code> 对应的IMP，然后重写其IMP实现，这里直接使用了 <code>imp_implementationWithBlock(id _Nonnull block)</code> 生成IMP</li>
+<li>调用方法，触发消息转发，进入<code>@selector(forwardInvocation:)</code> 对应的IMP内。<br>首先判断当前Class是否可执行原来方法，这里注意一下实例方法以及类方法的判断，如果是类方法，取的是<code>object_getClass()</code>：  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">SEL originSelector &#x3D; invocation.selector;</span><br><span class="line">BOOL isInstance &#x3D; isInstanceType(target);</span><br><span class="line">Class targetClass &#x3D; isInstance?[target class]:object_getClass(target);</span><br><span class="line">if (class_respondsToSelector(targetClass, originSelector)) &#123;</span><br><span class="line">    &#x2F;&#x2F;TODO:写入日志以及还原原方法的执行</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;如果target本身已经实现了对无法执行的方法的消息转发(forwardInvocation:)，则这里要还原其本来的实现</span><br><span class="line">else &#123;</span><br><span class="line">    originMethod_IMP(target,@selector(forwardInvocation:),invocation);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+当判断到当前方法需要执行日志监听时，拼装日志信息（<code>_CJDeep</code> 记录了方法执行的层级关系），然后执行一次日志写入操作：  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[_logger flushAllocationStack:[NSString stringWithFormat:@&quot;%@\n&quot;,methodlog]];</span><br></pre></td></tr></table></figure>
+再接着还原实际调用方法的实现：  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[invocation setSelector:createNewSelector(originSelector)];</span><br><span class="line">[invocation setTarget:target];            </span><br><span class="line">[invocation invoke];</span><br></pre></td></tr></table></figure>
+
+  紧接着如果存在 <code>CJLogMethodTimer</code> 选项，则计算当前函数执行时间，同时写入日志信息。<br>最后将 <code>_CJDeep</code>  - 1，从而完成本次hook方法的执行。</li>
+</ul>
+</li>
+<li><p><em><strong>CJMethodLog 无法同时 hook super方法</strong></em><br>是否还记得上篇文章讲到，Objective-C中执行方法，其实底层调用的是<code>objc_msgSend(receiver,SEL)</code>；如果是super方法，会调用<code>objc_msgSendSuper(objc_super,SEL)</code>，再往下会转换成<code>objc_msgSend(objc_super-&gt;receiver, SEL)</code>，此时的receiver和 objc_super-&gt;receiver 表示的是同一个接收者。<br>比如下面例子：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">底层对应的是</span><br><span class="line">objc_msgSend(self,@selector(viewDidLoad))</span><br><span class="line">objc_msgSend(objc_super-&gt;receiver, @selector(viewDidLoad))</span><br></pre></td></tr></table></figure>
+<p>   当CJMethodLog都hook了父子类的 viewDidLoad 方法后，调用会触发消息转发，最终由以下代码还原其实现</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[invocation setSelector:createNewSelector(@selector(viewDidLoad))];</span><br><span class="line">[invocation setTarget:target];            </span><br><span class="line">[invocation invoke];</span><br></pre></td></tr></table></figure>
+
+<p> 子类方法 target=self，父类方法 target=objc_super-&gt;receiver，其中<strong>self = objc_super-&gt;receiver</strong>，到此为止你是否发现了问题所在？问题就是这里的方法调用其实是一个死循环！！！伪代码如下：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">objc_msgSend(receiver,@selector(viewDidLoad)) &#123;</span><br><span class="line">            objc_msgSend(receiver, @selector(viewDidLoad));</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p> 要破解这一难题只能想办法区分父子类调用方法时候的不同上下文，可惜这一块我还没找到好的解决方案。</p>
+</li>
+</ol>
+<h3 id="更多"><a href="#更多" class="headerlink" title="更多"></a>更多</h3><ul>
+<li>解决<code>self</code> <code>super</code> 上下文调用的问题</li>
+<li>欢迎各位大神<code>star</code> <code>issue</code>，帮忙解决难题</li>
+<li>项目地址： <a target="_blank" rel="noopener" href="https://github.com/lele8446/CJMethodLog">CJMethodLog</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/runtime/" rel="tag"># runtime</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/03/02/CJMethodLog%EF%BC%88%E4%B8%80%EF%BC%89Runtime%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E7%9B%91%E6%8E%A7%E8%BF%98%E5%8E%9FAPP%E8%BF%90%E8%A1%8C%E7%9A%84%E6%AF%8F%E4%B8%80%E8%A1%8C%E4%BB%A3%E7%A0%81%E8%AF%B4%E8%B5%B7/" rel="prev" title="CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起">
+                  <i class="fa fa-chevron-left"></i> CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/04/20/%E6%87%92%E5%88%B0%E6%9E%81%E8%87%B4%E4%B9%8B%E6%80%92%E6%92%B8%E4%B8%80%E9%94%AE%E6%89%93%E5%8C%85%E5%8F%91%E5%B8%83%E7%B3%BB%E7%BB%9F/" rel="next" title="懒到极致之怒撸一键打包发布系统">
+                  懒到极致之怒撸一键打包发布系统 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+<script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lele8446</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
