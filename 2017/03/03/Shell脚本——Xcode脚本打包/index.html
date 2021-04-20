@@ -20,12 +20,12 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
 
 <script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;example.com&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Pisces&quot;,&quot;version&quot;:&quot;8.3.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script>
-<meta name="description" content="最近有好一段时间没有整理博客了，也不是因为忙，就是太懒。或者说程序员都自带懒属性😅，表现在对于一些机械性重复性的工作，宁愿一次性多花些精力去封装、去写出各种各样的工具来替自己干活，也不愿意多次重复劳动（就算那是很简单的工作）。这不，我结合最近的工作，研究着写了两份Shell脚本，一是关于Xcode脚本打包，还有一个是关于crash log解析（这个将在下一篇文章说明）。">
+<meta name="description" content="最近有好一段时间没有整理博客了，也不是因为忙，就是太懒。或者说程序员都自带懒属性😅，表现在对于一些机械性重复性的工作，宁愿一次性多花些精力去封装、去写出各种各样的工具来替自己干活，也不愿意多次重复劳动（就算那是很简单的工作）。这不，我结合最近的工作，研究着写了两份Shell脚本，一是关于Xcode脚本打包，还有一个是关于crash log解析（这个将在另一篇文章说明）。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Shell脚本——Xcode脚本打包">
 <meta property="og:url" content="http://example.com/2017/03/03/Shell%E8%84%9A%E6%9C%AC%E2%80%94%E2%80%94Xcode%E8%84%9A%E6%9C%AC%E6%89%93%E5%8C%85/index.html">
 <meta property="og:site_name" content="C.J.Lian">
-<meta property="og:description" content="最近有好一段时间没有整理博客了，也不是因为忙，就是太懒。或者说程序员都自带懒属性😅，表现在对于一些机械性重复性的工作，宁愿一次性多花些精力去封装、去写出各种各样的工具来替自己干活，也不愿意多次重复劳动（就算那是很简单的工作）。这不，我结合最近的工作，研究着写了两份Shell脚本，一是关于Xcode脚本打包，还有一个是关于crash log解析（这个将在下一篇文章说明）。">
+<meta property="og:description" content="最近有好一段时间没有整理博客了，也不是因为忙，就是太懒。或者说程序员都自带懒属性😅，表现在对于一些机械性重复性的工作，宁愿一次性多花些精力去封装、去写出各种各样的工具来替自己干活，也不愿意多次重复劳动（就算那是很简单的工作）。这不，我结合最近的工作，研究着写了两份Shell脚本，一是关于Xcode脚本打包，还有一个是关于crash log解析（这个将在另一篇文章说明）。">
 <meta property="og:locale">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429982-a749b05d47be9dd0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429982-731170b26679c196.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
@@ -233,13 +233,13 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>最近有好一段时间没有整理博客了，也不是因为忙，就是太懒。或者说程序员都自带懒属性😅，表现在对于一些机械性重复性的工作，宁愿一次性多花些精力去封装、去写出各种各样的工具来替自己干活，也不愿意多次重复劳动（就算那是很简单的工作）。这不，我结合最近的工作，研究着写了两份Shell脚本，一是关于<a target="_blank" rel="noopener" href="https://github.com/lele8446/CJShellDemo/tree/master/ReleaseDir">Xcode脚本打包</a>，还有一个是关于<a target="_blank" rel="noopener" href="http://www.jianshu.com/p/392d801062d1">crash log解析</a>（这个将在下一篇文章说明）。</p>
+        <p>最近有好一段时间没有整理博客了，也不是因为忙，就是太懒。或者说程序员都自带懒属性😅，表现在对于一些机械性重复性的工作，宁愿一次性多花些精力去封装、去写出各种各样的工具来替自己干活，也不愿意多次重复劳动（就算那是很简单的工作）。这不，我结合最近的工作，研究着写了两份Shell脚本，一是关于<a target="_blank" rel="noopener" href="https://github.com/lele8446/CJShellDemo/tree/master/ReleaseDir">Xcode脚本打包</a>，还有一个是关于<a target="_blank" rel="noopener" href="https://lele8446.top/2017/02/17/iOS%20crash%20%E8%A7%A3%E6%9E%90%E5%AE%9A%E4%BD%8D%EF%BC%8Cshell%E8%84%9A%E6%9C%AC%E6%9F%A5%E6%89%BEcrash/">crash log解析</a>（这个将在另一篇文章说明）。</p>
 <span id="more"></span>
 
 <hr>
 <h3 id="Shell打包脚本实现了如下功能"><a href="#Shell打包脚本实现了如下功能" class="headerlink" title="Shell打包脚本实现了如下功能"></a>Shell打包脚本实现了如下功能</h3><ol>
 <li>指定打包项目的Build号，Version版本号——Version号可选择自增或自定义（在测试阶段打包时，每次手动改变Version号很是麻烦，而且不方便管理；而如果能打包时通过脚本参数控制，so easy～）</li>
-<li>导出xcarchive文件，通过xcarchive文件得到dSYM文件，这是很重要的。查找线上crash时，缺它不可！<a target="_blank" rel="noopener" href="http://www.jianshu.com/p/392d801062d1">crash log解析</a>请看这里。</li>
+<li>导出xcarchive文件，通过xcarchive文件得到dSYM文件，这是很重要的。查找线上crash时，缺它不可！<a target="_blank" rel="noopener" href="https://lele8446.top/2017/02/17/iOS%20crash%20%E8%A7%A3%E6%9E%90%E5%AE%9A%E4%BD%8D%EF%BC%8Cshell%E8%84%9A%E6%9C%AC%E6%9F%A5%E6%89%BEcrash/">crash log解析</a>请看这里。</li>
 <li>打包生成ipa文件，这个就是最终需要的渠道包了。</li>
 </ol>
 <p>另外打包脚本可以根据项目配置，每一次成功打包后，都会生成对应目录，并生成记录本次打包的log日志文件。</p>
