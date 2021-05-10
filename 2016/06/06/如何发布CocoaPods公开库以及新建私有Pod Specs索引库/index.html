@@ -20,12 +20,12 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
 
 <script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;example.com&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Pisces&quot;,&quot;version&quot;:&quot;8.3.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script>
-<meta name="description" content="将自己的开源代码提交到github后，我们还可以将其发布到CocoaPods上，从而可以通过pod来管理项目，其中的好处我不说大家都知道&#x3D;_&#x3D;（CocoaPods大法好！）">
+<meta name="description" content="CocoaPods公开库将自己的开源代码提交到GitHub后，我们还可以将其发布成CocoaPods公开库，从而可以通过pod来管理引用。下面是发布CocoaPods公开库的步骤说明">
 <meta property="og:type" content="article">
-<meta property="og:title" content="如何发布github上的CocoaPods Pod库">
-<meta property="og:url" content="http://example.com/2016/06/06/%E5%A6%82%E4%BD%95%E5%8F%91%E5%B8%83github%E4%B8%8A%E7%9A%84CocoaPods%20Pod%E5%BA%93/index.html">
+<meta property="og:title" content="如何发布CocoaPods公开库以及新建私有Pod Specs索引库">
+<meta property="og:url" content="http://example.com/2016/06/06/%E5%A6%82%E4%BD%95%E5%8F%91%E5%B8%83CocoaPods%E5%85%AC%E5%BC%80%E5%BA%93%E4%BB%A5%E5%8F%8A%E6%96%B0%E5%BB%BA%E7%A7%81%E6%9C%89Pod%20Specs%E7%B4%A2%E5%BC%95%E5%BA%93/index.html">
 <meta property="og:site_name" content="C.J.Lian">
-<meta property="og:description" content="将自己的开源代码提交到github后，我们还可以将其发布到CocoaPods上，从而可以通过pod来管理项目，其中的好处我不说大家都知道&#x3D;_&#x3D;（CocoaPods大法好！）">
+<meta property="og:description" content="CocoaPods公开库将自己的开源代码提交到GitHub后，我们还可以将其发布成CocoaPods公开库，从而可以通过pod来管理引用。下面是发布CocoaPods公开库的步骤说明">
 <meta property="og:locale">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429982-a1f6c09ee0ae266a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429982-9e6139105b7a8e75.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
@@ -38,14 +38,14 @@
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1429982-a1f6c09ee0ae266a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
-<link rel="canonical" href="http://example.com/2016/06/06/%E5%A6%82%E4%BD%95%E5%8F%91%E5%B8%83github%E4%B8%8A%E7%9A%84CocoaPods%20Pod%E5%BA%93/">
+<link rel="canonical" href="http://example.com/2016/06/06/%E5%A6%82%E4%BD%95%E5%8F%91%E5%B8%83CocoaPods%E5%85%AC%E5%BC%80%E5%BA%93%E4%BB%A5%E5%8F%8A%E6%96%B0%E5%BB%BA%E7%A7%81%E6%9C%89Pod%20Specs%E7%B4%A2%E5%BC%95%E5%BA%93/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-Hans&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;http:&#x2F;&#x2F;example.com&#x2F;2016&#x2F;06&#x2F;06&#x2F;%E5%A6%82%E4%BD%95%E5%8F%91%E5%B8%83github%E4%B8%8A%E7%9A%84CocoaPods%20Pod%E5%BA%93&#x2F;&quot;,&quot;path&quot;:&quot;2016&#x2F;06&#x2F;06&#x2F;如何发布github上的CocoaPods Pod库&#x2F;&quot;,&quot;title&quot;:&quot;如何发布github上的CocoaPods Pod库&quot;}</script>
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-Hans&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;http:&#x2F;&#x2F;example.com&#x2F;2016&#x2F;06&#x2F;06&#x2F;%E5%A6%82%E4%BD%95%E5%8F%91%E5%B8%83CocoaPods%E5%85%AC%E5%BC%80%E5%BA%93%E4%BB%A5%E5%8F%8A%E6%96%B0%E5%BB%BA%E7%A7%81%E6%9C%89Pod%20Specs%E7%B4%A2%E5%BC%95%E5%BA%93&#x2F;&quot;,&quot;path&quot;:&quot;2016&#x2F;06&#x2F;06&#x2F;如何发布CocoaPods公开库以及新建私有Pod Specs索引库&#x2F;&quot;,&quot;title&quot;:&quot;如何发布CocoaPods公开库以及新建私有Pod Specs索引库&quot;}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
-<title>如何发布github上的CocoaPods Pod库 | C.J.Lian</title><script src="/js/config.js"></script>
+<title>如何发布CocoaPods公开库以及新建私有Pod Specs索引库 | C.J.Lian</title><script src="/js/config.js"></script>
   
 
 
@@ -122,7 +122,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%91%E5%B8%83%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.</span> <span class="nav-text">发布步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5"><span class="nav-number">1.1.</span> <span class="nav-text">第一步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5"><span class="nav-number">1.2.</span> <span class="nav-text">第二步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5"><span class="nav-number">1.3.</span> <span class="nav-text">第三步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5"><span class="nav-number">1.4.</span> <span class="nav-text">第四步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%BA%94%E6%AD%A5"><span class="nav-number">1.5.</span> <span class="nav-text">第五步</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#CocoaPods%E5%85%AC%E5%BC%80%E5%BA%93"><span class="nav-number">1.</span> <span class="nav-text">CocoaPods公开库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5"><span class="nav-number">1.1.</span> <span class="nav-text">第一步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5"><span class="nav-number">1.2.</span> <span class="nav-text">第二步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5"><span class="nav-number">1.3.</span> <span class="nav-text">第三步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5"><span class="nav-number">1.4.</span> <span class="nav-text">第四步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%BA%94%E6%AD%A5"><span class="nav-number">1.5.</span> <span class="nav-text">第五步</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B0%E5%BB%BA%E7%A7%81%E6%9C%89Pod-Specs%E7%B4%A2%E5%BC%95%E5%BA%93"><span class="nav-number">2.</span> <span class="nav-text">新建私有Pod Specs索引库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5-1"><span class="nav-number">2.1.</span> <span class="nav-text">第一步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5-1"><span class="nav-number">2.2.</span> <span class="nav-text">第二步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5-1"><span class="nav-number">2.3.</span> <span class="nav-text">第三步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5-1"><span class="nav-number">2.4.</span> <span class="nav-text">第四步</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2016/06/06/%E5%A6%82%E4%BD%95%E5%8F%91%E5%B8%83github%E4%B8%8A%E7%9A%84CocoaPods%20Pod%E5%BA%93/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2016/06/06/%E5%A6%82%E4%BD%95%E5%8F%91%E5%B8%83CocoaPods%E5%85%AC%E5%BC%80%E5%BA%93%E4%BB%A5%E5%8F%8A%E6%96%B0%E5%BB%BA%E7%A7%81%E6%9C%89Pod%20Specs%E7%B4%A2%E5%BC%95%E5%BA%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -208,7 +208,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          如何发布github上的CocoaPods Pod库
+          如何发布CocoaPods公开库以及新建私有Pod Specs索引库
         </h1>
 
         <div class="post-meta-container">
@@ -233,22 +233,22 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>将自己的开源代码提交到github后，我们还可以将其发布到CocoaPods上，从而可以通过pod来管理项目，其中的好处我不说大家都知道=_=（CocoaPods大法好！）</p>
+        <h3 id="CocoaPods公开库"><a href="#CocoaPods公开库" class="headerlink" title="CocoaPods公开库"></a>CocoaPods公开库</h3><p>将自己的开源代码提交到GitHub后，我们还可以将其发布成CocoaPods公开库，从而可以通过pod来管理引用。下面是发布CocoaPods公开库的步骤说明</p>
 <span id="more"></span>
 
-<h3 id="发布步骤"><a href="#发布步骤" class="headerlink" title="发布步骤"></a>发布步骤</h3><h4 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h4><p>打开终端，进入项目工程根目录，创建podspec文件</p>
-<blockquote>
-<p>pod spec create CJLabel</p>
-</blockquote>
+<h4 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h4><p>打开终端，进入项目工程根目录，创建podspec文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod spec create CJLabel</span><br></pre></td></tr></table></figure>
+
+
+
 <h4 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h4><p>编辑podspec文件</p>
-<blockquote>
-<p>vim CJLabel.podspec</p>
-</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim CJLabel.podspec</span><br></pre></td></tr></table></figure>
+
 <p> 执行命令后会自动生成一份模版文件，我们只需修改其中的一些主要内容即可<br><img src="http://upload-images.jianshu.io/upload_images/1429982-a1f6c09ee0ae266a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image">填写的时候注意几点：</p>
 <ol>
-<li><p>s.license = “MIT” ，默认选这个，但我选择后提示错误<code>[iOS] license: Unable to find a license file</code>，经google后找到解决方案，可改为后面的那段描述</p>
+<li><p>s.license = “MIT” ，默认选这个，但我选择后提示错误<code>[iOS] license: Unable to find a license file</code>，改为后面的描述可以解决报错；也可以在与.podspec文件同级别的目录下保存 <strong>LICENSE</strong> 文件同样可以解决报错。</p>
  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">s.license      = &#123; :<span class="built_in">type</span> =&gt; <span class="string">&#x27;Apache License, Version 2.0&#x27;</span>, :text =&gt; &lt;&lt;-<span class="string">LICENSE</span></span><br><span class="line"><span class="string">    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span></span><br><span class="line"><span class="string">    you may not use this file except in compliance with the License.</span></span><br><span class="line"><span class="string">    You may obtain a copy of the License at </span></span><br><span class="line"><span class="string">    http://www.apache.org/licenses/LICENSE</span>-2.0 </span><br><span class="line">    Unless required by applicable law or agreed to <span class="keyword">in</span> writing, software</span><br><span class="line">    distributed under the License is distributed on an <span class="string">&quot;AS IS&quot;</span> BASIS,</span><br><span class="line">    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span><br><span class="line">    See the License <span class="keyword">for</span> the specific language governing permissions and</span><br><span class="line">    limitations under the License.</span><br><span class="line">    LICENSE</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></li>
-<li><p>s.source  可直接填github上对应的托管地址，注意最后要以.git结尾，并填写对应的tag号</p>
+<li><p>s.source  可直接填GitHub上对应的托管地址，注意最后要以.git结尾，并说明对应的tag号</p>
 </li>
 <li><p>s.source_files是一定要填写正确的，不然无法提交 .podspec文件</p>
 </li>
@@ -267,28 +267,37 @@
 </ul>
 </blockquote>
 <p> 完成以后验证配置:</p>
-<blockquote>
-<p>pod spec lint CJLabel.podspec<br>pod spec lint CJLabel.podspec –allow-warnings（表示忽略项目警告）</p>
-</blockquote>
-<p> 如果出现提示：<img src="http://upload-images.jianshu.io/upload_images/1429982-9e6139105b7a8e75.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"><br>那么就是已经配置成功，可以提交到cocoapods了，否则要将所有提示的error和warn修改掉。（这一步花费了我不少时间，用心修改吧-_-#）</p>
-<ul>
-<li><p>附修改步骤：<br>1、先删除远程tag</p>
-<blockquote>
-<p>git push origin :refs/tags/0.0.1</p>
-</blockquote>
-<p>2、 重复上面的第三步步骤</p>
-</li>
-</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pod spec lint CJLabel.podspec</span><br><span class="line"><span class="meta">#</span><span class="bash"> 或者使用下面指令，表示忽略项目警告</span></span><br><span class="line">pod spec lint CJLabel.podspec --allow-warnings</span><br></pre></td></tr></table></figure>
+
+<p> 如果出现提示：<img src="http://upload-images.jianshu.io/upload_images/1429982-9e6139105b7a8e75.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"><br>那么就是已经配置成功，可以提交到cocoapods了，否则要将所有提示的error和warn修改掉。</p>
+<p>附修改步骤：</p>
+<p> 1、先删除远程tag</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin :refs/tags/0.0.1</span><br></pre></td></tr></table></figure>
+
+<p>  2、修改去除警告与错误后，重复上面的第三步步骤</p>
 <h4 id="第四步"><a href="#第四步" class="headerlink" title="第四步"></a>第四步</h4><p> 提交cocoapods</p>
-<blockquote>
-<p>pod trunk push CJLabel.podspec<br>pod trunk push CJLabel.podspec –allow-warnings（表示忽略项目警告）</p>
-</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pod trunk push CJLabel.podspec</span><br><span class="line"><span class="meta">#</span><span class="bash"> 或者使用下面指令，表示忽略项目警告</span></span><br><span class="line">pod trunk push CJLabel.podspec --allow-warnings</span><br></pre></td></tr></table></figure>
+
 <p> 如果在这一步出现提示<code>[!] You need to register a session first.</code><br>可以执行以下指令来解决：</p>
-<blockquote>
-<p>pod trunk register 邮箱地址 “用户名” –description=”macbook pro”</p>
-</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod trunk register 邮箱地址 &quot;用户名&quot; --description=&quot;macbook pro&quot;</span><br></pre></td></tr></table></figure>
+
 <p> 之后会有一封带有验证链接的邮件发送到你输入的邮箱，点击验证后就可以回来终端继续提交操作了。</p>
-<h4 id="第五步"><a href="#第五步" class="headerlink" title="第五步"></a>第五步</h4><p>提交成功后可以执行<code>pod search</code>命令来搜索提交的库，如果搜索不成功则执行<code>pod setup</code>，更新pod库，再次搜索。搜索成功后安装。</p>
+<h4 id="第五步"><a href="#第五步" class="headerlink" title="第五步"></a>第五步</h4><p>提交成功后可以执行<code>pod search</code>命令来搜索提交的库，如果搜索不成功则执行<code>pod setup</code>，更新pod索引库，再次搜索。搜索成功后安装。</p>
+<h3 id="新建私有Pod-Specs索引库"><a href="#新建私有Pod-Specs索引库" class="headerlink" title="新建私有Pod Specs索引库"></a>新建私有Pod Specs索引库</h3><p>前面介绍的 <strong>.podspec</strong> 是用于描述每一个pod库版本信息的描述文件，CooaPods正是通过这些索引描述来管理下载对应的三方库的。而Pod Specs索引库则是保存这些所有索引文件的仓库地址，查看本地文件夹目录 <code>/Users/用户名/.cocoapods/repos</code>，可以发现有个叫cocoapods的文件夹，里面记录的就是CocoaPods的索引信息，对应的远程仓库地址是<a target="_blank" rel="noopener" href="https://github.com/CocoaPods/Specs%E3%80%82">https://github.com/CocoaPods/Specs。</a></p>
+<p>由于GitHub外网限制，经常访问不通，我们可以通过建立私有的Pod Specs索引库来解决该问题。新建步骤：</p>
+<h4 id="第一步-1"><a href="#第一步-1" class="headerlink" title="第一步"></a>第一步</h4><p>在git服务器上新建Specs索引库的远程代码仓库 <strong>MySpecs</strong>，可以使用Coding码云或其他git服务器，新建的远程仓库根据业务需要设置成私有或公开。</p>
+<h4 id="第二步-1"><a href="#第二步-1" class="headerlink" title="第二步"></a>第二步</h4><p>本地添加私有索引库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod repo add MySpecs http://xxxx/MySpecs.git</span><br></pre></td></tr></table></figure>
+
+<p>添加完成可以查看本地是否已经添加成功，或者删除重加</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 查看本地索引库</span></span><br><span class="line">pod repo</span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除指定索引库</span></span><br><span class="line">pod repo remove MySpecs</span><br></pre></td></tr></table></figure>
+
+<h4 id="第三步-1"><a href="#第三步-1" class="headerlink" title="第三步"></a>第三步</h4><p>发布索引文件到私有索引库。比如这里讲前面新建的 <strong>CJLabel.podspec</strong> 索引发布到MySpecs索引库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod repo push MySpecs CJLabel.podspec --allow-warnings</span><br></pre></td></tr></table></figure>
+
+<h4 id="第四步-1"><a href="#第四步-1" class="headerlink" title="第四步"></a>第四步</h4><p>私有索引库的使用。私有索引库新建成功后，在 <strong>Podfile</strong> 文件中指定索引库的地址即可</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 指定索引库地址</span></span><br><span class="line">source <span class="string">&#x27;http://xxx/MySpecs.git&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#use_frameworks!</span></span><br><span class="line">platform <span class="symbol">:ios</span>, <span class="string">&#x27;9.0&#x27;</span></span><br><span class="line"></span><br><span class="line">target <span class="string">&#x27;TestDemo&#x27;</span> <span class="keyword">do</span></span><br><span class="line">  pod CJLabel</span><br><span class="line"> </span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
 
     </div>
 
