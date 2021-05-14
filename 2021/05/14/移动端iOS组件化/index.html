@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;example.com&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Pisces&quot;,&quot;version&quot;:&quot;8.3.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script>
+<meta name="description" content="组件化背景随着移动互联网的迅猛发展，手机APP已经成为了与我们生活紧密关联的一部分，各种应用场景也都已经落地到了手机移动端，但这也使得APP的业务模块以及对应的代码量越来越繁多，旧的开发架构已经没法满足业务快速发展的需求，重构整合也就成为了不可避免的问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="移动端iOS组件化">
+<meta property="og:url" content="http://example.com/2021/05/14/%E7%A7%BB%E5%8A%A8%E7%AB%AFiOS%E7%BB%84%E4%BB%B6%E5%8C%96/index.html">
+<meta property="og:site_name" content="C.J.Lian">
+<meta property="og:description" content="组件化背景随着移动互联网的迅猛发展，手机APP已经成为了与我们生活紧密关联的一部分，各种应用场景也都已经落地到了手机移动端，但这也使得APP的业务模块以及对应的代码量越来越繁多，旧的开发架构已经没法满足业务快速发展的需求，重构整合也就成为了不可避免的问题。">
+<meta property="og:locale">
+<meta property="og:image" content="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/%E7%BB%84%E4%BB%B6%E5%8C%96/%E4%BC%A0%E7%BB%9F%E6%9E%B6%E6%9E%84.png">
+<meta property="og:image" content="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/%E7%BB%84%E4%BB%B6%E5%8C%96/%E4%B8%9A%E5%8A%A1%E6%A8%A1%E5%9D%97%E6%8B%86%E5%88%86.png">
+<meta property="og:image" content="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/%E7%BB%84%E4%BB%B6%E5%8C%96/%E7%BB%84%E4%BB%B6%E5%8C%96%E6%9E%B6%E6%9E%841.png">
+<meta property="og:image" content="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/%E7%BB%84%E4%BB%B6%E5%8C%96/CJLRouter.jpg">
+<meta property="article:published_time" content="2021-05-14T10:15:03.000Z">
+<meta property="article:modified_time" content="2021-05-14T07:06:39.209Z">
+<meta property="article:author" content="lele8446">
+<meta property="article:tag" content="iOS开发">
+<meta property="article:tag" content="组件化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/%E7%BB%84%E4%BB%B6%E5%8C%96/%E4%BC%A0%E7%BB%9F%E6%9E%B6%E6%9E%84.png">
+
+
+<link rel="canonical" href="http://example.com/2021/05/14/%E7%A7%BB%E5%8A%A8%E7%AB%AFiOS%E7%BB%84%E4%BB%B6%E5%8C%96/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-Hans&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;http:&#x2F;&#x2F;example.com&#x2F;2021&#x2F;05&#x2F;14&#x2F;%E7%A7%BB%E5%8A%A8%E7%AB%AFiOS%E7%BB%84%E4%BB%B6%E5%8C%96&#x2F;&quot;,&quot;path&quot;:&quot;2021&#x2F;05&#x2F;14&#x2F;移动端iOS组件化&#x2F;&quot;,&quot;title&quot;:&quot;移动端iOS组件化&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>移动端iOS组件化 | C.J.Lian</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">C.J.Lian</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E5%8C%96%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">组件化背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E5%8C%96%E6%8B%86%E5%88%86"><span class="nav-number">2.</span> <span class="nav-text">组件化拆分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E5%8C%96%E6%9E%B6%E6%9E%84"><span class="nav-number">3.</span> <span class="nav-text">组件化架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CJLRouter%E7%BB%84%E4%BB%B6%E5%8C%96%E6%96%B9%E6%A1%88"><span class="nav-number">4.</span> <span class="nav-text">CJLRouter组件化方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E5%8C%96%E5%89%8D%E6%8F%90"><span class="nav-number">4.1.</span> <span class="nav-text">组件化前提</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E5%8C%96%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.2.</span> <span class="nav-text">组件化实现</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E9%97%B4%E9%80%9A%E4%BF%A1"><span class="nav-number">4.2.1.</span> <span class="nav-text">组件间通信</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E7%90%86"><span class="nav-number">4.2.2.</span> <span class="nav-text">生命周期管理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86"><span class="nav-number">4.2.3.</span> <span class="nav-text">资源管理</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E"><span class="nav-number">5.</span> <span class="nav-text">写在最后</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lele8446"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">lele8446</p>
+  <div class="site-description" itemprop="description">coding, learning...</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lele8446" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lele8446" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:lele8446@foxmail.com" title="E-Mail → mailto:lele8446@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.com/in/%E7%82%BD%E9%87%91-%E7%BB%83-966a4813b/" title="Linkedin → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;%E7%82%BD%E9%87%91-%E7%BB%83-966a4813b&#x2F;" rel="noopener" target="_blank"><i class="fab fa-linkedin fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/14/%E7%A7%BB%E5%8A%A8%E7%AB%AFiOS%E7%BB%84%E4%BB%B6%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="lele8446">
+      <meta itemprop="description" content="coding, learning...">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="C.J.Lian">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          移动端iOS组件化
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-05-14 18:15:03 / 修改时间：15:06:39" itemprop="dateCreated datePublished" datetime="2021-05-14T18:15:03+08:00">2021-05-14</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="组件化背景"><a href="#组件化背景" class="headerlink" title="组件化背景"></a>组件化背景</h3><p>随着移动互联网的迅猛发展，手机APP已经成为了与我们生活紧密关联的一部分，各种应用场景也都已经落地到了手机移动端，但这也使得APP的业务模块以及对应的代码量越来越繁多，旧的开发架构已经没法满足业务快速发展的需求，重构整合也就成为了不可避免的问题。</p>
+<span id="more"></span>
+
+<p>组件化开发则能够解决这一问题，而且经过业界近年来的探索与实践，慢慢地这已经成为了移动端开发架构的主流方式，并且市面上也已经开源了不少组件化实施方案。但现成的并不一定就是最好的，只有经过实践才能知道什么最合适，通过此文我将来谈谈自己对于组件化的理解以及在组件化实践中的一些经验。</p>
+<h3 id="组件化拆分"><a href="#组件化拆分" class="headerlink" title="组件化拆分"></a>组件化拆分</h3><p>首先应该明白组件化开发，是要对哪些模块进行组件化，以及模块之间的拆分是怎样的。在传统的APP架构中，更多的是关注于按功能层级来拆分：比如最底层的系统Framework，中间的基础功能库、网络库、图像处理库、UI库，最顶部则是各个业务模块。</p>
+<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/%E7%BB%84%E4%BB%B6%E5%8C%96/%E4%BC%A0%E7%BB%9F%E6%9E%B6%E6%9E%84.png" alt="传统架构"></p>
+<p>这里其实已经可以看到一些组件化的影子，那便是中间层级的功能组件，Github上已经提供了很多有关各类功能组件的三方库。但是传统架构中忽略了顶层业务模块之间的组件解耦，比如上图中的个人中心、订单、消息三个模块彼此之间都有通信关联，那么在实际开发中则很可能是彼此都引用了对方模块中的类（下图一），这将导致模块之间耦合严重，大大降低了代码质量，也不利于后续的功能扩展。</p>
+<p>而真正的组件化应该是对业务模块也进行组件拆分，而且拆分之后的不同业务模块之间不应该存在直接的通信关联，消息通信将由中间的路由（  <strong>CJLRouter</strong> ）来完成，业务组件单向依赖路由组件，并且所有业务组件都是可以独立迭代开发的（下图二）。最终构建APP时只需要指定各个组件的版本号，组合编译打包之后便能快速生成ipa包；当某个模块发生问题时，也只需要还原或升级对应模块的组件，就可以快速修复问题。</p>
+<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/%E7%BB%84%E4%BB%B6%E5%8C%96/%E4%B8%9A%E5%8A%A1%E6%A8%A1%E5%9D%97%E6%8B%86%E5%88%86.png" alt="业务模块拆分"></p>
+<h3 id="组件化架构"><a href="#组件化架构" class="headerlink" title="组件化架构"></a>组件化架构</h3><p>前面讲到，为了解决业务模块之间的耦合关系引入了路由组件，那么新的APP架构将变成如下图所示。</p>
+<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/%E7%BB%84%E4%BB%B6%E5%8C%96/%E7%BB%84%E4%BB%B6%E5%8C%96%E6%9E%B6%E6%9E%841.png" alt="组件化架构"></p>
+<p>APP总体还是由三层架构构成，各个层级之间依据箭头指向存在上层依赖下层的单向依赖关系，顶层业务层级的各个模块彼此独立，横向之间并不发生关联。从下往上最底层是系统Framework框架；中间是各种功能类组件：比如网络AFNetworking、图片SDWebImage、下拉刷新MJRefresh、自定义封装的通用基础库等等，使用一般都是通过 <strong>CocoaPods</strong> 直接引用即可。</p>
+<p>着重来看一下最顶层的业务层，可以发现这里跟传统架构的区别是业务层的最底部多了 <strong>CJLRouter</strong> 路由组件。将路由组件放到业务层可能会带来疑义，是不是意味着路由方案必须跟随业务走无法单独剥离出来成为通用组件？事实上并不如此，路由组件其实是通用解决方案，是可以下沉放到中间层作为通用功能库来用的，只不过具体到项目中它作为解耦业务模块的中间人，更多的是处理业务层的问题，所以架构图中把它归并到业务层了。</p>
+<h3 id="CJLRouter组件化方案"><a href="#CJLRouter组件化方案" class="headerlink" title="CJLRouter组件化方案"></a><a target="_blank" rel="noopener" href="https://github.com/lele8446/CJLRouter">CJLRouter</a>组件化方案</h3><h4 id="组件化前提"><a href="#组件化前提" class="headerlink" title="组件化前提"></a>组件化前提</h4><p><strong><a target="_blank" rel="noopener" href="https://github.com/lele8446/CJLRouter">CJLRouter</a></strong> 组件化方案的前提是基于 <strong>CocoaPods</strong> 来实现的。CocoaPods能够便捷直观地管理使用第三方库，这相信大家都很熟悉。那同样我们也可以将最顶层的业务模块拆分成不同的pod库，通过CocoaPods来管理业务组件的开发，这里有几个要点：</p>
+<ol>
+<li><p>不同业务组件模块对应不同的代码仓库，生成各自的 <strong>.podspec</strong> 索引，并实现组件之间的完全隔离。另外由于网络原因以及代码的安全性，不应该直接使用GitHub上的CocoaPods库索引，一般都是创建私有 <strong>Specs</strong> 索引库，同时业务组件的.podspec索引也将会被放到私有索引库中。这里解释一下每一个pod库都会有对应的.podspec索引，它记录了该组件库的内容以及依赖关系；而Specs索引库则是记录所有.podspec索引文件的仓库地址，使用的时候你只需要在 <strong>Podfile</strong> 文件中指明索引库地址便能够找到对应的三方库了（创建pod库以及pod索引库并不是本文的要点，在此不再做详细介绍，有兴趣的同学可以自行搜索 <a target="_blank" rel="noopener" href="https://lele8446.top/2016/06/06/%E5%A6%82%E4%BD%95%E5%8F%91%E5%B8%83CocoaPods%E5%85%AC%E5%BC%80%E5%BA%93%E4%BB%A5%E5%8F%8A%E6%96%B0%E5%BB%BA%E7%A7%81%E6%9C%89Pod%20Specs%E7%B4%A2%E5%BC%95%E5%BA%93/">如何发布CocoaPods公开库以及新建私有Pod Specs索引库</a>）</p>
+</li>
+<li><p>所有组件都集成为Pod管理后，项目主工程将变得非常干净，同时在Pofile中声明指定哪些组件需要本地开发联调，开发的时候开发人员只需关注当前开发的组件模块即可。</p>
+<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/%E7%BB%84%E4%BB%B6%E5%8C%96/CJLRouter.jpg" alt="组件化结构"></p>
+</li>
+<li><p>使用业务组件 <a target="_blank" rel="noopener" href="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/%E7%BB%84%E4%BB%B6%E5%8C%96/CJLRouterModule.py.zip">模块初始化脚本</a> 来创建业务组件Pod库，新建pod库默认已经依赖CJLRouter（<strong>这里建议所有业务组件的podspec中都不要对公共依赖的pod库指定版本号，改为在主工程的Pofile中来指定pod库版本，从而减少冲突</strong>），新创建组件模块的<strong>Router</strong>文件夹下将自动生成CJLRouter+ModuleName.h、ModuleNameModule.h、ModuleNameBundle.h等文件，如上图CJMain组件所示，这几个类便是用于实现路由通信的相关类。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># CJLRouterModule.py 路由业务组件模板快速创建脚本</span></span><br><span class="line"><span class="comment"># 初次运行请先执行 chmod 777 CJLRouterModule.py 指令，对脚本赋予可执行指令</span></span><br><span class="line"><span class="comment"># 使用方式：</span></span><br><span class="line"><span class="variable">$ </span>./CJLRouterModule.py [组件模块名称]</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="组件化实现"><a href="#组件化实现" class="headerlink" title="组件化实现"></a>组件化实现</h4><p>为了实现不同模块间的通信并且减少耦合关系，目前业界常见的组件化方案有：</p>
+<ul>
+<li>路由URL跳转。优点是统一适用多端平台（H5、iOS、Android），缺点是无法处理复杂的业务场景，以及需要维护大量的URL硬编码。</li>
+<li>运行时反射。借助OC运行时机制无需#import也能够调用指定类的方法，从而实现模块间解耦，缺点是同样存在硬编码字符串，并且调用错了只会在运行时才能暴露。</li>
+<li>注册服务协议Protocol 。使用服务协议的方式，能够显式地声明当前模块的对外接口，同时能够做到代码自动补全和编译时检查，缺点是需要引入额外的公用模块来管理所有模块的对外协议声明，而且某个Protocol 协议的改变可能会导致其他遵循了该协议的模块编译失败，降低了开发效率。</li>
+<li>NSNotification广播通知。使用非常简单，但没法处理通信回调，而且在开发调试中难以定位问题。</li>
+</ul>
+<p><strong>CJLRouter</strong> 组件化方案在分析以上各种方案的优缺点以及结合项目实际的基础上，最终实现的路由方案包含了组件间通信、生命周期管理、资源管理三个方面的内容。</p>
+<h5 id="组件间通信"><a href="#组件间通信" class="headerlink" title="组件间通信"></a>组件间通信</h5><p>组件间通信基于Runtime机制，CJLRouter路由中心提供类似 <strong>-performSelector:withObject:</strong> 的统一调用方法，并在该方法内使用NSInvocation对目标方法进行最终调用。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">CJLRouter</span></span></span><br><span class="line">+ (<span class="keyword">id</span>)routerPerformSELname:(<span class="built_in">NSString</span> *)SELname params:(<span class="built_in">NSArray</span> *)params &#123;</span><br><span class="line">    <span class="comment">// 使用NSInvocation进行方法转发</span></span><br><span class="line">    SEL aSelector = <span class="built_in">NSSelectorFromString</span>(SELname);</span><br><span class="line">    <span class="built_in">NSInvocation</span> *inv = [<span class="built_in">NSInvocation</span> invocationWithMethodSignature:[<span class="keyword">self</span> methodSignatureForSelector:aSelector]];</span><br><span class="line">    [inv setTarget:<span class="keyword">self</span>];</span><br><span class="line">    [inv setSelector:aSelector];</span><br><span class="line">    [inv setArgument:&amp;params atIndex:index];</span><br><span class="line">    [inv invoke];</span><br><span class="line">    <span class="keyword">void</span> *result;</span><br><span class="line">    [invocation getReturnValue:&amp;result];</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+
+<p>前面“组件化前提”中讲到新业务组件使用<a target="_blank" rel="noopener" href="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/%E7%BB%84%E4%BB%B6%E5%8C%96/CJLRouterModule.py.zip">模块初始化脚本</a>创建，新建后会自动生成 <strong>CJLRouter+ModuleName.h</strong> 分类，该分类用于声明当前组件的所有对外通信接口，并且接口方法的命名格式规定为：**+ 当前模块名_方法名** ，接口方法规定以模块名为前缀是为了解决CJLRouter分类可能会存在方法重名的问题。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">CJLRouter</span> (<span class="title">CJMain</span>)</span></span><br><span class="line"><span class="comment">/// 获取主页面Controller</span></span><br><span class="line">+ (<span class="built_in">UIViewController</span> *)main_mainViewController &#123;</span><br><span class="line">    <span class="comment">/// 返回主页面</span></span><br><span class="line">    <span class="keyword">return</span> [<span class="built_in">UIViewController</span> new];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+
+<p>当其他业务组件需要调用main组件的通信接口时，那么只需要在目标组件的CJLRouter+ModuleName.h分类中查找对应方法，然后执行 <strong>routerPerformSELname:</strong> 进行调用即可。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UIViewController</span> *mainVC = [CJLRouter routerPerformSELname:<span class="string">@&quot;main_mainViewController&quot;</span>];</span><br></pre></td></tr></table></figure>
+
+<p>这里之所以不直接使用系统<code>[CJLRouter performSelector:@selector(main_mainViewController)]</code>的方式调用，一是因为performSelector:没法满足复杂参数的调用；二是使用performSelector:如果目标方法改变那么将直接导致编译失败（某个组件的错误会影响其他组件的开发这明显违背了组件化开发的初衷）。而通过CJLRouter的统一中转方法**+ routerPerformSELname: params:** 来调用，则可以提前在中转方法内做异常捕获和错误提示。</p>
+<p>另外为了满足多平台统一页面跳转的需求，CJLRouter同时提供了路由URL的调用方式：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UIViewController</span> *mainVC = [CJLRouter routerPerformWithUri:<span class="string">@&quot;CJLRouter://main/main_mainViewController&quot;</span>];</span><br></pre></td></tr></table></figure>
+
+<p>路由URL的定义为： <strong>AppScheme://模块名/调用方法名?方法参数</strong> ，实际使用中为了多端统一后台下发的跳转路由URL不一定是这里规定的格式，那么你只需额外维护一份路由URL与对应模块方法的映射表即可。</p>
+<h5 id="生命周期管理"><a href="#生命周期管理" class="headerlink" title="生命周期管理"></a>生命周期管理</h5><p>CJLRouter组件化方案中，所有的模块都使用CocoaPods来管理，而且所有的业务组件都是独立开发的，那么也就意味着不应该再在一个统一的入口中来维护所有业务模块的初始化设置、以及各业务模块监听APP的生命周期事件。当然你也许会说可以在主工程的AppDelegate中进行这些操作，但所有业务组件的这些处理都放置其中那将会使得AppDelegate非常臃肿并且丑陋，而且严格上说组件化方案中APP主工程也可以是一个组件，那么它就不应该与其他业务模块有太多的耦合关系。</p>
+<p>为此新建 <strong>CJLModuleManager</strong> 模块管理中心，专门用于处理APP生命周期管理、组件初始化以及广播消息事件响应。这里用到了前面讲到的注册服务协议Protocol的思想，所有新建组件都遵循CJLModuleProtocol协议，可在协议方法中完成初始化配置。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// 组件消息广播协议</span></span><br><span class="line"><span class="class"><span class="keyword">@protocol</span> <span class="title">CJLModuleProtocol</span> &lt;<span class="title">UIApplicationDelegate</span>, <span class="title">NSObject</span>&gt;</span></span><br><span class="line"><span class="keyword">@required</span></span><br><span class="line"><span class="comment">/// 组件模块必须实现单例方法</span></span><br><span class="line">+ (<span class="keyword">instancetype</span>)sharedInstance;</span><br><span class="line"><span class="comment">/// 组件模块必须实现初始化</span></span><br><span class="line">- (<span class="keyword">void</span>)setup;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line">  </span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">CJLModuleManager</span> : <span class="title">NSObject</span></span></span><br><span class="line"><span class="comment">/// 业务组件需要提前向路由进行注册</span></span><br><span class="line"><span class="comment">/// @param moduleClass 业务组件Module类</span></span><br><span class="line">+ (<span class="keyword">void</span>)registerModuleClass:(Class&lt;CJLModuleProtocol&gt;)moduleClass;</span><br><span class="line"></span><br><span class="line"><span class="comment">/// 初始化所有已经向路由注册的业务组件Module</span></span><br><span class="line">+ (<span class="keyword">void</span>)setupAllModules;</span><br><span class="line"></span><br><span class="line"><span class="comment">/// 对所有已经向路由注册的业务组件Module进行方法转发</span></span><br><span class="line"><span class="comment">/// @param selector 转发方法名</span></span><br><span class="line"><span class="comment">/// @param arguments 方法参数</span></span><br><span class="line">+ (<span class="keyword">void</span>)checkAllModulesWithSelector:(SEL)selector arguments:(<span class="built_in">NSArray</span>*)arguments;</span><br></pre></td></tr></table></figure>
+
+<p>通过<a target="_blank" rel="noopener" href="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/%E7%BB%84%E4%BB%B6%E5%8C%96/CJLRouterModule.py.zip">模块初始化脚本</a>创建的组件自动生成 <strong>ModuleNameModule.h</strong> 类，用于处理组件模块注册、初始化，APP生命周期事件，响应其他组件广播消息事件的实现等等。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">CJMainModule</span> : <span class="title">NSObject</span>&lt;<span class="title">CJLModuleProtocol</span>&gt;</span></span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">CJMainModule</span></span></span><br><span class="line">+ (<span class="keyword">void</span>)load &#123;</span><br><span class="line">    [CJLModuleManager registerModuleClass:<span class="keyword">self</span>.class];</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> mark - CJLModuleProtocol @required</span></span><br><span class="line">+ (<span class="keyword">instancetype</span>)sharedInstance &#123;</span><br><span class="line">    <span class="keyword">static</span> CJMainModule *share = <span class="literal">nil</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="built_in">dispatch_once_t</span> onceToken;</span><br><span class="line">    <span class="built_in">dispatch_once</span>(&amp;onceToken, ^&#123;</span><br><span class="line">        share = [[CJMainModule alloc] init];</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> share;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/// 组件的初始化配置方法</span></span><br><span class="line">- (<span class="keyword">void</span>)setup &#123;</span><br><span class="line">    <span class="comment">//在此处执行组件初始化时需进行的基础配置</span></span><br><span class="line">    <span class="comment">//注：该方法是在主线程调用的，如果是进行网络请求及其他比较耗时的操作需要另外注意，可以将其放到异步线程</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> mark - application life cycle</span></span><br><span class="line"><span class="comment">/// 处理APP生命周期事件</span></span><br><span class="line">- (<span class="built_in">BOOL</span>)application:(<span class="built_in">UIApplication</span> *)application didFinishLaunchingWithOptions:(<span class="keyword">nullable</span> <span class="built_in">NSDictionary</span> *)launchOptions &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">YES</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> mark - 其他组件转发的消息事件</span></span><br><span class="line"><span class="comment">//监听登录组件转发的登录成功事件</span></span><br><span class="line">- (<span class="keyword">void</span>)login_loginSuccess &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+
+<p>在 <strong>ModuleNameModule.m</strong> 的+load方法中完成组件模块的注册，同时每个组件的module都会生成一个单例+sharedInstance，以及对应的初始化方法-setup。<strong>CJLModuleManager</strong> 模块管理中心在APP启动的时候查找所有已经注册的组件模块并初始化，同时向已经注册监听的组件转发消息事件。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在AppDelegate.m中进行生命周期事件的转发</span></span><br><span class="line">- (<span class="built_in">BOOL</span>)application:(<span class="built_in">UIApplication</span> *)application willFinishLaunchingWithOptions:(<span class="built_in">NSDictionary</span> *)launchOptions &#123;</span><br><span class="line">    <span class="comment">//设置当前app路由AppScheme</span></span><br><span class="line">    [CJLRouter setupAppScheme:<span class="string">@&quot;CJLRouter://&quot;</span>];</span><br><span class="line">    <span class="comment">//完成所有已经注册组件module的初始化</span></span><br><span class="line">    [CJLModuleManager setupAllModules];</span><br><span class="line">    <span class="comment">//向业务组件转发当前方法</span></span><br><span class="line">    [CJLModuleManager checkAllModulesWithSelector:_cmd arguments:@[CJLSafe(application),CJLSafe(launchOptions)]];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="literal">YES</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// login组件转发登录成功事件</span></span><br><span class="line">- (<span class="keyword">void</span>)loginSuccess &#123;</span><br><span class="line">  <span class="comment">//向所有业务组件转发用户登录成功的消息</span></span><br><span class="line">  [CJLModuleManager checkAllModulesWithSelector:<span class="built_in">NSSelectorFromString</span>(<span class="string">@&quot;login_loginSuccess&quot;</span>) arguments:@[]];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="资源管理"><a href="#资源管理" class="headerlink" title="资源管理"></a>资源管理</h5><p>使用CocoaPods管理，每个业务模块最后会生成静态库+资源bundle，这里传统的资源读取方式将不再适用，需要改为从指定bundle中读取。<strong>CJLBundle</strong> 就是用于处理资源管理的专用类，而通过<a target="_blank" rel="noopener" href="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/%E7%BB%84%E4%BB%B6%E5%8C%96/CJLRouterModule.py.zip">模块初始化脚本</a>自动生成的 <strong>ModuleNameBundle.h</strong> 类继承自CJLBundle，并在其中返回当前业务组件的bundle。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">CJMainBundle</span> : <span class="title">CJLBundle</span> &lt;<span class="title">CJLBundleProtocol</span>&gt;</span></span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">CJMainBundle</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> mark - CJLBundleProtocol</span></span><br><span class="line"><span class="comment">/// 需要返回当前业务组件的bundle（默认bundle名与业务组件名称相同）</span></span><br><span class="line">+ (<span class="built_in">NSBundle</span> *)cjl_bundle &#123;</span><br><span class="line">    <span class="keyword">return</span> [<span class="keyword">self</span> cjl_bundleWithName:<span class="string">@&quot;CJMain&quot;</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line">  </span><br><span class="line"><span class="comment">//main组件读取资源</span></span><br><span class="line"><span class="built_in">UIImage</span> *image = [CJMainBundle cjl_imageNamed:<span class="string">@&quot;icon_name&quot;</span>];</span><br><span class="line"><span class="built_in">UINib</span> *nib = [CJMainBundle cjl_nibWithName:<span class="string">@&quot;nib_name&quot;</span>];</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h3><p>到此也就已经分析梳理完了CJLRouter组件化方案的实现，主要关键点是借助CocoaPods来管理所有业务组件，业务模块组件使用<a target="_blank" rel="noopener" href="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/%E7%BB%84%E4%BB%B6%E5%8C%96/CJLRouterModule.py.zip">模块初始化脚本</a>创建，新建的pod库默认依赖CJLRouter，并自动生成CJLRouter+ModuleName.h用于声明当前组件对外通信接口，ModuleNameModule.h用于处理当前组件的APP生命周期管理以及监听其他组件广播事件的响应，ModuleNameBundle.h用于管理组件资源的读取。</p>
+<p>最后附上 <a target="_blank" rel="noopener" href="https://github.com/lele8446/CJLRouter"><strong>CJLRouter</strong></a> 的源码地址，欢迎点击关注，如果你有更好的想法，请留言交流。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/iOS%E5%BC%80%E5%8F%91/" rel="tag"># iOS开发</a>
+              <a href="/tags/%E7%BB%84%E4%BB%B6%E5%8C%96/" rel="tag"># 组件化</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/04/30/Command%20CodeSign%20failed%20with%20a%20nonzero%20exit%20code/" rel="prev" title="Command CodeSign failed with a nonzero exit code">
+                  <i class="fa fa-chevron-left"></i> Command CodeSign failed with a nonzero exit code
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+<script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lele8446</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
