@@ -369,7 +369,7 @@
 <li><p>ipa代码注入一般通过动态库来实现。新建动态库在Xcode中选择新建 <code>TARTETS — Framework &amp; Library — Framework</code>，然后在framework中添加自定义代码，一般都是使用Runtime来注入附加功能。最后选择framework要支持的架构，编译后便得到了最终动态库。</p>
 <p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/iOSSign/%E5%8A%A8%E6%80%81%E5%BA%93.png" alt="动态库"></p>
 </li>
-<li><p>对需要重签名的**.app<strong>右键显示包内容，然后将动态库拷贝到<code>Framework</code>文件夹（没有则新建）中。然而此时动态库与app还没建立关联关系，动态库需要注入<code>MachO</code>中才能生效。注入使用</strong><a target="_blank" rel="noopener" href="https://github.com/KJCracks/yololib">yololib</a>**工具，下载yololib并编译，将生产的命令复制到<code>/usr/local/bin</code>或<code>$PATH</code>中的其他路径，便可以在终端使用<code>yololib</code>指令</p>
+<li><p>对需要重签名的 <strong>.app</strong> 右键显示包内容，然后将动态库拷贝到<code>Framework</code>文件夹（没有则新建）中。然而此时动态库与app还没建立关联关系，动态库需要注入<code>MachO</code>中才能生效。注入使用 <strong><a target="_blank" rel="noopener" href="https://github.com/KJCracks/yololib">yololib</a></strong> 工具，下载yololib并编译，将生产的命令复制到<code>/usr/local/bin</code>或<code>$PATH</code>中的其他路径，便可以在终端使用<code>yololib</code>指令</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## 通过yololib工具实现注入动态库</span></span><br><span class="line">yololib <span class="string">&quot;MachO文件路径&quot;</span> <span class="string">&quot;需要注入的动态库路径&quot;</span></span><br></pre></td></tr></table></figure>
 
 <p>注入成功后再对所有Framework签名，最后对app重签名，然后生成ipa文件。</p>
