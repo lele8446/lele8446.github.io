@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;example.com&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Pisces&quot;,&quot;version&quot;:&quot;8.3.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script>
+<meta name="description" content="换肤背景用户体验是衡量一款APP质量的重要考核点，而换肤则是提升用户体验的重要一环。换肤包括但不限于APP主动更换主题（比如根据春节、圣诞、元旦等节假日更换节日主题）、局部页面换肤（白天夜间模式切换、阅读页面字体颜色的调整）、APP用户自定义皮肤的编辑等等。这些在现如今的主流APP上都能找到身影，甚至iOS系统在iOS13之后就已经提供了暗黑模式以用于换肤的实现。实现换肤方案需要考虑的要点主要包含">
+<meta property="og:type" content="article">
+<meta property="og:title" content="APP动态换肤方案详解">
+<meta property="og:url" content="http://example.com/2021/08/13/APP%E5%8A%A8%E6%80%81%E6%8D%A2%E8%82%A4%E6%96%B9%E6%A1%88%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="C.J.Lian">
+<meta property="og:description" content="换肤背景用户体验是衡量一款APP质量的重要考核点，而换肤则是提升用户体验的重要一环。换肤包括但不限于APP主动更换主题（比如根据春节、圣诞、元旦等节假日更换节日主题）、局部页面换肤（白天夜间模式切换、阅读页面字体颜色的调整）、APP用户自定义皮肤的编辑等等。这些在现如今的主流APP上都能找到身影，甚至iOS系统在iOS13之后就已经提供了暗黑模式以用于换肤的实现。实现换肤方案需要考虑的要点主要包含">
+<meta property="og:locale">
+<meta property="og:image" content="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/cjskin/%E6%8D%A2%E8%82%A4%E6%9E%B6%E6%9E%84.jpg">
+<meta property="og:image" content="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/cjskin/%E6%8D%A2%E8%82%A4%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%862.jpg">
+<meta property="og:image" content="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/cjskin/CJSkin.png">
+<meta property="og:image" content="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/cjskin/%E6%8D%A2%E8%82%A4%E6%B5%81%E7%A8%8B1.jpg">
+<meta property="article:published_time" content="2021-08-13T06:05:03.000Z">
+<meta property="article:modified_time" content="2021-08-13T06:46:03.000Z">
+<meta property="article:author" content="lele8446">
+<meta property="article:tag" content="iOS开发">
+<meta property="article:tag" content="Runtime">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/cjskin/%E6%8D%A2%E8%82%A4%E6%9E%B6%E6%9E%84.jpg">
+
+
+<link rel="canonical" href="http://example.com/2021/08/13/APP%E5%8A%A8%E6%80%81%E6%8D%A2%E8%82%A4%E6%96%B9%E6%A1%88%E8%AF%A6%E8%A7%A3/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-Hans&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;http:&#x2F;&#x2F;example.com&#x2F;2021&#x2F;08&#x2F;13&#x2F;APP%E5%8A%A8%E6%80%81%E6%8D%A2%E8%82%A4%E6%96%B9%E6%A1%88%E8%AF%A6%E8%A7%A3&#x2F;&quot;,&quot;path&quot;:&quot;2021&#x2F;08&#x2F;13&#x2F;APP动态换肤方案详解&#x2F;&quot;,&quot;title&quot;:&quot;APP动态换肤方案详解&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>APP动态换肤方案详解 | C.J.Lian</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">C.J.Lian</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8D%A2%E8%82%A4%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">换肤背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8D%A2%E8%82%A4%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">换肤类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%B0%E6%9C%89%E6%8D%A2%E8%82%A4%E6%96%B9%E6%A1%88%E5%88%86%E6%9E%90"><span class="nav-number">3.</span> <span class="nav-text">现有换肤方案分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81%E5%88%86%E7%B1%BB%EF%BC%88Category%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">1、分类（Category）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81%E5%9F%BA%E4%BA%8EUIView%E7%9A%84%E5%88%86%E7%B1%BB%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.2.</span> <span class="nav-text">2、基于UIView的分类实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3%E3%80%81%E8%BD%AC%E5%8F%91%E5%B9%B6%E7%BC%93%E5%AD%98%E5%B1%9E%E6%80%A7%E8%AE%BE%E7%BD%AE%E6%96%B9%E6%B3%95"><span class="nav-number">3.3.</span> <span class="nav-text">3、转发并缓存属性设置方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E6%8D%A2%E8%82%A4%E6%96%B9%E6%A1%88"><span class="nav-number">4.</span> <span class="nav-text">动态换肤方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9A%AE%E8%82%A4%E8%B5%84%E6%BA%90%E8%AF%BB%E5%8F%96"><span class="nav-number">4.1.</span> <span class="nav-text">皮肤资源读取</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E6%8D%A2%E8%82%A4"><span class="nav-number">4.2.</span> <span class="nav-text">静态换肤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E6%8D%A2%E8%82%A4"><span class="nav-number">4.3.</span> <span class="nav-text">动态换肤</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E"><span class="nav-number">5.</span> <span class="nav-text">写在最后</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lele8446"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">lele8446</p>
+  <div class="site-description" itemprop="description">coding, learning...</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lele8446" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lele8446" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:lele8446@foxmail.com" title="E-Mail → mailto:lele8446@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.com/in/%E7%82%BD%E9%87%91-%E7%BB%83-966a4813b/" title="Linkedin → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;%E7%82%BD%E9%87%91-%E7%BB%83-966a4813b&#x2F;" rel="noopener" target="_blank"><i class="fab fa-linkedin fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/13/APP%E5%8A%A8%E6%80%81%E6%8D%A2%E8%82%A4%E6%96%B9%E6%A1%88%E8%AF%A6%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="lele8446">
+      <meta itemprop="description" content="coding, learning...">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="C.J.Lian">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          APP动态换肤方案详解
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-08-13 14:05:03 / 修改时间：14:46:03" itemprop="dateCreated datePublished" datetime="2021-08-13T14:05:03+08:00">2021-08-13</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="换肤背景"><a href="#换肤背景" class="headerlink" title="换肤背景"></a>换肤背景</h3><p>用户体验是衡量一款APP质量的重要考核点，而换肤则是提升用户体验的重要一环。换肤包括但不限于APP主动更换主题（比如根据春节、圣诞、元旦等节假日更换节日主题）、局部页面换肤（白天夜间模式切换、阅读页面字体颜色的调整）、APP用户自定义皮肤的编辑等等。这些在现如今的主流APP上都能找到身影，甚至iOS系统在iOS13之后就已经提供了暗黑模式以用于换肤的实现。实现换肤方案需要考虑的要点主要包含以下几方面：</p>
+<span id="more"></span>
+
+<ul>
+<li><p><strong>换肤元素</strong></p>
+<p>换肤最终体现在视觉层面的表现一般是：图片、字体、颜色的改变，当然也可能包括布局排版、动画特效的变动，但后两者涉及的需求场景较少，所以不在本文的讨论范围内。</p>
+</li>
+<li><p><strong>皮肤资源管理</strong></p>
+<p>皮肤包内会包含图片、颜色色值、字体包等各种皮肤资源，它们是构成换肤的最底层要素，能够便捷有效地管理皮肤资源是实现换肤方案中的重要一环。皮肤资源管理具体包括如何在尽可能减少开发量的情况下快速更换皮肤资源打包生成不同样式的渠道包，APP内存在多套内置皮肤资源又应该怎样管理，能否在APP不升级发版的情况下在线更新皮肤等等。</p>
+</li>
+<li><p><strong>换肤框架的易用性</strong></p>
+<p>开发者引入换肤框架是否会增加额外大量的工作量，换肤框架提供的API接口复不复杂，换肤框架与原有项目的耦合性高不高……这些都是设计一款换肤方案需要考虑的要点。</p>
+</li>
+</ul>
+<h3 id="换肤类型"><a href="#换肤类型" class="headerlink" title="换肤类型"></a>换肤类型</h3><p>根据换肤方式的不同，主要分为两类。</p>
+<ul>
+<li><p><strong>本地换肤</strong></p>
+<p>APP所能支持的换肤资源在APP打包初始化时就已确定，安装之后不能再动态下载更新，如果更新必须重新打包送审，其中最具代表性的便是iOS13之后系统支持的暗黑与明亮模式。当然也可以在打包时提前将多套皮肤资源内置到APP资源包中，后面再由接口控制皮肤切换。本地换肤的缺点是换肤不够灵活，并且包的体积过大，还依赖苹果审核。</p>
+</li>
+<li><p><strong>远程换肤</strong></p>
+<p>换肤资源由接口下发，下发后可选择为增量更新或者是等全部图片皮肤资源下载完成后再全局换肤。至于皮肤资源的下载时机则可以根据业务的实际需要设计为用户主动点击触发，或者读取后台配置自动更新。</p>
+</li>
+</ul>
+<h3 id="现有换肤方案分析"><a href="#现有换肤方案分析" class="headerlink" title="现有换肤方案分析"></a>现有换肤方案分析</h3><p>分析市面上已有换肤方案的实现，大概分为以下几类。</p>
+<h4 id="1、分类（Category）"><a href="#1、分类（Category）" class="headerlink" title="1、分类（Category）"></a>1、分类（Category）</h4><p>在分类中增加扩展属性，并用扩展属性来设置皮肤样式，比如给UILabel增加扩展属性<code>skin_textColor</code>，该属性可以根据当前皮肤主题读取对应的文本颜色用以显示，使用时弃用系统原有的<code>textColor</code>，改用<code>skin_textColor</code>来设置样式。这种方案的不足点是需要对所有的UI控件以及每一个控件对应的UI属性都进行分类重写，这样的工作量是巨大的，而且换肤方案没法覆盖那些自定义的UI组件，因为你无法预知自定义UI组件的样式是怎样的。另一方面开发者引入换肤框架后还得对所在项目代码进行大量修改，毕竟你得将系统原有的样式属性设置改为扩展属性后换肤才会生效。</p>
+<h4 id="2、基于UIView的分类实现"><a href="#2、基于UIView的分类实现" class="headerlink" title="2、基于UIView的分类实现"></a>2、基于UIView的分类实现</h4><p>该方案是基于UI组件都是继承自<code>UIView</code>的前提下实现的，在<code>UIView</code>的分类中增加扩展属性<code>skinMap</code>，用于记录了当前组件所要执行的所有换肤方法信息，存储时key为当前调用方法名，value为皮肤资源名称；同时在分类中统一重写所有UI组件的样式设置方法。当发生换肤事件后由换肤管理中心发出换肤通知，所有接收到通知的UI组件对象都会查找执行自身已存储的换肤方法，自动触发样式刷新。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">UIView</span> (<span class="title">Skin</span>)</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>) <span class="built_in">NSDictionary</span> *skinMap;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">UIView</span> (<span class="title">Skin</span>)</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> *kUIViewSkinMap;</span><br><span class="line">- (<span class="keyword">void</span>)setSkinMap:(<span class="built_in">NSDictionary</span> *)skinMap &#123;</span><br><span class="line">    objc_setAssociatedObject(<span class="keyword">self</span>, &amp;kUIViewSkinMap, skinMap, OBJC_ASSOCIATION_COPY_NONATOMIC);</span><br><span class="line">    <span class="comment">// 判断是否已注册监听换肤通知</span></span><br><span class="line">    <span class="keyword">if</span> (!_registerSkinNotic) &#123;</span><br><span class="line">        <span class="comment">// 注册监听换肤通知</span></span><br><span class="line">        [[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserver:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(skinChanged:) name:kSkinDidChangeNotification object:<span class="literal">nil</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 触发样式设置</span></span><br><span class="line">    [<span class="keyword">self</span> skinChanged:<span class="literal">nil</span>];</span><br><span class="line">&#125;</span><br><span class="line">- (<span class="built_in">NSDictionary</span> *)skinMap &#123;</span><br><span class="line">    <span class="keyword">return</span> objc_getAssociatedObject(<span class="keyword">self</span>, &amp;kUIViewSkinMap);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)skinChanged:(<span class="built_in">NSDictionary</span> *)notic &#123;</span><br><span class="line">    <span class="built_in">NSDictionary</span> *skinMap = <span class="keyword">self</span>.skinMap;</span><br><span class="line">    <span class="keyword">if</span> ([<span class="keyword">self</span> isKindOfClass:[<span class="built_in">UILabel</span> <span class="keyword">class</span>]]) &#123;</span><br><span class="line">        <span class="built_in">UILabel</span> *obj = (<span class="built_in">UILabel</span> *)<span class="keyword">self</span>;</span><br><span class="line">        <span class="keyword">if</span> (skinMap[<span class="built_in">NSStringFromSelector</span>(<span class="keyword">@selector</span>(setTextColor:))]) &#123;</span><br><span class="line">            obj.textColor = [SkinManager colorWithKey:skinMap[<span class="built_in">NSStringFromSelector</span>(<span class="keyword">@selector</span>(setTextColor:))]];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (skinMap[<span class="built_in">NSStringFromSelector</span>(<span class="keyword">@selector</span>(setBackgroundColor:))]) &#123;</span><br><span class="line">            obj.backgroundColor = [SkinManager colorWithKey:skinMap[<span class="built_in">NSStringFromSelector</span>(<span class="keyword">@selector</span>(setBackgroundColor:))]];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//...依次重写处理UILabel的其他所有属性</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ([<span class="keyword">self</span> isKindOfClass:[<span class="built_in">UIButton</span> <span class="keyword">class</span>]]) &#123;</span><br><span class="line">        <span class="built_in">UIButton</span> *obj = (<span class="built_in">UIButton</span> *)<span class="keyword">self</span>;</span><br><span class="line">        <span class="keyword">if</span> (skinMap[<span class="built_in">NSStringFromSelector</span>((<span class="keyword">@selector</span>(setTitleColor:forState:))]) &#123;</span><br><span class="line">            [obj setTitleColor:skinMap[<span class="built_in">NSStringFromSelector</span>(<span class="keyword">@selector</span>(setTitleColor:forState:))] forState:<span class="built_in">UIControlStateNormal</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//...依次重写处理UIButton的其他所有属性</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//if([self isKindOfClass:[UIImageView class]])&#123;&#125;</span></span><br><span class="line">    <span class="comment">//...依次重写处理其他所有UI组件</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line">  </span><br><span class="line"><span class="comment">//换肤设置示例</span></span><br><span class="line">[<span class="built_in">UILabel</span> new].skinMap = @&#123;<span class="built_in">NSStringFromSelector</span>(<span class="keyword">@selector</span>(setTextColor:)):<span class="string">@&quot;文本颜色&quot;</span>,</span><br><span class="line">                          <span class="built_in">NSStringFromSelector</span>(<span class="keyword">@selector</span>(setBackgroundColor:)):<span class="string">@&quot;背景颜色&quot;</span>&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这种方案和方案1类似同样对UI控件的样式设置方法进行了重写，并且它的重写是统一封装在了UIView分类方法的内部，虽然说理论上能够做到对系统已有UI控件的所有属性都重写覆盖，但其扩展性还是比较差的。当系统框架新增了样式属性，或者是由开发者开发的其他第三方UI控件的样式属性，想要进行换肤设置那该方案也就无能为力了。</p>
+<h4 id="3、转发并缓存属性设置方法"><a href="#3、转发并缓存属性设置方法" class="headerlink" title="3、转发并缓存属性设置方法"></a>3、转发并缓存属性设置方法</h4><p>新建NSObject的分类并实现一个类似<code>performSelector:withObject:</code>的调用方法，在该调用方法内转发原本的样式设置方法，同时注册监听换肤通知以及保存当前样式设置方法的缓存。当接收到换肤通知后，当前UI组件对象同样会遍历执行自身已存储的所有方法缓存，自动触发样式刷新。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">NSObject</span> (<span class="title">Skin</span>)</span></span><br><span class="line">- (<span class="keyword">void</span>)CJSkinInvokeMethodForSelector:(SEL)aSelector withArguments:(<span class="built_in">NSArray</span> *)params &#123;</span><br><span class="line">    <span class="comment">// 1、 判断是否已注册监听换肤通知</span></span><br><span class="line">    <span class="keyword">if</span> (!_registerSkinNotic) &#123;</span><br><span class="line">        <span class="comment">// 注册监听换肤通知</span></span><br><span class="line">        [[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserver:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(skinChanged:) name:kSkinDidChangeNotification object:<span class="literal">nil</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 2、存储当前方法缓存</span></span><br><span class="line">    [<span class="keyword">self</span> cacheParams:params forSelector:aSelector];</span><br><span class="line">    <span class="comment">// 3、 转发原本的属性设置方法</span></span><br><span class="line">    [<span class="keyword">self</span> performSelector:aSelector params:params];</span><br><span class="line">&#125;</span><br><span class="line">- (<span class="keyword">void</span>)performSelector:(SEL)aSelector withParams:(<span class="built_in">NSArray</span> *)params &#123;</span><br><span class="line">    <span class="comment">// 使用NSInvocation进行方法转发</span></span><br><span class="line">    <span class="built_in">NSInvocation</span> *inv = [<span class="built_in">NSInvocation</span> invocationWithMethodSignature:[<span class="keyword">self</span> methodSignatureForSelector:aSelector]];</span><br><span class="line">    [inv setTarget:<span class="keyword">self</span>];</span><br><span class="line">    [inv setSelector:aSelector];</span><br><span class="line">    [inv setArgument:&amp;params atIndex:index];</span><br><span class="line">    [inv invoke];</span><br><span class="line">&#125;</span><br><span class="line">- (<span class="keyword">void</span>)skinChanged:(<span class="built_in">NSDictionary</span> *)notic &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="built_in">NSString</span> *selName <span class="keyword">in</span> [<span class="keyword">self</span>.cachedMethods allKeys])&#123;</span><br><span class="line">        <span class="built_in">NSArray</span> *params = <span class="keyword">self</span>.cachedMethods[selName];</span><br><span class="line">        [<span class="keyword">self</span> performSelector:<span class="built_in">NSSelectorFromString</span>(selName) params:params];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line">  </span><br><span class="line"><span class="comment">//换肤设置示例</span></span><br><span class="line">[[<span class="built_in">UILabel</span> new] CJSkinInvokeMethodForSelector:<span class="keyword">@selector</span>(setBackgroundColor:) withArguments:@[[SkinManager colorWithKey:key]]];</span><br></pre></td></tr></table></figure>
+
+<p>这种方案应该是所有换肤方案中设计思路最好的一种，它很好的解耦了组件原本的样式设置方法与换肤框架的耦合关系，理论上该方案无需修改就能够满足所有UI组件的换肤设置。然而此种换肤方案在设计上还是有一些需要注意的地方：一是换肤资源的管理应该和换肤框架尽可能地解耦，因为在实际开发中，皮肤资源是免不了必须要由开发者来管理配置的，而至于换肤框架的内部实现则不必关心。二是换肤框架要能够根据当前皮肤主题自动映射显示对应的皮肤样式，而且这一步的操作应该封装在框架内部，而不是由开发者另外去判断设置。三是皮肤资源要能够支持在线增删改，这也对应了前面所说的换肤类型中的远程换肤。但是市面上依据此种思路设计的换肤方案并没有很好的解决上面所说的三个问题。</p>
+<p>综上可以看出，以上的换肤方案都多多少少会有存在不足。也正是基于此，我重新设计实现了一套完整的动态换肤方案，下面我们就来分析一下。</p>
+<h3 id="动态换肤方案"><a href="#动态换肤方案" class="headerlink" title="动态换肤方案"></a>动态换肤方案</h3><h4 id="皮肤资源读取"><a href="#皮肤资源读取" class="headerlink" title="皮肤资源读取"></a>皮肤资源读取</h4><p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/cjskin/%E6%8D%A2%E8%82%A4%E6%9E%B6%E6%9E%84.jpg" alt="换肤架构"></p>
+<p>从下往上，最底层是皮肤资源管理模块，模块内可以内置<code>皮肤包1、皮肤包2、皮肤包3...</code>多个皮肤资源包，每一个皮肤包内则包含颜色、图片、字体三类皮肤资源的配置信息。另外也可以在后期通过接口远程更新皮肤包，需要更新的皮肤包需要按照下图所示固定格式的方式来生成压缩包。</p>
+<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/cjskin/%E6%8D%A2%E8%82%A4%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%862.jpg" alt="换肤资源管理"></p>
+<p>换肤资源使用 <strong>CJSkin.plist</strong> 文件（文件名固定）来配置管理换肤信息。如下图所示：当前项目的CJSkin.plist文件内记录了default、skin1、skin2三个皮肤包，每个皮肤包内固定包含<code>Color</code>、<code>Image</code>、<code>Font</code>（颜色、图片、字体）三类皮肤元素的信息。</p>
+<p>不同皮肤包 <strong>Color</strong> 字典中的key相同值不同：比如default皮肤包中 <code>导航背景色</code> 值为0x996666，skin2皮肤包中 <code>导航背景色</code> 的值为0x454545。</p>
+<p><strong>Image</strong> 的说明同理，比如default和skin2皮肤包中都有 <code>顶部图片</code> ，但分别指向了不同的url；另外不同皮肤包的图片还可以放到各自的default.bundle、skin1.bundle文件夹内，同时在CJSkin.plist中声明图片别名，比如skin1.bundle中包含图片top.png，它在CJSkin.plist的配置为“ <code>顶部图片 : top.png</code> ”。</p>
+<p> <strong>Font</strong> 的配置说明也是一样，不同皮肤包的key相同，值为包含Name、Size两个固定key的字典，Name为空则使用系统默认字体，Size表示了字号大小。</p>
+<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/cjskin/CJSkin.png" alt="CJSkin.plist"></p>
+<p>新建皮肤资源管理工具类 <strong>CJSkinTool</strong>，通过它可以便捷获取当前皮肤包下的资源信息。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//从当前皮肤包，快速获取颜色</span></span><br><span class="line">FOUNDATION_EXPORT <span class="built_in">UIColor</span>* SkinColor(<span class="built_in">NSString</span> *key);</span><br><span class="line"><span class="comment">//从当前皮肤包，快速获取图片（只能获取本地图片）</span></span><br><span class="line">FOUNDATION_EXPORT <span class="built_in">UIImage</span>* SkinImage(<span class="built_in">NSString</span> *key);</span><br><span class="line"><span class="comment">//从当前皮肤包，快速获取字体</span></span><br><span class="line">FOUNDATION_EXPORT <span class="built_in">UIFont</span>* SkinFont(<span class="built_in">NSString</span> *key);</span><br><span class="line"><span class="comment">/** 快速获取皮肤资源，颜色转换工具类实例 */</span></span><br><span class="line">FOUNDATION_EXPORT CJSkinTool* SkinColorTool(<span class="built_in">NSString</span> *key);</span><br><span class="line"><span class="comment">/** 快速获取皮肤资源，图片转换工具类实例 */</span></span><br><span class="line">FOUNDATION_EXPORT CJSkinTool* SkinImageTool(<span class="built_in">NSString</span> *key);</span><br><span class="line"><span class="comment">/** 快速获取皮肤资源，字体转换工具类实例 */</span></span><br><span class="line">FOUNDATION_EXPORT CJSkinTool* SkinFontTool(<span class="built_in">NSString</span> *key);</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">CJSkinTool</span> : <span class="title">NSObject</span></span></span><br><span class="line"><span class="comment">/**皮肤资源key */</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>, <span class="keyword">readonly</span>) <span class="built_in">NSString</span> *key;</span><br><span class="line"><span class="comment">/**皮肤资源类型 0颜色，1图片，2字体 */</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>, <span class="keyword">readonly</span>) CJSkinValueType valueType;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> 从当前皮肤包初始化皮肤资源的实例方法</span></span><br><span class="line"><span class="comment"> @param key 皮肤值的key</span></span><br><span class="line"><span class="comment"> @param type 皮肤值的类型</span></span><br><span class="line"><span class="comment"> @return CJSkinTool</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">+ (CJSkinTool *)skinToolWithKey:(<span class="built_in">NSString</span> *)key type:(CJSkinValueType)type;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> 获取皮肤资源</span></span><br><span class="line"><span class="comment"> @return UIColor、UIImage或者UIFont</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">- (<span class="keyword">id</span>)skinValue;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="静态换肤"><a href="#静态换肤" class="headerlink" title="静态换肤"></a>静态换肤</h4><p>有了前面皮肤资源管理工具类 <strong>CJSkinTool</strong>的支持，到此已经完全可以支持静态换肤的实现。这里说的静态换肤是指UI组件能够根据当前皮肤主题显示对应的样式，但当APP发生皮肤切换事件后，UI组件和所在页面不会自动刷新样式，只能重新设置或者页面重载才可更新换肤。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UIButton</span> *button = [<span class="built_in">UIButton</span> new];</span><br><span class="line">button.backgroundColor = SkinColor(<span class="string">@&quot;背景色&quot;</span>);</span><br><span class="line">[button setImage:SkinImage(<span class="string">@&quot;按钮&quot;</span>) forState:<span class="built_in">UIControlStateNormal</span>];</span><br><span class="line">button.titleLabel.font = SkinFont(<span class="string">@&quot;标题&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="动态换肤"><a href="#动态换肤" class="headerlink" title="动态换肤"></a>动态换肤</h4><p>动态换肤基于前面讲到的“现有换肤方案分析”—— <strong>转发并缓存属性设置方法</strong>的原理实现，总体的换肤流程见下图。</p>
+<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/cjskin/%E6%8D%A2%E8%82%A4%E6%B5%81%E7%A8%8B1.jpg" alt="换肤流程"></p>
+<p>动态换肤框架在基于方法转发的基础上，针对前面提到的问题要点做了改进：</p>
+<ol>
+<li><p>动态换肤方法内封装处理了根据当前皮肤主题自动读取对应皮肤资源的逻辑，还有便是对于动态转发方法的参数进行了链式分析，因为传入的参数本身可能就是调用函数或者是NSArray类型的参数集合。例如将前面静态换肤中UIButton的样式设置改为动态换肤则是这样：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UIButton</span> *button = [<span class="built_in">UIButton</span> new];</span><br><span class="line">    [button CJSkinInvokeMethodForSelector:<span class="keyword">@selector</span>(setBackgroundColor:) withArguments:@[SkinColorTool(<span class="string">@&quot;背景色&quot;</span>)]];</span><br><span class="line">    [button CJSkinInvokeMethodForSelector:<span class="keyword">@selector</span>(setImage:forState:) withArguments:@[SkinImageTool(<span class="string">@&quot;按钮&quot;</span>),@(<span class="built_in">UIControlStateNormal</span>)]];</span><br><span class="line">    [button.titleLabel CJSkinInvokeMethodForSelector:<span class="keyword">@selector</span>(setFont:) withArguments:@[SkinFontTool(<span class="string">@&quot;标题&quot;</span>)]];</span><br></pre></td></tr></table></figure>
+
+<p>可能你已经注意到了，动态换肤设置颜色的参数 **<code>SkinColorTool(@&quot;背景色&quot;)</code>**其实是一个<code>CJSkinTool</code>对象，这是因为<code>CJSkinInvokeMethodForSelector:withArguments:</code>动态转发方法内对<code>CJSkinTool</code>类型的参数做了特殊处理，首先根据<code>CJSkinTool</code>的key读取生成当前皮肤主题下对应的<code>UIColor</code>色值，然后才继续转发样式设置方法，图片字体的处理逻辑同理。</p>
+</li>
+<li><p>支持在线图片样式的设置，换肤框架当判断到需要设置的是在线图片时会自动下载，并在下载完成后才进行样式更新。假设有一张key为 <strong>按钮</strong> 的图片，<code>皮肤包1</code>中声明的是本地图片，<code>皮肤包2</code>中的声明是网络图片，那么切换皮肤1会读取本地图片即时刷新，皮肤2则是等图片下载完成后异步刷新。</p>
+</li>
+<li><p>设置动态换肤，在调用原本的样式设置方法之前会存储该换肤方法的上下文信息，而且存储<code>key</code>是方法 **<code>SEL</code>**，存储值是当前参数，调用同一个换肤方法则会更新存储最新的方法参数，因为对于样式的设置，我们只需关心最后一次的设置就可以了。理论上这种设计是没问题的，但却忽略了一个问题，某些UI组件样式方法的重复调用并不是覆盖设置，而是设置不同状态下的样式，比如UIButton：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UIButton</span> *button = [<span class="built_in">UIButton</span> new];</span><br><span class="line"><span class="comment">//设置点击图片</span></span><br><span class="line"><span class="comment">//[button setImage:image forState:UIControlStateNormal];</span></span><br><span class="line">    [button CJSkinInvokeMethodForSelector:<span class="keyword">@selector</span>(setImage:forState:) withArguments:@[SkinImageTool(<span class="string">@&quot;按钮&quot;</span>),@(<span class="built_in">UIControlStateNormal</span>)]];</span><br><span class="line">    [button CJSkinInvokeMethodForSelector:<span class="keyword">@selector</span>(setImage:forState:) withArguments:@[SkinImageTool(<span class="string">@&quot;按钮高亮&quot;</span>),@(<span class="built_in">UIControlStateHighlighted</span>)]];</span><br></pre></td></tr></table></figure>
+
+<p>这样设置之后，当发生换肤事件后其实UIButton只会更新在高亮状态下的按钮图片。要解决这个问题，我的解决方案是生成存储换肤方法上下文信息的key时，除了记录 <strong><code>SEL</code></strong> 外另外再加上指定的参数信息，这样也就保证了虽然是同一个样式设置方法<code>setImage:forState:</code>，但却能够存储不同状态下的方法上下文信息。</p>
+</li>
+<li><p>另一种实现方式。针对第3点提到的样式覆盖问题，其实还有更好的解决方案，方案灵感来源于前面讲到的“现有换肤方案分析”—— <strong>基于UIView的分类实现</strong>，该方案是在UIView的分类中新增扩展属性，并通过扩展属性来实现换肤。那同样的我们也可以给 <strong>NSObject</strong> 的分类增加扩展属性 **<code>skinChangeBlock</code>**， <strong><code>skinChangeBlock</code></strong> 是一个代码块，在block代码块内我们可以进行静态换肤样式的设置。当发生换肤，重新执行 <strong><code>skinChangeBlock</code></strong> 就可达到动态换肤的效果。而且由于这是 <strong>NSObject</strong> 的分类，也就意味着除了可以对UIView系列的UI组件进行换肤事件的监听外，其他任意类的实例对象都可以进行换肤设置，这大大增加了换肤框架使用的灵活性。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">NSObject</span> (<span class="title">Skin</span>)</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>) <span class="keyword">void</span>(^skinChangeBlock)(<span class="keyword">id</span> weakSelf);</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">NSObject</span> (<span class="title">ZWTSkin</span>)</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> *kSkinChangeBlockKey;</span><br><span class="line">- (<span class="keyword">void</span>)setSkinChangeBlock:(<span class="keyword">void</span> (^)(<span class="keyword">id</span>))skinChangeBlock &#123;</span><br><span class="line">    objc_setAssociatedObject(<span class="keyword">self</span>, &amp;kSkinChangeBlockKey, skinChangeBlock, OBJC_ASSOCIATION_COPY_NONATOMIC);</span><br><span class="line">    <span class="comment">// 判断是否已注册监听换肤通知</span></span><br><span class="line">    <span class="keyword">if</span> (!_registerSkinNotic) &#123;</span><br><span class="line">        <span class="comment">// 注册监听换肤通知</span></span><br><span class="line">        [[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserver:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(skinChanged:) name:kSkinDidChangeNotification object:<span class="literal">nil</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    __<span class="keyword">weak</span> <span class="keyword">typeof</span>(<span class="keyword">self</span>)wSelf = <span class="keyword">self</span>;</span><br><span class="line">    skinChangeBlock(wSelf);</span><br><span class="line">&#125;</span><br><span class="line">- (<span class="keyword">void</span> (^)(<span class="keyword">id</span>))skinChangeBlock &#123;</span><br><span class="line">    <span class="keyword">return</span> objc_getAssociatedObject(<span class="keyword">self</span>, &amp;kSkinChangeBlockKey);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)skinChanged:(<span class="built_in">NSDictionary</span> *)notic &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">self</span>.skinChangeBlock) &#123;</span><br><span class="line">        __<span class="keyword">weak</span> <span class="keyword">typeof</span>(<span class="keyword">self</span>)wSelf = <span class="keyword">self</span>;</span><br><span class="line">        <span class="keyword">self</span>.skinChangeBlock(wSelf);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line">  </span><br><span class="line"><span class="comment">//换肤设置示例</span></span><br><span class="line"><span class="built_in">UIButton</span> *button = [<span class="built_in">UIButton</span> new];</span><br><span class="line">button.skinChangeBlock = ^(<span class="built_in">UIButton</span> *weakSelf) &#123;</span><br><span class="line">    weakSelf.backgroundColor = SkinColor(<span class="string">@&quot;背景色&quot;</span>);</span><br><span class="line">    [weakSelf setImage:SkinImage(<span class="string">@&quot;按钮&quot;</span>) forState:<span class="built_in">UIControlStateNormal</span>];</span><br><span class="line">    [weakSelf setImage:SkinImage(<span class="string">@&quot;按钮高亮&quot;</span>) forState:<span class="built_in">UIControlStateHighlighted</span>];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h3><p>到此也就已经分析梳理完了iOS APP动态换肤方案的细节实现。主要关键点是将换肤框架拆分为两部分：底层的资源管理层级以及用于监听和管理换肤事件的换肤控制中心，其中换肤控制中心的实现则借用了Object-C所具有的运行时（Runtime）的语言特性。</p>
+<p>更多详情请查看 <a target="_blank" rel="noopener" href="https://github.com/lele8446/CJSkin">CJSkin</a>。</p>
+<p>如果你有更好的想法，欢迎留言交流。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/iOS%E5%BC%80%E5%8F%91/" rel="tag"># iOS开发</a>
+              <a href="/tags/Runtime/" rel="tag"># Runtime</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/08/12/%E5%8D%81%E5%A4%A7%E7%BB%8F%E5%85%B8%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" rel="prev" title="十大经典排序算法">
+                  <i class="fa fa-chevron-left"></i> 十大经典排序算法
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+<script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lele8446</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
