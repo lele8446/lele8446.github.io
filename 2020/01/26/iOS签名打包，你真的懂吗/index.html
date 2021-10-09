@@ -146,14 +146,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-count">21</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -272,7 +272,7 @@
 <ul>
 <li>计算得到的哈希值大小固定，不受原本信息内容大小的影响；</li>
 <li>不可逆，根据哈希值无法推断得到原本信息（实际上MD5以及SHA-1算法已经被证明可以被破解）；</li>
-<li>唯一性，原本信息内容一致，那么哈希值也一致；原数据不同，也不会存在重复的哈希结果。</li>
+<li>唯一性，原本信息内容一致，那么哈希值也一致；反过来理论上不同内容的原数据可能会碰撞产生相同的哈希值（这也就是上面说到的被破解），但碰撞概率的大小受哈希函数的影响，而且这只是理论上的概率事件可以认为这并不影响信息摘要在iOS签名中的使用。</li>
 </ul>
 <p>使用信息摘要技术在数据加密传输时，发送方先对文件内容使用哈希算法进行信息摘要计算，再对摘要内容进行加密，之后将文件内容以及摘要内容（已加密）发送出去。</p>
 <p>接收方收到数据后，先解密得到摘要内容，再依据相同的哈希算法对文件内容进行信息摘要计算，最后匹配接收到的哈希值与计算得到的哈希值是否一致，如果一致那就说明传输过程是安全的。</p>
@@ -362,7 +362,7 @@
   <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">codesign -fs <span class="string">&quot;签名证书名称&quot;</span> <span class="string">&quot;Frameworks/xxx.framework（动态库路径）&quot;</span></span><br></pre></td></tr></table></figure></li>
 <li><p>最后对app进行重签名</p>
   <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">codesign -f -s <span class="string">&quot;iPhone Distribution: XXX（证书名称）&quot;</span> --entitlements entitlements.plist（Profile配置文件） XXX.app（签名app）</span><br></pre></td></tr></table></figure></li>
-<li><p>最后将<strong>Payload</strong>文件夹下的资源移除，只保留**.app**文件，右键压缩，然后更改后缀为<code>.ipa</code>，这样重签后的ipa便已生成了，你可以通过iTunes、iTools或其他途径安装到iOS设备上。</p>
+<li><p>最后将 <strong>Payload</strong> 文件夹下的资源移除，只保留 <strong>.app</strong> 文件，右键压缩，然后更改后缀为<code>.ipa</code>，这样重签后的ipa便已生成了，你可以通过iTunes、iTools或其他途径安装到iOS设备上。</p>
 </li>
 </ul>
 <h4 id="3-3-注入代码重签"><a href="#3-3-注入代码重签" class="headerlink" title="3.3 注入代码重签"></a>3.3 注入代码重签</h4><ul>
