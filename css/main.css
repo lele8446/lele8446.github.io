@@ -1628,7 +1628,7 @@ pre code {
   width: 100%;
 }
 .with-love {
-  color: #ff0000;
+  color: ;
   display: inline-block;
   margin: 0 5px;
 }
@@ -2612,7 +2612,6 @@ ul.breadcrumb li:last-child {
   position: sticky;
   top: 12px;
   width: 240px;
-  visibility: hidden;
 }
 @media (max-width: 991px) {
   .sidebar {

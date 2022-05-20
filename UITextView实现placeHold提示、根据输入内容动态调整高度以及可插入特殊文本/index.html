@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;example.com&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Pisces&quot;,&quot;version&quot;:&quot;8.3.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:false,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script>
+<meta name="description" content="项目中遇到的需求，需要自定义UITextView，实现以下功能：  添加placeHold提示，类似UITextField的placeholder默认提示，并根据输入文字自动提示； UITextView高度可根据输入内容动态调整，当超出maxHeight时，高度不再增加； 输入时可插入不可编辑的自定义文本（如 ＃主题＃ ， @人名 ），类似微信输入时候的@人名，插入的文本要有不同颜色显示，并且插入">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UITextView实现placeHold提示、根据输入内容动态调整高度以及可插入特殊文本">
+<meta property="og:url" content="http://example.com/UITextView%E5%AE%9E%E7%8E%B0placeHold%E6%8F%90%E7%A4%BA%E3%80%81%E6%A0%B9%E6%8D%AE%E8%BE%93%E5%85%A5%E5%86%85%E5%AE%B9%E5%8A%A8%E6%80%81%E8%B0%83%E6%95%B4%E9%AB%98%E5%BA%A6%E4%BB%A5%E5%8F%8A%E5%8F%AF%E6%8F%92%E5%85%A5%E7%89%B9%E6%AE%8A%E6%96%87%E6%9C%AC/index.html">
+<meta property="og:site_name" content="C.J.Lian">
+<meta property="og:description" content="项目中遇到的需求，需要自定义UITextView，实现以下功能：  添加placeHold提示，类似UITextField的placeholder默认提示，并根据输入文字自动提示； UITextView高度可根据输入内容动态调整，当超出maxHeight时，高度不再增加； 输入时可插入不可编辑的自定义文本（如 ＃主题＃ ， @人名 ），类似微信输入时候的@人名，插入的文本要有不同颜色显示，并且插入">
+<meta property="og:locale">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429982-46d438dea24424c9.gif?imageMogr2/auto-orient/strip">
+<meta property="article:published_time" content="2016-07-07T06:46:03.000Z">
+<meta property="article:modified_time" content="2016-07-07T06:46:03.000Z">
+<meta property="article:author" content="lele8446">
+<meta property="article:tag" content="iOS开发">
+<meta property="article:tag" content="CoreText">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1429982-46d438dea24424c9.gif?imageMogr2/auto-orient/strip">
+
+
+<link rel="canonical" href="http://example.com/UITextView%E5%AE%9E%E7%8E%B0placeHold%E6%8F%90%E7%A4%BA%E3%80%81%E6%A0%B9%E6%8D%AE%E8%BE%93%E5%85%A5%E5%86%85%E5%AE%B9%E5%8A%A8%E6%80%81%E8%B0%83%E6%95%B4%E9%AB%98%E5%BA%A6%E4%BB%A5%E5%8F%8A%E5%8F%AF%E6%8F%92%E5%85%A5%E7%89%B9%E6%AE%8A%E6%96%87%E6%9C%AC/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-Hans&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;http:&#x2F;&#x2F;example.com&#x2F;UITextView%E5%AE%9E%E7%8E%B0placeHold%E6%8F%90%E7%A4%BA%E3%80%81%E6%A0%B9%E6%8D%AE%E8%BE%93%E5%85%A5%E5%86%85%E5%AE%B9%E5%8A%A8%E6%80%81%E8%B0%83%E6%95%B4%E9%AB%98%E5%BA%A6%E4%BB%A5%E5%8F%8A%E5%8F%AF%E6%8F%92%E5%85%A5%E7%89%B9%E6%AE%8A%E6%96%87%E6%9C%AC&#x2F;&quot;,&quot;path&quot;:&quot;UITextView实现placeHold提示、根据输入内容动态调整高度以及可插入特殊文本&#x2F;&quot;,&quot;title&quot;:&quot;UITextView实现placeHold提示、根据输入内容动态调整高度以及可插入特殊文本&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>UITextView实现placeHold提示、根据输入内容动态调整高度以及可插入特殊文本 | C.J.Lian</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">C.J.Lian</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82"><span class="nav-number">1.</span> <span class="nav-text">实现细节</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#placeHold%E6%8F%90%E7%A4%BA"><span class="nav-number">1.1.</span> <span class="nav-text">placeHold提示</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UITextView%E9%AB%98%E5%BA%A6%E5%8A%A8%E6%80%81%E8%B0%83%E6%95%B4"><span class="nav-number">1.2.</span> <span class="nav-text">UITextView高度动态调整</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8F%92%E5%85%A5%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%87%E6%9C%AC"><span class="nav-number">1.3.</span> <span class="nav-text">插入自定义文本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%87%E6%9C%AC%EF%BC%8C%E5%88%99%E9%9C%80%E8%A6%81%E5%90%8C%E6%97%B6%E5%88%A0%E9%99%A4"><span class="nav-number">1.4.</span> <span class="nav-text">删除自定义文本，则需要同时删除</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%9D%E8%AF%81%E6%8F%92%E5%85%A5%E6%96%87%E6%9C%AC%E4%B8%8D%E5%8F%AF%E7%BC%96%E8%BE%91"><span class="nav-number">1.5.</span> <span class="nav-text">保证插入文本不可编辑</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%90%8E"><span class="nav-number">2.</span> <span class="nav-text">最后</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lele8446"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">lele8446</p>
+  <div class="site-description" itemprop="description">coding, learning...</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lele8446" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lele8446" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/a97f1b616991" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;a97f1b616991" rel="noopener" target="_blank"><i class="fa fa-book fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:lele8446@foxmail.com" title="E-Mail → mailto:lele8446@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.com/in/%E7%82%BD%E9%87%91-%E7%BB%83-966a4813b/" title="Linkedin → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;%E7%82%BD%E9%87%91-%E7%BB%83-966a4813b&#x2F;" rel="noopener" target="_blank"><i class="fab fa-linkedin fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/UITextView%E5%AE%9E%E7%8E%B0placeHold%E6%8F%90%E7%A4%BA%E3%80%81%E6%A0%B9%E6%8D%AE%E8%BE%93%E5%85%A5%E5%86%85%E5%AE%B9%E5%8A%A8%E6%80%81%E8%B0%83%E6%95%B4%E9%AB%98%E5%BA%A6%E4%BB%A5%E5%8F%8A%E5%8F%AF%E6%8F%92%E5%85%A5%E7%89%B9%E6%AE%8A%E6%96%87%E6%9C%AC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="lele8446">
+      <meta itemprop="description" content="coding, learning...">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="C.J.Lian">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          UITextView实现placeHold提示、根据输入内容动态调整高度以及可插入特殊文本
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2016-07-07 14:46:03" itemprop="dateCreated datePublished" datetime="2016-07-07T14:46:03+08:00">2016-07-07</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>项目中遇到的需求，需要自定义UITextView，实现以下功能：</p>
+<ul>
+<li>添加placeHold提示，类似UITextField的placeholder默认提示，并根据输入文字自动提示；</li>
+<li>UITextView高度可根据输入内容动态调整，当超出maxHeight时，高度不再增加；</li>
+<li>输入时可插入不可编辑的自定义文本（如 <strong>＃主题＃</strong> ， <strong>@人名</strong> ），类似微信输入时候的@人名，插入的文本要有不同颜色显示，并且插入文本不可编辑，删除时候则统一删除。</li>
+</ul>
+<span id="more"></span>
+
+<p>简单效果如图所示</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1429982-46d438dea24424c9.gif?imageMogr2/auto-orient/strip" alt="效果图"></p>
+<h3 id="实现细节"><a href="#实现细节" class="headerlink" title="实现细节"></a>实现细节</h3><p>自定义CJUITextView继承自UITextView，并且自身实现了UITextViewDelegate的代理，同时新增CJUITextViewDelegate代理方法：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@protocol</span> <span class="title">CJUITextViewDelegate</span> &lt;<span class="title">NSObject</span>&gt;</span></span><br><span class="line"><span class="keyword">@optional</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">*  CJUITextView输入了done的回调</span></span><br><span class="line"><span class="comment">*  一般在self.textView.returnKeyType = UIReturnKeyDone;时执行该回调</span></span><br><span class="line"><span class="comment">*</span></span><br><span class="line"><span class="comment">*  @param textView</span></span><br><span class="line"><span class="comment">*</span></span><br><span class="line"><span class="comment">*  @return</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">- (<span class="keyword">void</span>)CJUITextViewEnterDone:(CJUITextView *)textView;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  CJUITextView自动改变高度</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  @param textView</span></span><br><span class="line"><span class="comment"> *  @param frame     改变高度后的size</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> - (<span class="keyword">void</span>)CJUITextView:(CJUITextView *)textView heightChanged:(<span class="built_in">CGRect</span>)frame;</span><br><span class="line"></span><br><span class="line"> - (<span class="built_in">BOOL</span>)textViewShouldBeginEditing:(CJUITextView *)textView;</span><br><span class="line"> - (<span class="built_in">BOOL</span>)textViewShouldEndEditing:(CJUITextView *)textView;</span><br><span class="line"></span><br><span class="line"> - (<span class="keyword">void</span>)textViewDidBeginEditing:(CJUITextView *)textView;</span><br><span class="line"> - (<span class="keyword">void</span>)textViewDidEndEditing:(CJUITextView *)textView;</span><br><span class="line"></span><br><span class="line"> - (<span class="built_in">BOOL</span>)textView:(CJUITextView *)textView shouldChangeTextInRange:(<span class="built_in">NSRange</span>)range replacementText:(<span class="built_in">NSString</span> *)text;</span><br><span class="line"> - (<span class="keyword">void</span>)textViewDidChange:(CJUITextView *)textView;</span><br><span class="line"></span><br><span class="line"> - (<span class="keyword">void</span>)textViewDidChangeSelection:(CJUITextView *)textView;</span><br><span class="line"></span><br><span class="line"> - (<span class="built_in">BOOL</span>)textView:(CJUITextView *)textView shouldInteractWithURL:(<span class="built_in">NSURL</span> *)URL inRange:(<span class="built_in">NSRange</span>)characterRange <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">7</span>_0);</span><br><span class="line"> - (<span class="built_in">BOOL</span>)textView:(CJUITextView *)textView shouldInteractWithTextAttachment:(<span class="built_in">NSTextAttachment</span> *)textAttachment inRange:(<span class="built_in">NSRange</span>)characterRange <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">7</span>_0);</span><br><span class="line"></span><br><span class="line"> <span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p>从方法命名可以看出，除了前两个方法，后面的代理方法都是跟UITextViewDelegate的代理一样的。</p>
+<h4 id="placeHold提示"><a href="#placeHold提示" class="headerlink" title="placeHold提示"></a>placeHold提示</h4><p>添加UILabel（placeHoldLabel）到UITextView上，设置默认字体、颜色等属性，然后在drawRect:方法中调整其frame值大小。同时在textViewDidChangeSelection:代理回调中判断placeHoldLabel的hidden值，并根据当前UITextView高度，调整placeHoldLabel的大小。</p>
+<p>与placeHold提示相关的属性：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>, <span class="keyword">setter</span>=setPlaceHoldString:)   <span class="built_in">NSString</span> *placeHoldString;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>, <span class="keyword">setter</span>=setPlaceHoldTextFont:) <span class="built_in">UIFont</span> *placeHoldTextFont;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>, <span class="keyword">setter</span>=setPlaceHoldTextColor:) <span class="built_in">UIColor</span> *placeHoldTextColor;</span><br></pre></td></tr></table></figure>
+
+<h4 id="UITextView高度动态调整"><a href="#UITextView高度动态调整" class="headerlink" title="UITextView高度动态调整"></a>UITextView高度动态调整</h4><p>设置属性</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  是否根据输入内容自动调整高度(default NO)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>, <span class="keyword">setter</span>=setAutoLayoutHeight:) <span class="built_in">BOOL</span> autoLayoutHeight;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  autoLayoutHeight为YES时的最大高度(default MAXFLOAT)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) <span class="built_in">CGFloat</span> maxHeight;</span><br></pre></td></tr></table></figure>
+
+<p>有个注意点，当开启autoLayoutHeight后，实现中默认将输入的自动联想功能关闭了<code>self.autocorrectionType = UITextAutocorrectionTypeNo;</code>因为用户如果是选择输入了联想关键词时，UITextView在动态调整高度的同时会出现输入光标跳动的问题，这里暂时只能如此处理。<br>在textViewDidChangeSelection:回调中执行<code>[self changeSize];</code>动态调整高度：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)changeSize &#123;</span><br><span class="line">    <span class="built_in">CGRect</span> oriFrame = <span class="keyword">self</span>.frame;</span><br><span class="line">    <span class="built_in">CGSize</span> sizeToFit = [<span class="keyword">self</span> sizeThatFits:<span class="built_in">CGSizeMake</span>(oriFrame.size.width, MAXFLOAT)];</span><br><span class="line">    <span class="keyword">if</span> (sizeToFit.height &lt; <span class="keyword">self</span>.defaultFrame.size.height) &#123;</span><br><span class="line">        sizeToFit.height = <span class="keyword">self</span>.defaultFrame.size.height;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (oriFrame.size.height != sizeToFit.height &amp;&amp; sizeToFit.height &lt;= <span class="keyword">self</span>.maxHeight) &#123;</span><br><span class="line">        oriFrame.size.height = sizeToFit.height;</span><br><span class="line">        <span class="keyword">self</span>.frame = oriFrame;</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">self</span>.myDelegate &amp;&amp; [<span class="keyword">self</span>.myDelegate respondsToSelector:<span class="keyword">@selector</span>(CJUITextView:heightChanged:)]) &#123;</span><br><span class="line">            [<span class="keyword">self</span>.myDelegate CJUITextView:<span class="keyword">self</span> heightChanged:oriFrame];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    [<span class="keyword">self</span> scrollRangeToVisible:<span class="built_in">NSMakeRange</span>(<span class="keyword">self</span>.text.length, <span class="number">0</span>)];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后一行代码<code>[self scrollRangeToVisible:NSMakeRange(self.text.length, 0)];</code>是为了保证调整高度后，光标始终在输入文本的后面。</p>
+<h4 id="插入自定义文本"><a href="#插入自定义文本" class="headerlink" title="插入自定义文本"></a>插入自定义文本</h4><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  插入文本的颜色(default self.textColor)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>, <span class="keyword">getter</span>=getSpecialTextColor) <span class="built_in">UIColor</span> *specialTextColor;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  在指定位置插入字符，并返回插入字符后的SelectedRange值</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  @param specialText    要插入的字符</span></span><br><span class="line"><span class="comment"> *  @param selectedRange  插入位置</span></span><br><span class="line"><span class="comment"> *  @param attributedText 插入前的文本</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  @return 插入字符后的光标位置</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">- (<span class="built_in">NSRange</span>)insterSpecialTextAndGetSelectedRange:(<span class="built_in">NSAttributedString</span> *)specialText</span><br><span class="line">                              selectedRange:(<span class="built_in">NSRange</span>)selectedRange</span><br><span class="line">                                       text:(<span class="built_in">NSAttributedString</span> *)attributedText;</span><br></pre></td></tr></table></figure>
+<p>调用示例：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//插入文本的颜色</span></span><br><span class="line"><span class="keyword">self</span>.textView.specialTextColor = [<span class="built_in">UIColor</span> redColor];</span><br><span class="line"><span class="built_in">NSMutableAttributedString</span> *str = [[<span class="built_in">NSMutableAttributedString</span> alloc] initWithString:<span class="string">@&quot;#插入文本#&quot;</span>];</span><br><span class="line">[str addAttribute:<span class="built_in">NSFontAttributeName</span> value:[<span class="built_in">UIFont</span> systemFontOfSize:<span class="number">16</span>] range:<span class="built_in">NSMakeRange</span>(<span class="number">0</span>, str.length)];</span><br><span class="line">[<span class="keyword">self</span>.textView insterSpecialTextAndGetSelectedRange:str selectedRange:<span class="keyword">self</span>.textView.selectedRange text:<span class="keyword">self</span>.textView.attributedText];</span><br></pre></td></tr></table></figure>
+
+<p><code>self. specialTextColor</code>设置所有插入文本的颜色，当然也可以在<code>-insterSpecialTextAndGetSelectedRange: selectedRange: text:</code>方法中单独对插入文本进行设置。<br><code>-insterSpecialTextAndGetSelectedRange: selectedRange: text:</code>方法的实现逻辑如下：</p>
+<ul>
+<li>首先读取插入文本的Attribute属性，并设置字体大小与文本颜色，同时增加一个自定义属性<code>SPECIAL_TEXT_NUM</code>（用来区分插入文本的不同颜色显示，以及删除插入文本）<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//为插入文本增加SPECIAL_TEXT_NUM索引</span></span><br><span class="line"><span class="keyword">self</span>.specialTextNum ++;</span><br><span class="line">[specialTextAttStr addAttribute:SPECIAL_TEXT_NUM value:@(<span class="keyword">self</span>.specialTextNum) range:specialRange];</span><br></pre></td></tr></table></figure>
+<code>self.specialTextNum</code>初始值为1，并根据插入特殊文本的次数自增长。</li>
+<li>判断插入文本的位置<code>selectedRange</code>，根据插入位置将插入前的文本做截取，最后和插入文本拼接在一起。</li>
+</ul>
+<h4 id="删除自定义文本，则需要同时删除"><a href="#删除自定义文本，则需要同时删除" class="headerlink" title="删除自定义文本，则需要同时删除"></a>删除自定义文本，则需要同时删除</h4><p>在<code>-textView: shouldChangeTextInRange: replacementText:</code>回调中判断，通过枚举NSAttributedString的自定义属性<code>SPECIAL_TEXT_NUM</code>，如果判断到需要删除的文本中包含<code>SPECIAL_TEXT_NUM</code>属性，则将所有<code>SPECIAL_TEXT_NUM</code>的值相等的文本都删除，因为在insterSpecialText的时候已经保证了插入文本的每个字符都会有相同的<code>SPECIAL_TEXT_NUM</code>属性。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ([text isEqualToString:<span class="string">@&quot;&quot;</span>]) &#123;<span class="comment">//输入了删除</span></span><br><span class="line">    __block <span class="built_in">BOOL</span> deleteSpecial = <span class="literal">NO</span>;</span><br><span class="line">    <span class="built_in">NSRange</span> oldRange = textView.selectedRange;</span><br><span class="line">    </span><br><span class="line">    [textView.attributedText enumerateAttribute:SPECIAL_TEXT_NUM inRange:<span class="built_in">NSMakeRange</span>(<span class="number">0</span>, textView.selectedRange.location) options:<span class="built_in">NSAttributedStringEnumerationReverse</span> usingBlock:^(<span class="built_in">NSDictionary</span> *attrs, <span class="built_in">NSRange</span> range, <span class="built_in">BOOL</span> *stop) &#123;</span><br><span class="line">        <span class="built_in">NSRange</span> deleteRange = <span class="built_in">NSMakeRange</span>(textView.selectedRange.location<span class="number">-1</span>, <span class="number">0</span>) ;</span><br><span class="line">        <span class="keyword">if</span> (attrs != <span class="literal">nil</span> &amp;&amp; attrs != <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (deleteRange.location &gt; range.location &amp;&amp; deleteRange.location &lt; (range.location+range.length)) &#123;</span><br><span class="line">                <span class="built_in">NSMutableAttributedString</span> *textAttStr = [[<span class="built_in">NSMutableAttributedString</span> alloc] initWithAttributedString:textView.attributedText];</span><br><span class="line">                [textAttStr deleteCharactersInRange:range];</span><br><span class="line">                textView.attributedText = textAttStr;</span><br><span class="line">                deleteSpecial = <span class="literal">YES</span>;</span><br><span class="line">                textView.selectedRange = <span class="built_in">NSMakeRange</span>(oldRange.location-range.length, <span class="number">0</span>);</span><br><span class="line">                *stop = <span class="literal">YES</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;];</span><br><span class="line">    <span class="keyword">return</span> !deleteSpecial;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="保证插入文本不可编辑"><a href="#保证插入文本不可编辑" class="headerlink" title="保证插入文本不可编辑"></a>保证插入文本不可编辑</h4><p>这里不可编辑的意思是：文本插入后不能删减自定义文本的文字或者在中间增加文字。<br>那么只需要保证光标不能移动到插入文本之中就可以了。<br>借助runtime，发现光标移动的时候会触发<code>selectedTextRange</code>属性的改变，这就好办了，KVO注册对<code>selectedTextRange</code>属性的监测，在KVO的监测方法中对光标位置进行处理</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)observeValueForKeyPath:(<span class="built_in">NSString</span>*) path</span><br><span class="line">                  ofObject:(<span class="keyword">id</span>)object</span><br><span class="line">                    change:(<span class="built_in">NSDictionary</span>*)change</span><br><span class="line">                   context:(<span class="keyword">void</span>*)context</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (context == TextViewObserverSelectedTextRange &amp;&amp; [path isEqual:<span class="string">@&quot;selectedTextRange&quot;</span>])&#123;</span><br><span class="line">    </span><br><span class="line">        <span class="built_in">UITextRange</span> *newContentStr = [change objectForKey:<span class="string">@&quot;new&quot;</span>];</span><br><span class="line">        <span class="built_in">UITextRange</span> *oldContentStr = [change objectForKey:<span class="string">@&quot;old&quot;</span>];</span><br><span class="line">        <span class="built_in">NSRange</span> newRange = [<span class="keyword">self</span> selectedRange:<span class="keyword">self</span> selectTextRange:newContentStr];</span><br><span class="line">        <span class="built_in">NSRange</span> oldRange = [<span class="keyword">self</span> selectedRange:<span class="keyword">self</span> selectTextRange:oldContentStr];</span><br><span class="line">        <span class="keyword">if</span> (newRange.location != oldRange.location) &#123;</span><br><span class="line">            <span class="comment">//判断光标移动，光标不能处在特殊文本内</span></span><br><span class="line">            [<span class="keyword">self</span>.attributedText enumerateAttribute:SPECIAL_TEXT_NUM inRange:<span class="built_in">NSMakeRange</span>(<span class="number">0</span>, <span class="keyword">self</span>.attributedText.length) options:<span class="built_in">NSAttributedStringEnumerationReverse</span> usingBlock:^(<span class="built_in">NSDictionary</span> *attrs, <span class="built_in">NSRange</span> range, <span class="built_in">BOOL</span> *stop) &#123;</span><br><span class="line">            <span class="keyword">if</span> (attrs != <span class="literal">nil</span> &amp;&amp; attrs != <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (newRange.location &gt; range.location &amp;&amp; newRange.location &lt; (range.location+range.length)) &#123;</span><br><span class="line">                    <span class="comment">//光标距离左边界的值</span></span><br><span class="line">                    <span class="built_in">NSUInteger</span> leftValue = newRange.location - range.location;</span><br><span class="line">                    <span class="comment">//光标距离右边界的值</span></span><br><span class="line">                    <span class="built_in">NSUInteger</span> rightValue = range.location+range.length - newRange.location;</span><br><span class="line">                    <span class="keyword">if</span> (leftValue &gt;= rightValue) &#123;</span><br><span class="line">                        <span class="keyword">self</span>.selectedRange = <span class="built_in">NSMakeRange</span>(<span class="keyword">self</span>.selectedRange.location-leftValue, <span class="number">0</span>);</span><br><span class="line">                    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                        <span class="keyword">self</span>.selectedRange = <span class="built_in">NSMakeRange</span>(<span class="keyword">self</span>.selectedRange.location+rightValue, <span class="number">0</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">        &#125;];</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">self</span>.typingAttributes = <span class="keyword">self</span>.defaultAttributes;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可能你注意到了最后一行代码<code>self.typingAttributes = self.defaultAttributes;</code>这是用来重设UITextView的默认输入属性的。因为当你插入了一段不同颜色的特殊文本，或者将光标移动到了特殊文本的后面，继续输入时文字的颜色会跟特殊文本的颜色一样，很明显这不是我们想要的。所以有好几个地方需要重设<code>typingAttributes</code>的值，分别在：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-textViewDidChangeSelection:</span><br><span class="line">-textView:shouldChangeTextInRange:replacementText:</span><br><span class="line">-observeValueForKeyPath:ofObject:change:context:</span><br></pre></td></tr></table></figure>
+
+<p>这三个方法中。而输入的默认属性<code>self.defaultAttributes</code>是由懒加载实现的：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="built_in">NSMutableDictionary</span> *)defaultAttributes &#123;</span><br><span class="line">   <span class="keyword">if</span> (!_defaultAttributes) &#123;</span><br><span class="line">       _defaultAttributes = [<span class="built_in">NSMutableDictionary</span> dictionary];</span><br><span class="line">       [_defaultAttributes setObject:<span class="keyword">self</span>.font forKey:<span class="built_in">NSFontAttributeName</span>];</span><br><span class="line">       <span class="keyword">if</span> (!<span class="keyword">self</span>.textColor || <span class="keyword">self</span>.textColor == <span class="literal">nil</span>) &#123;</span><br><span class="line">           <span class="keyword">self</span>.textColor = [<span class="built_in">UIColor</span> blackColor];</span><br><span class="line">       &#125;</span><br><span class="line">       [_defaultAttributes setObject:<span class="keyword">self</span>.textColor forKey:<span class="built_in">NSForegroundColorAttributeName</span>];</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> _defaultAttributes;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h3><p>最后奉上GitHub源码地址<a target="_blank" rel="noopener" href="https://github.com/lele8446/TextViewDemo">TextViewDemo</a>，另外该项目已集成cocopads依赖，引用方法：</p>
+<blockquote>
+<p>platform :ios, ‘8.0’<br>pod ‘CJTextView’, ‘~&gt; 1.0.1’</p>
+</blockquote>
+<br>
+欢迎支持本人博客，欢迎star。。。不要脸的打广告😁😂有问题请留言
+
+<p><a target="_blank" rel="noopener" href="https://github.com/lele8446">本人GitHub</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/iOS%E5%BC%80%E5%8F%91/" rel="tag"># iOS开发</a>
+              <a href="/tags/CoreText/" rel="tag"># CoreText</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/%E5%A6%82%E4%BD%95%E5%8F%91%E5%B8%83CocoaPods%E5%85%AC%E5%BC%80%E5%BA%93%E4%BB%A5%E5%8F%8A%E6%96%B0%E5%BB%BA%E7%A7%81%E6%9C%89Pod%20Specs%E7%B4%A2%E5%BC%95%E5%BA%93/" rel="prev" title="如何发布CocoaPods公开库以及新建私有Pod Specs索引库">
+                  <i class="fa fa-chevron-left"></i> 如何发布CocoaPods公开库以及新建私有Pod Specs索引库
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/iOS%E8%AE%BE%E5%A4%87%E5%94%AF%E4%B8%80%E6%A0%87%E8%AF%86%E7%AC%A6/" rel="next" title="iOS设备唯一标识符">
+                  iOS设备唯一标识符 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+<script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备2022055361号 </a>
+  </div>
+
+<div class="copyright">
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ChiJin.Lian</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

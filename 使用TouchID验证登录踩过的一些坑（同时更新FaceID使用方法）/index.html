@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;example.com&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Pisces&quot;,&quot;version&quot;:&quot;8.3.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:false,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script>
+<meta name="description" content="FaceIDiPhoneX 提供的刷脸功能与之前的设备的TouchID类似，都是属于生物验证的范畴。苹果爸爸也是为了照顾开发者，这两个功能对应的API基本相同，对于之前支持TouchID的APP其实可以在不做任何修改的基础上兼容FaceID，只是在一些UI样式上需要修改。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用TouchID验证登录踩过的一些坑（同时更新FaceID使用方法）">
+<meta property="og:url" content="http://example.com/%E4%BD%BF%E7%94%A8TouchID%E9%AA%8C%E8%AF%81%E7%99%BB%E5%BD%95%E8%B8%A9%E8%BF%87%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9D%91%EF%BC%88%E5%90%8C%E6%97%B6%E6%9B%B4%E6%96%B0FaceID%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%89/index.html">
+<meta property="og:site_name" content="C.J.Lian">
+<meta property="og:description" content="FaceIDiPhoneX 提供的刷脸功能与之前的设备的TouchID类似，都是属于生物验证的范畴。苹果爸爸也是为了照顾开发者，这两个功能对应的API基本相同，对于之前支持TouchID的APP其实可以在不做任何修改的基础上兼容FaceID，只是在一些UI样式上需要修改。">
+<meta property="og:locale">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429982-9cfc808834baadad.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429982-bb8849f47db4099c.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429982-a89dd0e5d803266d.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2017-08-03T09:36:03.000Z">
+<meta property="article:modified_time" content="2017-08-10T08:04:00.000Z">
+<meta property="article:author" content="lele8446">
+<meta property="article:tag" content="iOS开发">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1429982-9cfc808834baadad.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+<link rel="canonical" href="http://example.com/%E4%BD%BF%E7%94%A8TouchID%E9%AA%8C%E8%AF%81%E7%99%BB%E5%BD%95%E8%B8%A9%E8%BF%87%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9D%91%EF%BC%88%E5%90%8C%E6%97%B6%E6%9B%B4%E6%96%B0FaceID%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%89/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-Hans&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;http:&#x2F;&#x2F;example.com&#x2F;%E4%BD%BF%E7%94%A8TouchID%E9%AA%8C%E8%AF%81%E7%99%BB%E5%BD%95%E8%B8%A9%E8%BF%87%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9D%91%EF%BC%88%E5%90%8C%E6%97%B6%E6%9B%B4%E6%96%B0FaceID%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%89&#x2F;&quot;,&quot;path&quot;:&quot;使用TouchID验证登录踩过的一些坑（同时更新FaceID使用方法）&#x2F;&quot;,&quot;title&quot;:&quot;使用TouchID验证登录踩过的一些坑（同时更新FaceID使用方法）&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>使用TouchID验证登录踩过的一些坑（同时更新FaceID使用方法） | C.J.Lian</title><script src="/js/config.js"></script>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">C.J.Lian</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#FaceID"><span class="nav-number">1.</span> <span class="nav-text">FaceID</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#biometryType"><span class="nav-number">1.1.</span> <span class="nav-text">biometryType</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NSFaceIDUsageDescription"><span class="nav-number">1.2.</span> <span class="nav-text">NSFaceIDUsageDescription</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">1.3.</span> <span class="nav-text">其他</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F"><span class="nav-number">1.4.</span> <span class="nav-text">注意</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TouchID"><span class="nav-number">2.</span> <span class="nav-text">TouchID</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E7%94%A8%E5%89%8D%E7%9A%84%E5%88%A4%E6%96%AD"><span class="nav-number">2.1.</span> <span class="nav-text">调用前的判断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E7%94%A8TouchID"><span class="nav-number">2.2.</span> <span class="nav-text">调用TouchID</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81%E9%94%99%E8%AF%AF%E7%A0%81%E7%9A%84%E5%88%A4%E6%96%AD"><span class="nav-number">2.3.</span> <span class="nav-text">验证错误码的判断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B2%E9%BB%91%E6%9D%BF-%E7%9C%8B%E9%87%8D%E7%82%B9"><span class="nav-number">2.4.</span> <span class="nav-text">敲黑板 看重点</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lele8446"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">lele8446</p>
+  <div class="site-description" itemprop="description">coding, learning...</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lele8446" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lele8446" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/a97f1b616991" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;a97f1b616991" rel="noopener" target="_blank"><i class="fa fa-book fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:lele8446@foxmail.com" title="E-Mail → mailto:lele8446@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.com/in/%E7%82%BD%E9%87%91-%E7%BB%83-966a4813b/" title="Linkedin → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;%E7%82%BD%E9%87%91-%E7%BB%83-966a4813b&#x2F;" rel="noopener" target="_blank"><i class="fab fa-linkedin fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/%E4%BD%BF%E7%94%A8TouchID%E9%AA%8C%E8%AF%81%E7%99%BB%E5%BD%95%E8%B8%A9%E8%BF%87%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9D%91%EF%BC%88%E5%90%8C%E6%97%B6%E6%9B%B4%E6%96%B0FaceID%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="lele8446">
+      <meta itemprop="description" content="coding, learning...">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="C.J.Lian">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用TouchID验证登录踩过的一些坑（同时更新FaceID使用方法）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-08-03 17:36:03" itemprop="dateCreated datePublished" datetime="2017-08-03T17:36:03+08:00">2017-08-03</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2017-08-10 16:04:00" itemprop="dateModified" datetime="2017-08-10T16:04:00+08:00">2017-08-10</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="FaceID"><a href="#FaceID" class="headerlink" title="FaceID"></a>FaceID</h2><p>iPhoneX 提供的刷脸功能与之前的设备的TouchID类似，都是属于生物验证的范畴。苹果爸爸也是为了照顾开发者，这两个功能对应的API基本相同，对于之前支持TouchID的APP其实可以在不做任何修改的基础上兼容FaceID，只是在一些UI样式上需要修改。</p>
+<span id="more"></span>
+
+<h3 id="biometryType"><a href="#biometryType" class="headerlink" title="biometryType"></a>biometryType</h3><p>iOS11之后<code>LAContext</code>新增<code>biometryType</code>属性，调用时候可以根据这个属性来判断当前设备是使用FaceID还是TouchID，并据此做UI样式上的调整</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="built_in">NS_ENUM</span>(<span class="built_in">NSInteger</span>, LABiometryType)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">/// The device does not support biometry.</span></span><br><span class="line">    LABiometryTypeNone API_AVAILABLE(macos(<span class="number">10.13</span><span class="number">.2</span>), ios(<span class="number">11.2</span>)),</span><br><span class="line">    LABiometryNone API_DEPRECATED_WITH_REPLACEMENT(<span class="string">&quot;LABiometryTypeNone&quot;</span>, macos(<span class="number">10.13</span>, <span class="number">10.13</span><span class="number">.2</span>), ios(<span class="number">11.0</span>, <span class="number">11.2</span>)) = LABiometryTypeNone,</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/// The device supports Touch ID.</span></span><br><span class="line">    LABiometryTypeTouchID,</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/// The device supports Face ID.</span></span><br><span class="line">    LABiometryTypeFaceID API_UNAVAILABLE(macos),</span><br><span class="line">&#125; API_AVAILABLE(macos(<span class="number">10.13</span><span class="number">.2</span>), ios(<span class="number">11.0</span>)) API_UNAVAILABLE(watchos, tvos);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/// Indicates the type of the biometry supported by the device.</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// @discussion  This property is set only when canEvaluatePolicy succeeds for a biometric policy.</span></span><br><span class="line"><span class="comment">///              The default value is LABiometryTypeNone.</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">readonly</span>) LABiometryType biometryType API_AVAILABLE(macos(<span class="number">10.13</span><span class="number">.2</span>), ios(<span class="number">11.0</span>)) API_UNAVAILABLE(watchos, tvos);</span><br></pre></td></tr></table></figure>
+
+<h3 id="NSFaceIDUsageDescription"><a href="#NSFaceIDUsageDescription" class="headerlink" title="NSFaceIDUsageDescription"></a>NSFaceIDUsageDescription</h3><p>使用FaceID需要在info.plist中增加<code>NSFaceIDUsageDescription </code>权限申请说明，这个跟定位、拍照等一样，如果不增加默认提示如下，虽然不会崩溃，但最好还是加上。<br><img src="http://upload-images.jianshu.io/upload_images/1429982-9cfc808834baadad.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="FaceID权限.jpg"></p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>FaceID的调用方法跟TouchID一样，都是先判断再调用，具体流程参照分割线后的TouchID部分。</p>
+<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><p>FaceID如果 <em><strong>不间断连续尝试</strong></em> 次数超过5次之后，会弹窗提示如下，同时不再执行<code>reply:</code>对应的block，这个需要注意<br><img src="http://upload-images.jianshu.io/upload_images/1429982-bb8849f47db4099c.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="超出次数.jpg"></p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[myContext evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics</span><br><span class="line">          localizedReason:myLocalizedReasonString</span><br><span class="line">                    reply:^(<span class="built_in">BOOL</span> success, <span class="built_in">NSError</span> *error) &#123;</span><br><span class="line">    <span class="comment">//！！！超出次数，提示弹窗后，这里的block不会执行！！！</span></span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+
+
+<hr>
+<h2 id="TouchID"><a href="#TouchID" class="headerlink" title="TouchID"></a>TouchID</h2><p>iPhone 5s之后苹果推出的TouchID功能绝对是登录验证的一大神器，自此之后各种APP在涉及到登录时如果不把这一方式加上，估计都不好意思说是做APP的。这就苦了我们众程序猿，在开发中免不了要遇上各种坑。</p>
+<p>在次我将自己曾经趟过的一些坑罗列了下</p>
+<h3 id="调用前的判断"><a href="#调用前的判断" class="headerlink" title="调用前的判断"></a>调用前的判断</h3><p>在调用TouchID验证弹窗前最好先判断一下设备是否支持TouchID</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建安全验证对象</span></span><br><span class="line">LAContext * con = [[LAContext alloc]init];</span><br><span class="line"><span class="built_in">NSError</span> * error;</span><br><span class="line"><span class="comment">//判断是否支持密码验证</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * LAPolicyDeviceOwnerAuthentication 可输入手机密码的验证方式</span></span><br><span class="line"><span class="comment"> * LAPolicyDeviceOwnerAuthenticationWithBiometrics 只有指纹的验证方式</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="built_in">BOOL</span> can = [con canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&amp;error];</span><br></pre></td></tr></table></figure>
+<p>这里有两种验证方式可选：</p>
+<ul>
+<li><code>LAPolicyDeviceOwnerAuthenticationWithBiometrics </code> iOS8.0以上支持，只有指纹验证功能</li>
+<li><code>LAPolicyDeviceOwnerAuthentication</code> iOS 9.0以上支持，包含指纹验证与输入密码的验证方式</li>
+</ul>
+<h3 id="调用TouchID"><a href="#调用TouchID" class="headerlink" title="调用TouchID"></a>调用TouchID</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//初始化上下文对象</span></span><br><span class="line">LAContext *context = [[LAContext alloc] init];</span><br><span class="line"><span class="comment">//localizedFallbackTitle＝@“”,不会出现“输入密码”按钮</span></span><br><span class="line">context.localizedFallbackTitle = <span class="string">@&quot;&quot;</span>;</span><br><span class="line"><span class="comment">//错误对象</span></span><br><span class="line"><span class="built_in">NSError</span> *error = <span class="literal">nil</span>;</span><br><span class="line"><span class="built_in">NSString</span> *result = <span class="string">@&quot;验证信息&quot;</span>;</span><br><span class="line">    </span><br><span class="line"><span class="comment">//判断是否支持密码验证</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *LAPolicyDeviceOwnerAuthentication 手机密码的验证方式</span></span><br><span class="line"><span class="comment"> *LAPolicyDeviceOwnerAuthenticationWithBiometrics 指纹的验证方式</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">if</span> ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&amp;error]) &#123;</span><br><span class="line">    [context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:result reply:^(<span class="built_in">BOOL</span> success, <span class="built_in">NSError</span> *error) &#123;</span><br><span class="line">        <span class="keyword">if</span>(error.code == LAErrorTouchIDLockout) &#123;</span><br><span class="line">            </span><br><span class="line">            <span class="built_in">BOOL</span> can = [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthentication error:&amp;error];</span><br><span class="line">            <span class="keyword">if</span> (can) &#123;</span><br><span class="line">                [context evaluatePolicy:LAPolicyDeviceOwnerAuthentication localizedReason:result reply:^(<span class="built_in">BOOL</span> success, <span class="built_in">NSError</span> * _Nullable error) &#123;</span><br><span class="line">                    </span><br><span class="line">                &#125;];</span><br><span class="line">                </span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="built_in">NSLog</span>(<span class="string">@&quot;调起账号密码页面失败!!!&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意<code>context.localizedFallbackTitle = @&quot;&quot;;</code>如果不设置空值，则AlertView弹窗默认会有“输入密码”的选项，但是在<code>LAPolicyDeviceOwnerAuthenticationWithBiometrics </code>模式下点击“输入密码”不会有反应；<code>LAPolicyDeviceOwnerAuthentication</code>模式下点击可以唤起输入手机密码页面，页面如下，其中除了“指纹”两字是你的app名称，其他都不可定制<br><img src="http://upload-images.jianshu.io/upload_images/1429982-a89dd0e5d803266d.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="iPhone.jpg"></p>
+<h3 id="验证错误码的判断"><a href="#验证错误码的判断" class="headerlink" title="验证错误码的判断"></a>验证错误码的判断</h3><p>系统提供的错误码</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Error codes</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> kLAErrorAuthenticationFailed                       -1</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> kLAErrorUserCancel                                 -2</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> kLAErrorUserFallback                               -3</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> kLAErrorSystemCancel                               -4</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> kLAErrorPasscodeNotSet                             -5</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> kLAErrorTouchIDNotAvailable                        -6</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> kLAErrorTouchIDNotEnrolled                         -7</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> kLAErrorTouchIDLockout                             -8</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> kLAErrorAppCancel                                  -9</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> kLAErrorInvalidContext                            -10</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> kLAErrorNotInteractive                          -1004</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> kLAErrorBiometryNotAvailable              kLAErrorTouchIDNotAvailable</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> kLAErrorBiometryNotEnrolled               kLAErrorTouchIDNotEnrolled</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> kLAErrorBiometryLockout                   kLAErrorTouchIDLockout</span></span><br></pre></td></tr></table></figure>
+<p>验证失败，你可以根据实际情况将错误原因反馈给用户，比如在上面的调用TouchID代码中，当判断到TouchID被锁定，使用<code>LAPolicyDeviceOwnerAuthentication </code>模式再次验证，并弹出输入密码页面解锁。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(error.code == LAErrorTouchIDLockout) &#123;</span><br><span class="line">    <span class="built_in">BOOL</span> can = [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthentication error:&amp;error];</span><br><span class="line">    <span class="keyword">if</span> (can) &#123;</span><br><span class="line">        [context evaluatePolicy:LAPolicyDeviceOwnerAuthentication localizedReason:result reply:^(<span class="built_in">BOOL</span> success, <span class="built_in">NSError</span> * _Nullable error) &#123;</span><br><span class="line">        &#125;];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@&quot;调起账号密码页面失败!!!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="敲黑板-看重点"><a href="#敲黑板-看重点" class="headerlink" title="敲黑板 看重点"></a>敲黑板 看重点</h3><p>前面说的都是TouchID使用时候的常规场景，下面说一下可能会忽视的重点！！</p>
+<ol>
+<li><p>使用TouchID，必须确保app已经是活动状态！！<br>使用TouchID，必须确保app已经是活动状态！！<br>使用TouchID，必须确保app已经是活动状态！！<br>也即是说当你调用TouchID时，必须确保程序已经收到了UIApplicationDidBecomeActiveNotification的消息，不然的话会调用失败，返回一个错误</p>
+<blockquote>
+<p>Code: -1004 NSLocalizedDescription: User interaction is required</p>
+</blockquote>
+<p>  <del><strong>-1004</strong>这个错误码并不包含在官方SDK提供的文档中，但根据提示应该能够明白这是由于APP并没完全启动，未能提供用户交互导致。</del><br> <strong>-1004 错误在iOS11 SDK中已经更新，对应的错误描述如下：</strong></p>
+  <figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// Authentication failed, because it would require showing UI which has been forbidden</span></span><br><span class="line"><span class="comment">/// by using interactionNotAllowed property.</span></span><br><span class="line">LAErrorNotInteractive API_AVAILABLE(macos(<span class="number">10.10</span>), ios(<span class="number">8.0</span>), watchos(<span class="number">3.0</span>), tvos(<span class="number">10.0</span>)) = kLAErrorNotInteractive,</span><br></pre></td></tr></table></figure>
+<p> 我曾经因为在<code>applicationWillEnterForeground:</code>以及<code>application: didReceiveRemoteNotification:</code>两个方法中进行登录判断，过早的调用了TouchID导致-1004报错，着实被坑了一把。特别是在<code>application: didReceiveRemoteNotification:</code>点击消息推送启动的时，部分设备会报-1004，而有些又不会，最后费了好大劲才找到原因。</p>
+</li>
+<li><p>同一个文件路径下的同一份代码，打包编译成多个ipa安装包，就算各个包的<code>Bundle Identifier</code>不同，安装到同一个设备后，也只有最后生成的那个ipa包可以启用TouchID，其他包会报<strong>Code: -1004 NSLocalizedDescription: User interaction is required</strong>的错误。<br>神奇吧！！这个也是我经过了多次踩坑才发现的。开发中一份代码打多个包测试时注意下，避免再次入坑。 </p>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/iOS%E5%BC%80%E5%8F%91/" rel="tag"># iOS开发</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Runtime%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5%E2%80%94%E2%80%94hook%E9%BB%91%E9%AD%94%E6%B3%95%E4%BB%A5%E5%8F%8A%E6%89%A9%E5%B1%95%E7%B1%BB/" rel="prev" title="Runtime应用实践——hook黑魔法以及扩展类">
+                  <i class="fa fa-chevron-left"></i> Runtime应用实践——hook黑魔法以及扩展类
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/CJMethodLog%EF%BC%88%E4%B8%80%EF%BC%89Runtime%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BB%8E%E7%9B%91%E6%8E%A7%E8%BF%98%E5%8E%9FAPP%E8%BF%90%E8%A1%8C%E7%9A%84%E6%AF%8F%E4%B8%80%E8%A1%8C%E4%BB%A3%E7%A0%81%E8%AF%B4%E8%B5%B7/" rel="next" title="CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起">
+                  CJMethodLog（一）Runtime原理：从监控还原APP运行的每一行代码说起 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+<script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备2022055361号 </a>
+  </div>
+
+<div class="copyright">
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ChiJin.Lian</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
