@@ -1,24 +1,84 @@
 <!DOCTYPE html>
-<html lang="zh-Hans">
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
 <head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.0">
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
-
-<link rel="stylesheet" href="/css/main.css">
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
 
-<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;example.com&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Pisces&quot;,&quot;version&quot;:&quot;8.3.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:false,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script>
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Runtime," />
+
+
+
+
+
+
+
+
+
+
 <meta name="description" content="需求 已知类MyClass具有私有方法methodB；要求如何在不改变MyClass源码的基础上扩展methodB方法，使其在执行methodB方法的时候具有新增功能myAction。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Runtime应用实践——hook黑魔法以及扩展类">
@@ -38,204 +98,223 @@
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1429982-52d1097d69eadd01.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
-<link rel="canonical" href="http://example.com/Runtime%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5%E2%80%94%E2%80%94hook%E9%BB%91%E9%AD%94%E6%B3%95%E4%BB%A5%E5%8F%8A%E6%89%A9%E5%B1%95%E7%B1%BB/">
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
 
 
 
-<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-Hans&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;http:&#x2F;&#x2F;example.com&#x2F;Runtime%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5%E2%80%94%E2%80%94hook%E9%BB%91%E9%AD%94%E6%B3%95%E4%BB%A5%E5%8F%8A%E6%89%A9%E5%B1%95%E7%B1%BB&#x2F;&quot;,&quot;path&quot;:&quot;Runtime应用实践——hook黑魔法以及扩展类&#x2F;&quot;,&quot;title&quot;:&quot;Runtime应用实践——hook黑魔法以及扩展类&quot;}</script>
+  <link rel="canonical" href="http://example.com/Runtime应用实践——hook黑魔法以及扩展类/"/>
 
-<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
-<title>Runtime应用实践——hook黑魔法以及扩展类 | C.J.Lian</title><script src="/js/config.js"></script>
+
+
+
+
+  <title>Runtime应用实践——hook黑魔法以及扩展类 | C.J.Lian</title>
   
 
 
 
 
-  <noscript>
-    <link rel="stylesheet" href="/css/noscript.css">
-  </noscript>
-</head>
 
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="headband"></div>
 
-  <main class="main">
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">C.J.Lian</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">lele8446技术加油站</p>
+      
+  </div>
+
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏" role="button">
-        <span class="toggle-line"></span>
-        <span class="toggle-line"></span>
-        <span class="toggle-line"></span>
-    </div>
-  </div>
-
-  <div class="site-meta">
-
-    <a href="/" class="brand" rel="start">
-      <i class="logo-line"></i>
-      <h1 class="site-title">C.J.Lian</h1>
-      <i class="logo-line"></i>
-    </a>
-  </div>
-
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger">
-    </div>
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
   </div>
 </div>
 
-
-
 <nav class="site-nav">
-  <ul class="main-menu menu">
-        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
-        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
-        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
-  </ul>
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
 </nav>
 
 
 
-
-</div>
-        
-  
-  <div class="toggle sidebar-toggle" role="button">
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-  </div>
-
-  <aside class="sidebar">
-
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
-      <ul class="sidebar-nav">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
-      </ul>
-
-      <div class="sidebar-panel-container">
-        <!--noindex-->
-        <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9C%80%E6%B1%82"><span class="nav-number">1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="nav-number">2.</span> <span class="nav-text">怎么办</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E"><span class="nav-number">3.</span> <span class="nav-text">写在最后</span></a></li></ol></div>
-        </div>
-        <!--/noindex-->
-
-        <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="lele8446"
-      src="/images/avatar.png">
-  <p class="site-author-name" itemprop="name">lele8446</p>
-  <div class="site-description" itemprop="description">coding, learning...</div>
-</div>
-<div class="site-state-wrap site-overview-item animated">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">21</span>
-          <span class="site-state-item-name">日志</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">10</span>
-        <span class="site-state-item-name">标签</span></a>
-      </div>
-  </nav>
-</div>
-  <div class="links-of-author site-overview-item animated">
-      <span class="links-of-author-item">
-        <a href="https://github.com/lele8446" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lele8446" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://www.jianshu.com/u/a97f1b616991" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;a97f1b616991" rel="noopener" target="_blank"><i class="fa fa-book fa-fw"></i></a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="mailto:lele8446@foxmail.com" title="E-Mail → mailto:lele8446@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="https://www.linkedin.com/in/%E7%82%BD%E9%87%91-%E7%BB%83-966a4813b/" title="Linkedin → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;%E7%82%BD%E9%87%91-%E7%BB%83-966a4813b&#x2F;" rel="noopener" target="_blank"><i class="fab fa-linkedin fa-fw"></i></a>
-      </span>
-  </div>
-
-
-
-        </div>
-      </div>
-        <div class="back-to-top animated" role="button" aria-label="返回顶部">
-          <i class="fa fa-arrow-up"></i>
-          <span>0%</span>
-        </div>
-    </div>
-  </aside>
-  <div class="sidebar-dimmer"></div>
-
-
+ </div>
     </header>
 
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
     
 
-<noscript>
-  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
-</noscript>
-
-
-    <div class="main-inner post posts-expand">
-
-
   
 
-
-<div class="post-block">
+  
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/Runtime%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5%E2%80%94%E2%80%94hook%E9%BB%91%E9%AD%94%E6%B3%95%E4%BB%A5%E5%8F%8A%E6%89%A9%E5%B1%95%E7%B1%BB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="lele8446">
-      <meta itemprop="description" content="coding, learning...">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="C.J.Lian">
     </span>
+
+    
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          Runtime应用实践——hook黑魔法以及扩展类
-        </h1>
 
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
+        
+        
+          <h1 class="post-title" itemprop="name headline">Runtime应用实践——hook黑魔法以及扩展类</h1>
+        
 
-      <time title="创建时间：2017-06-21 09:55:03 / 修改时间：12:00:00" itemprop="dateCreated datePublished" datetime="2017-06-21T09:55:03+08:00">2017-06-21</time>
-    </span>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-21T09:55:03+08:00">
+                2017-06-21
+              </time>
+            
 
-  
-</div>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
 
         </div>
       </header>
+    
 
     
     
     
     <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
         <h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><blockquote>
 <p>已知类MyClass具有私有方法methodB；要求如何在不改变MyClass源码的基础上扩展methodB方法，使其在执行methodB方法的时候具有新增功能myAction。</p>
 </blockquote>
@@ -245,90 +324,401 @@
 <p><img src="http://upload-images.jianshu.io/upload_images/1429982-52d1097d69eadd01.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="IQKeyboardManager.m.png"></p>
 <h3 id="怎么办"><a href="#怎么办" class="headerlink" title="怎么办"></a>怎么办</h3><p>这时就轮到Runtime上场了，借助Runtime的Method Swizzling（方法替换）以及Associated Object（关联对象），可以完美的实现以上需求，同时还可以对相关类进行扩展。<br>假设类<code>MyClass</code>如下：</p>
 <p><code>MyClass.h</code>文件</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">MyClass</span> : <span class="title">NSObject</span></span></span><br><span class="line">- (<span class="keyword">void</span>)methodA;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)test;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-class"><span class="hljs-keyword">@interface</span> <span class="hljs-title">MyClass</span> : <span class="hljs-title">NSObject</span></span><br>- (<span class="hljs-keyword">void</span>)methodA;<br><br>- (<span class="hljs-keyword">void</span>)test;<br><span class="hljs-keyword">@end</span><br></code></pre></td></tr></table></figure>
 
 <p><code>MyClass.m</code>文件</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">MyClass</span> ()</span></span><br><span class="line">- (<span class="keyword">void</span>)methodB;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">MyClass</span></span></span><br><span class="line">- (<span class="keyword">void</span>)methodA &#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@&quot;MyClass methodA&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line">- (<span class="keyword">void</span>)methodB &#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@&quot;MyClass methodB&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line">- (<span class="keyword">void</span>)test &#123;</span><br><span class="line">    [<span class="keyword">self</span> methodB];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-class"><span class="hljs-keyword">@interface</span> <span class="hljs-title">MyClass</span> ()</span><br>- (<span class="hljs-keyword">void</span>)methodB;<br><span class="hljs-keyword">@end</span><br><br><span class="hljs-class"><span class="hljs-keyword">@implementation</span> <span class="hljs-title">MyClass</span></span><br>- (<span class="hljs-keyword">void</span>)methodA &#123;<br>    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;MyClass methodA&quot;</span>);<br>&#125;<br>- (<span class="hljs-keyword">void</span>)methodB &#123;<br>    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;MyClass methodB&quot;</span>);<br>&#125;<br>- (<span class="hljs-keyword">void</span>)test &#123;<br>    [<span class="hljs-keyword">self</span> methodB];<br>&#125;<br><span class="hljs-keyword">@end</span><br></code></pre></td></tr></table></figure>
 
 <p><code>MyClass </code>类的共有方法：<code>-methodA</code>以及<code>-test </code>，而调用test其实会执行私有方法<code>-methodB </code></p>
 <p><img src="http://upload-images.jianshu.io/upload_images/1429982-6934cb655d23dae7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="MyClass.png"></p>
 <p>要在不改变源码的基础上对<code>- methodA</code>以及<code>- methodB</code>方法进行扩展，那么可以新建类别<code>MyClass+MyCategory</code>，并在<code>initialize </code>方法中将<code>- methodA</code>与<code>- methodB</code>方法替换为自定义方法，其中<code>initialize </code>会在第一次初始化这个类之前被调用，如果始终没用到则不会调用，有点类似于懒加载。<br>另外在<code>MyMethodA </code>与<code>MyMethodB </code>中调用了自身，那是不是会引起死循环呢？答案是不会的，因为使用method_exchangeImplementations进行了方法替换，在调用<code>MyMethodA </code>时实现的是<code>methodA </code>方法。</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#import <span class="meta-string">&quot;MyClass+MyCategory.h&quot;</span></span></span><br><span class="line"><span class="meta">#import <span class="meta-string">&lt;objc/runtime.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">MyClass</span> (<span class="title">MyCategory</span>)</span></span><br><span class="line"></span><br><span class="line">+ (<span class="keyword">void</span>)initialize &#123;</span><br><span class="line">    </span><br><span class="line">    Method method1 = class_getInstanceMethod([<span class="keyword">self</span> <span class="keyword">class</span>], <span class="keyword">@selector</span>(methodA));</span><br><span class="line">    Method method2 = class_getInstanceMethod([<span class="keyword">self</span> <span class="keyword">class</span>], <span class="keyword">@selector</span>(MyMethodA));</span><br><span class="line">    method_exchangeImplementations(method1, method2);</span><br><span class="line">    </span><br><span class="line">    Method method3 = class_getInstanceMethod([<span class="keyword">self</span> <span class="keyword">class</span>], <span class="built_in">NSSelectorFromString</span>(<span class="string">@&quot;methodB&quot;</span>));</span><br><span class="line">    Method method4 = class_getInstanceMethod([<span class="keyword">self</span> <span class="keyword">class</span>], <span class="keyword">@selector</span>(MyMethodB));</span><br><span class="line">    method_exchangeImplementations(method3, method4);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)MyMethodA &#123;</span><br><span class="line">    [<span class="keyword">self</span> MyMethodA];</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@&quot;MyClass (MyCategory) methodA&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)MyMethodB &#123;</span><br><span class="line">    [<span class="keyword">self</span> MyMethodB];</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@&quot;MyClass (MyCategory) methodB&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-meta">#import <span class="hljs-meta-string">&quot;MyClass+MyCategory.h&quot;</span></span><br><span class="hljs-meta">#import <span class="hljs-meta-string">&lt;objc/runtime.h&gt;</span></span><br><br><span class="hljs-class"><span class="hljs-keyword">@implementation</span> <span class="hljs-title">MyClass</span> (<span class="hljs-title">MyCategory</span>)</span><br><br>+ (<span class="hljs-keyword">void</span>)initialize &#123;<br>    <br>    Method method1 = class_getInstanceMethod([<span class="hljs-keyword">self</span> <span class="hljs-keyword">class</span>], <span class="hljs-keyword">@selector</span>(methodA));<br>    Method method2 = class_getInstanceMethod([<span class="hljs-keyword">self</span> <span class="hljs-keyword">class</span>], <span class="hljs-keyword">@selector</span>(MyMethodA));<br>    method_exchangeImplementations(method1, method2);<br>    <br>    Method method3 = class_getInstanceMethod([<span class="hljs-keyword">self</span> <span class="hljs-keyword">class</span>], <span class="hljs-built_in">NSSelectorFromString</span>(<span class="hljs-string">@&quot;methodB&quot;</span>));<br>    Method method4 = class_getInstanceMethod([<span class="hljs-keyword">self</span> <span class="hljs-keyword">class</span>], <span class="hljs-keyword">@selector</span>(MyMethodB));<br>    method_exchangeImplementations(method3, method4);<br>&#125;<br><br>- (<span class="hljs-keyword">void</span>)MyMethodA &#123;<br>    [<span class="hljs-keyword">self</span> MyMethodA];<br>    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;MyClass (MyCategory) methodA&quot;</span>);<br>&#125;<br><br>- (<span class="hljs-keyword">void</span>)MyMethodB &#123;<br>    [<span class="hljs-keyword">self</span> MyMethodB];<br>    <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;MyClass (MyCategory) methodB&quot;</span>);<br>&#125;<br><br><span class="hljs-keyword">@end</span><br></code></pre></td></tr></table></figure>
 
 <p><strong><code>#import &quot;MyClass+MyCategory.h&quot;</code></strong> ，再次运行程序，可以看到</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/1429982-d6a63570da489cb4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="MyClass2.png"><br>到这一步，我们已经可以对MyClass类的方法进行自定义扩展，你可以在自定义方法<code>- MyMethodA</code>、 <code>- MyMethodB </code>中通过NSNotification或直接调用其他类的方法来触发具体的需求方法了。但这样做的话会使得<code>MyClass</code>类与其它类的耦合性太强，而且也不方便调试。在这里我们应该设计相关接口，以供外部调用实现它们自定义的各种需求方法。<br>那么继续往下看：</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#import <span class="meta-string">&quot;MyClass.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">MyClass</span> (<span class="title">MyCategory</span>)</span></span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)addTarget:(<span class="keyword">id</span>)target action:(SEL)action parameter:(<span class="keyword">id</span>)parameter;</span><br><span class="line">- (<span class="keyword">void</span>)removeTargetAction;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-meta">#import <span class="hljs-meta-string">&quot;MyClass.h&quot;</span></span><br><br><span class="hljs-class"><span class="hljs-keyword">@interface</span> <span class="hljs-title">MyClass</span> (<span class="hljs-title">MyCategory</span>)</span><br><br>- (<span class="hljs-keyword">void</span>)addTarget:(<span class="hljs-keyword">id</span>)target action:(SEL)action parameter:(<span class="hljs-keyword">id</span>)parameter;<br>- (<span class="hljs-keyword">void</span>)removeTargetAction;<br><span class="hljs-keyword">@end</span><br></code></pre></td></tr></table></figure>
 
 <p>给<code>MyClass+MyCategory</code>类别设计两个方法，用来给第三方传递目标方法以及移除目标方法。</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#import <span class="meta-string">&quot;MyClass+MyCategory.h&quot;</span></span></span><br><span class="line"><span class="meta">#import <span class="meta-string">&lt;objc/runtime.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">MyClass</span> ()</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) <span class="keyword">id</span> target;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) <span class="keyword">id</span> parameter;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>) <span class="built_in">NSString</span> *actionName;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">MyClass</span> (<span class="title">MyCategory</span>)</span></span><br><span class="line"></span><br><span class="line">+ (<span class="keyword">void</span>)initialize &#123;</span><br><span class="line">    </span><br><span class="line">    Method method1 = class_getInstanceMethod([<span class="keyword">self</span> <span class="keyword">class</span>], <span class="keyword">@selector</span>(methodA));</span><br><span class="line">    Method method2 = class_getInstanceMethod([<span class="keyword">self</span> <span class="keyword">class</span>], <span class="keyword">@selector</span>(MyMethodA));</span><br><span class="line">    method_exchangeImplementations(method1, method2);</span><br><span class="line">    </span><br><span class="line">    Method method3 = class_getInstanceMethod([<span class="keyword">self</span> <span class="keyword">class</span>], <span class="built_in">NSSelectorFromString</span>(<span class="string">@&quot;methodB&quot;</span>));</span><br><span class="line">    Method method4 = class_getInstanceMethod([<span class="keyword">self</span> <span class="keyword">class</span>], <span class="keyword">@selector</span>(MyMethodB));</span><br><span class="line">    method_exchangeImplementations(method3, method4);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">char</span> targetKey;</span><br><span class="line">- (<span class="keyword">void</span>)setTarget:(<span class="keyword">id</span>)target&#123;</span><br><span class="line">    objc_setAssociatedObject(<span class="keyword">self</span>, &amp;targetKey, target, OBJC_ASSOCIATION_RETAIN_NONATOMIC);</span><br><span class="line">&#125;</span><br><span class="line">- (<span class="keyword">id</span>)target&#123;</span><br><span class="line">    <span class="keyword">return</span> objc_getAssociatedObject(<span class="keyword">self</span>, &amp;targetKey);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">char</span> actionNameKey;</span><br><span class="line">- (<span class="keyword">void</span>)setActionName:(<span class="built_in">NSString</span> *)actionName &#123;</span><br><span class="line">    objc_setAssociatedObject(<span class="keyword">self</span>, &amp;actionNameKey, actionName, OBJC_ASSOCIATION_COPY_NONATOMIC);</span><br><span class="line">&#125;</span><br><span class="line">- (<span class="built_in">NSString</span> *)actionName&#123;</span><br><span class="line">    <span class="keyword">return</span> objc_getAssociatedObject(<span class="keyword">self</span>, &amp;actionNameKey);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">char</span> parameterKey;</span><br><span class="line">- (<span class="keyword">void</span>)setParameter:(<span class="keyword">id</span>)parameter &#123;</span><br><span class="line">    objc_setAssociatedObject(<span class="keyword">self</span>, &amp;parameterKey, parameter, OBJC_ASSOCIATION_RETAIN_NONATOMIC);</span><br><span class="line">&#125;</span><br><span class="line">- (<span class="keyword">id</span>)parameter &#123;</span><br><span class="line">    <span class="keyword">return</span> objc_getAssociatedObject(<span class="keyword">self</span>, &amp;parameterKey);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)MyMethodA &#123;</span><br><span class="line">    [<span class="keyword">self</span> MyMethodA];</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">self</span>.target &amp;&amp; <span class="keyword">self</span>.actionName &amp;&amp; <span class="keyword">self</span>.actionName.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> clang diagnostic push</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> clang diagnostic ignored <span class="meta-string">&quot;-Warc-performSelector-leaks&quot;</span></span></span><br><span class="line">        [<span class="keyword">self</span>.target performSelector:<span class="built_in">NSSelectorFromString</span>(<span class="keyword">self</span>.actionName) withObject:<span class="keyword">self</span>.parameter];</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> clang diagnostic pop</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)MyMethodB &#123;</span><br><span class="line">    [<span class="keyword">self</span> MyMethodB];</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">self</span>.target &amp;&amp; <span class="keyword">self</span>.actionName &amp;&amp; <span class="keyword">self</span>.actionName.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> clang diagnostic push</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> clang diagnostic ignored <span class="meta-string">&quot;-Warc-performSelector-leaks&quot;</span></span></span><br><span class="line">        [<span class="keyword">self</span>.target performSelector:<span class="built_in">NSSelectorFromString</span>(<span class="keyword">self</span>.actionName) withObject:<span class="keyword">self</span>.parameter];</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> clang diagnostic pop</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)addTarget:(<span class="keyword">id</span>)target action:(SEL)action parameter:(<span class="keyword">id</span>)parameter &#123;</span><br><span class="line">    <span class="keyword">self</span>.target = target;</span><br><span class="line">    <span class="keyword">self</span>.actionName = <span class="built_in">NSStringFromSelector</span>(action);</span><br><span class="line">    <span class="keyword">self</span>.parameter = parameter;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)removeTargetAction &#123;</span><br><span class="line">    <span class="keyword">self</span>.target = <span class="literal">nil</span>;</span><br><span class="line">    <span class="keyword">self</span>.actionName = <span class="literal">nil</span>;</span><br><span class="line">    <span class="keyword">self</span>.parameter = <span class="literal">nil</span>;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><code class="hljs objc"><span class="hljs-meta">#import <span class="hljs-meta-string">&quot;MyClass+MyCategory.h&quot;</span></span><br><span class="hljs-meta">#import <span class="hljs-meta-string">&lt;objc/runtime.h&gt;</span></span><br><br><span class="hljs-class"><span class="hljs-keyword">@interface</span> <span class="hljs-title">MyClass</span> ()</span><br><br><span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">strong</span>) <span class="hljs-keyword">id</span> target;<br><span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">strong</span>) <span class="hljs-keyword">id</span> parameter;<br><span class="hljs-keyword">@property</span> (<span class="hljs-keyword">nonatomic</span>, <span class="hljs-keyword">copy</span>) <span class="hljs-built_in">NSString</span> *actionName;<br><span class="hljs-keyword">@end</span><br><br><span class="hljs-class"><span class="hljs-keyword">@implementation</span> <span class="hljs-title">MyClass</span> (<span class="hljs-title">MyCategory</span>)</span><br><br>+ (<span class="hljs-keyword">void</span>)initialize &#123;<br>    <br>    Method method1 = class_getInstanceMethod([<span class="hljs-keyword">self</span> <span class="hljs-keyword">class</span>], <span class="hljs-keyword">@selector</span>(methodA));<br>    Method method2 = class_getInstanceMethod([<span class="hljs-keyword">self</span> <span class="hljs-keyword">class</span>], <span class="hljs-keyword">@selector</span>(MyMethodA));<br>    method_exchangeImplementations(method1, method2);<br>    <br>    Method method3 = class_getInstanceMethod([<span class="hljs-keyword">self</span> <span class="hljs-keyword">class</span>], <span class="hljs-built_in">NSSelectorFromString</span>(<span class="hljs-string">@&quot;methodB&quot;</span>));<br>    Method method4 = class_getInstanceMethod([<span class="hljs-keyword">self</span> <span class="hljs-keyword">class</span>], <span class="hljs-keyword">@selector</span>(MyMethodB));<br>    method_exchangeImplementations(method3, method4);<br>&#125;<br><br><span class="hljs-keyword">static</span> <span class="hljs-keyword">char</span> targetKey;<br>- (<span class="hljs-keyword">void</span>)setTarget:(<span class="hljs-keyword">id</span>)target&#123;<br>    objc_setAssociatedObject(<span class="hljs-keyword">self</span>, &amp;targetKey, target, OBJC_ASSOCIATION_RETAIN_NONATOMIC);<br>&#125;<br>- (<span class="hljs-keyword">id</span>)target&#123;<br>    <span class="hljs-keyword">return</span> objc_getAssociatedObject(<span class="hljs-keyword">self</span>, &amp;targetKey);<br>&#125;<br><br><span class="hljs-keyword">static</span> <span class="hljs-keyword">char</span> actionNameKey;<br>- (<span class="hljs-keyword">void</span>)setActionName:(<span class="hljs-built_in">NSString</span> *)actionName &#123;<br>    objc_setAssociatedObject(<span class="hljs-keyword">self</span>, &amp;actionNameKey, actionName, OBJC_ASSOCIATION_COPY_NONATOMIC);<br>&#125;<br>- (<span class="hljs-built_in">NSString</span> *)actionName&#123;<br>    <span class="hljs-keyword">return</span> objc_getAssociatedObject(<span class="hljs-keyword">self</span>, &amp;actionNameKey);<br>&#125;<br><br><span class="hljs-keyword">static</span> <span class="hljs-keyword">char</span> parameterKey;<br>- (<span class="hljs-keyword">void</span>)setParameter:(<span class="hljs-keyword">id</span>)parameter &#123;<br>    objc_setAssociatedObject(<span class="hljs-keyword">self</span>, &amp;parameterKey, parameter, OBJC_ASSOCIATION_RETAIN_NONATOMIC);<br>&#125;<br>- (<span class="hljs-keyword">id</span>)parameter &#123;<br>    <span class="hljs-keyword">return</span> objc_getAssociatedObject(<span class="hljs-keyword">self</span>, &amp;parameterKey);<br>&#125;<br><br>- (<span class="hljs-keyword">void</span>)MyMethodA &#123;<br>    [<span class="hljs-keyword">self</span> MyMethodA];<br>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">self</span>.target &amp;&amp; <span class="hljs-keyword">self</span>.actionName &amp;&amp; <span class="hljs-keyword">self</span>.actionName.length &gt; <span class="hljs-number">0</span>) &#123;<br><span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> clang diagnostic push</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> clang diagnostic ignored <span class="hljs-meta-string">&quot;-Warc-performSelector-leaks&quot;</span></span><br>        [<span class="hljs-keyword">self</span>.target performSelector:<span class="hljs-built_in">NSSelectorFromString</span>(<span class="hljs-keyword">self</span>.actionName) withObject:<span class="hljs-keyword">self</span>.parameter];<br><span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> clang diagnostic pop</span><br>    &#125;<br>&#125;<br><br>- (<span class="hljs-keyword">void</span>)MyMethodB &#123;<br>    [<span class="hljs-keyword">self</span> MyMethodB];<br>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">self</span>.target &amp;&amp; <span class="hljs-keyword">self</span>.actionName &amp;&amp; <span class="hljs-keyword">self</span>.actionName.length &gt; <span class="hljs-number">0</span>) &#123;<br><span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> clang diagnostic push</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> clang diagnostic ignored <span class="hljs-meta-string">&quot;-Warc-performSelector-leaks&quot;</span></span><br>        [<span class="hljs-keyword">self</span>.target performSelector:<span class="hljs-built_in">NSSelectorFromString</span>(<span class="hljs-keyword">self</span>.actionName) withObject:<span class="hljs-keyword">self</span>.parameter];<br><span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> clang diagnostic pop</span><br>    &#125;<br>&#125;<br><br>- (<span class="hljs-keyword">void</span>)addTarget:(<span class="hljs-keyword">id</span>)target action:(SEL)action parameter:(<span class="hljs-keyword">id</span>)parameter &#123;<br>    <span class="hljs-keyword">self</span>.target = target;<br>    <span class="hljs-keyword">self</span>.actionName = <span class="hljs-built_in">NSStringFromSelector</span>(action);<br>    <span class="hljs-keyword">self</span>.parameter = parameter;<br>&#125;<br><br>- (<span class="hljs-keyword">void</span>)removeTargetAction &#123;<br>    <span class="hljs-keyword">self</span>.target = <span class="hljs-literal">nil</span>;<br>    <span class="hljs-keyword">self</span>.actionName = <span class="hljs-literal">nil</span>;<br>    <span class="hljs-keyword">self</span>.parameter = <span class="hljs-literal">nil</span>;;<br>&#125;<br><br><span class="hljs-keyword">@end</span><br></code></pre></td></tr></table></figure>
 <p>在.m文件的实现中，使用Associated Object，<code>MyClass </code>内部扩展了相应属性，并在恰当的时候触发传递进来的自定义方法。<br>再次运行：</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/1429982-41ff35ecbe002532.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="MyClass3.png"></p>
 <p>可以看到，在运行<code>MyClass </code>的<code>- methodA</code>与<code>- methodB</code>方法时，正确触发了自定义方法，而且我们还可以给自定义方法传递参数。需求搞定！！</p>
 <h3 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h3><p>以上便是 <strong>Runtime</strong> 在实际开发中的一些运用，其实还可以更加灵活，对于那些就算是无法看到源代码的三方库，也可以运用runtime拿到其方法列表，然后通过分析，在对应的地方替换或注入方法，以达到你想要的效果。比如前段时间很火的微信自动抢红包，就是运用了此种技术，有兴趣的可以研究下，这里就不做讨论了。</p>
 
+      
     </div>
+    
+    
+    
 
     
+
     
+
     
 
     <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/Runtime/" rel="tag"># Runtime</a>
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Runtime/" rel="tag"># Runtime</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Node.js%20+%20apn%20%E6%90%AD%E5%BB%BAAPNS%E6%8E%A8%E9%80%81%E5%90%8E%E5%8F%B0/" rel="next" title="Node.js + apn 搭建APNS推送后台">
+                <i class="fa fa-chevron-left"></i> Node.js + apn 搭建APNS推送后台
+              </a>
+            
           </div>
 
-        
+          <span class="post-nav-divider"></span>
 
-          <div class="post-nav">
-            <div class="post-nav-item">
-                <a href="/Node.js%20+%20apn%20%E6%90%AD%E5%BB%BAAPNS%E6%8E%A8%E9%80%81%E5%90%8E%E5%8F%B0/" rel="prev" title="Node.js + apn 搭建APNS推送后台">
-                  <i class="fa fa-chevron-left"></i> Node.js + apn 搭建APNS推送后台
-                </a>
-            </div>
-            <div class="post-nav-item">
-                <a href="/%E4%BD%BF%E7%94%A8TouchID%E9%AA%8C%E8%AF%81%E7%99%BB%E5%BD%95%E8%B8%A9%E8%BF%87%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9D%91%EF%BC%88%E5%90%8C%E6%97%B6%E6%9B%B4%E6%96%B0FaceID%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%89/" rel="next" title="使用TouchID验证登录踩过的一些坑（同时更新FaceID使用方法）">
-                  使用TouchID验证登录踩过的一些坑（同时更新FaceID使用方法） <i class="fa fa-chevron-right"></i>
-                </a>
-            </div>
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/%E4%BD%BF%E7%94%A8TouchID%E9%AA%8C%E8%AF%81%E7%99%BB%E5%BD%95%E8%B8%A9%E8%BF%87%E7%9A%84%E4%B8%80%E4%BA%9B%E5%9D%91%EF%BC%88%E5%90%8C%E6%97%B6%E6%9B%B4%E6%96%B0FaceID%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%89/" rel="prev" title="使用TouchID验证登录踩过的一些坑（同时更新FaceID使用方法）">
+                使用TouchID验证登录踩过的一些坑（同时更新FaceID使用方法） <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
+        </div>
+      
+
+      
+      
     </footer>
+  </div>
+  
+  
+  
   </article>
-</div>
 
 
 
-
-
-<script src="/js/comments.js"></script>
-</div>
-  </main>
-
-  <footer class="footer">
-    <div class="footer-inner">
-
-  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备2022055361号 </a>
+    <div class="post-spread">
+      
+    </div>
   </div>
 
-<div class="copyright">
-  &copy; 2016 – 
-  <span itemprop="copyrightYear">2022</span>
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/lele8446" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-fab fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.jianshu.com/u/a97f1b616991" target="_blank" title="简书">
+                      
+                        <i class="fa fa-fw fa-fab fa-book"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lele8446@foxmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-fab fa-envelope"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.linkedin.com/in/%E7%82%BD%E9%87%91-%E7%BB%83-966a4813b/" target="_blank" title="Linkedin">
+                      
+                        <i class="fa fa-fw fa-fab fa-linkedin"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9C%80%E6%B1%82"><span class="nav-number">1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="nav-number">2.</span> <span class="nav-text">怎么办</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E"><span class="nav-number">3.</span> <span class="nav-text">写在最后</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">ChiJin.Lian</span>
+  <span class="author" itemprop="copyrightHolder">ChiJin.Lian  粤ICP备2022055361号</span>
+
+  
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
   </div>
 
-    </div>
-  </footer>
-
-  
-  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
-
   
 
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
 
 
 
@@ -339,6 +729,40 @@
 
 
 
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
 
 </body>
 </html>
