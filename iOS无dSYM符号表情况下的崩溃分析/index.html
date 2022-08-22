@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="iOS开发,APNS,Shell," />
+  <meta name="keywords" content="iOS开发,Shell," />
 
 
 
@@ -79,22 +79,23 @@
 
 
 
-<meta name="description" content="本文重点关注的是APNS推送后台的搭建，不涉及推送证书Certificate 、Profiles 文件，iOS客户端推送代码的介绍。 需求背景iOS开发，在接收到APNS推送消息后打开App，然后跳转到App内任意模块、或者打开webView页面、或者执行升级操作、或者跳转打开第三方应用。">
+<meta name="description" content="一、dSYM符号表分析崩溃在能够获取到dSYM符号表文件的情况下，分析崩溃详情请移步iOS crash 解析定位，shell脚本查找crash， 或者使用可视化工具分析崩溃 CJCrashTools">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Node.js + apn 搭建APNS推送后台">
-<meta property="og:url" content="http://example.com/Node.js%20+%20apn%20%E6%90%AD%E5%BB%BAAPNS%E6%8E%A8%E9%80%81%E5%90%8E%E5%8F%B0/index.html">
+<meta property="og:title" content="iOS无dSYM符号表情况下的崩溃分析">
+<meta property="og:url" content="http://example.com/iOS%E6%97%A0dSYM%E7%AC%A6%E5%8F%B7%E8%A1%A8%E6%83%85%E5%86%B5%E4%B8%8B%E7%9A%84%E5%B4%A9%E6%BA%83%E5%88%86%E6%9E%90/index.html">
 <meta property="og:site_name" content="C.J.Lian">
-<meta property="og:description" content="本文重点关注的是APNS推送后台的搭建，不涉及推送证书Certificate 、Profiles 文件，iOS客户端推送代码的介绍。 需求背景iOS开发，在接收到APNS推送消息后打开App，然后跳转到App内任意模块、或者打开webView页面、或者执行升级操作、或者跳转打开第三方应用。">
+<meta property="og:description" content="一、dSYM符号表分析崩溃在能够获取到dSYM符号表文件的情况下，分析崩溃详情请移步iOS crash 解析定位，shell脚本查找crash， 或者使用可视化工具分析崩溃 CJCrashTools">
 <meta property="og:locale">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429982-6a7d458bb426e048.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="article:published_time" content="2017-05-03T02:55:03.000Z">
-<meta property="article:modified_time" content="2017-05-03T09:52:00.000Z">
+<meta property="og:image" content="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/crashlog/CJCrashTools.png">
+<meta property="og:image" content="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/crashlog/crashlog1.png">
+<meta property="og:image" content="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/crashlog/crashlog2.png">
+<meta property="article:published_time" content="2022-08-22T06:18:03.000Z">
+<meta property="article:modified_time" content="2022-08-22T06:52:00.000Z">
 <meta property="article:author" content="lele8446">
 <meta property="article:tag" content="iOS开发">
-<meta property="article:tag" content="APNS">
 <meta property="article:tag" content="Shell">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1429982-6a7d458bb426e048.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:image" content="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/crashlog/CJCrashTools.png">
 
 
 
@@ -124,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://example.com/Node.js + apn 搭建APNS推送后台/"/>
+  <link rel="canonical" href="http://example.com/iOS无dSYM符号表情况下的崩溃分析/"/>
 
 
 
 
 
-  <title>Node.js + apn 搭建APNS推送后台 | C.J.Lian</title>
+  <title>iOS无dSYM符号表情况下的崩溃分析 | C.J.Lian</title>
   
 
 
@@ -247,7 +248,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/Node.js%20+%20apn%20%E6%90%AD%E5%BB%BAAPNS%E6%8E%A8%E9%80%81%E5%90%8E%E5%8F%B0/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/iOS%E6%97%A0dSYM%E7%AC%A6%E5%8F%B7%E8%A1%A8%E6%83%85%E5%86%B5%E4%B8%8B%E7%9A%84%E5%B4%A9%E6%BA%83%E5%88%86%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -264,7 +265,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Node.js + apn 搭建APNS推送后台</h1>
+          <h1 class="post-title" itemprop="name headline">iOS无dSYM符号表情况下的崩溃分析</h1>
         
 
         <div class="post-meta">
@@ -276,8 +277,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-03T10:55:03+08:00">
-                2017-05-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-08-22T14:18:03+08:00">
+                2022-08-22
               </time>
             
 
@@ -314,45 +315,57 @@
       
 
       
-        <p>本文重点关注的是APNS推送后台的搭建，不涉及推送证书Certificate 、Profiles 文件，iOS客户端推送代码的介绍。</p>
-<h4 id="需求背景"><a href="#需求背景" class="headerlink" title="需求背景"></a>需求背景</h4><p>iOS开发，在接收到APNS推送消息后打开App，然后跳转到App内任意模块、或者打开webView页面、或者执行升级操作、或者跳转打开第三方应用。</p>
+        <h3 id="一、dSYM符号表分析崩溃"><a href="#一、dSYM符号表分析崩溃" class="headerlink" title="一、dSYM符号表分析崩溃"></a>一、dSYM符号表分析崩溃</h3><p>在能够获取到dSYM符号表文件的情况下，分析崩溃详情请移步<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/392d801062d1">iOS crash 解析定位，shell脚本查找crash</a>，</p>
+<p>或者使用可视化工具分析崩溃 <a target="_blank" rel="noopener" href="https://github.com/lele8446/CJShellDemo/tree/master/CJCrashTools">CJCrashTools</a></p>
+<img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/crashlog/CJCrashTools.png" alt="CJCrashTools" style="zoom:45%;" />
+
 <span id="more"></span>
-<p>对于这样的需求，开发测试的时候需要频繁发送APNS推送，如果每次都让后台服务器的兄弟来配合测试，那肯定是心好累，最好的方案就是自己搭建服务，想怎么推就怎么推！！</p>
-<h4 id="写在开头"><a href="#写在开头" class="headerlink" title="写在开头"></a>写在开头</h4><p> 网上关于APNS推送的文章有很多，但对于推送后台介绍的文章却不多（有很多都是介绍java后台的，本人曾经参照教程用java实现过，那是在Android Studio上运行的，为了推送消息这个小小的功能，却要安装Android Studio那么大一个IDE，同时还要新建工程来运行项目，想想都头大😓）</p>
-<p>在探寻的过程中发现了Node.js + apn是一个不错方案，只是网上关于这方面的介绍不多，有的也是<a target="_blank" rel="noopener" href="http://blog.csdn.net/freedom2028/article/details/12243187">同一篇文章</a>在相互转载。<br>文章最后对于后台的介绍只一句带过<code>最后，安装apn，把key.pem和cert.pem拷贝到项目目录。执行以下代码可以推送通知到指定设备</code>，这对于我这个js门外汉来说完全就是懵逼。。。</p>
-<p>无奈只能实践出真理，并将摸索过程中的一些经验做了总结。</p>
-<h4 id="干货"><a href="#干货" class="headerlink" title="干货"></a>干货</h4><h5 id="1-生成-pem文件"><a href="#1-生成-pem文件" class="headerlink" title="1. 生成 pem文件"></a>1. 生成 pem文件</h5><p><em>请先确保已安装对应的Apple Push Services证书，如果没有请网上搜索Apple Push Notification service SSL关键字</em></p>
-<p>打开<code>钥匙串访问</code>- 找到对应的推送证书，分别导出<code>apns-dev-cert.p12</code>以及<code>apns-dev-key.p12</code>文件，这里我导出的是development环境下的p12，这个可以在Xcode连真机build的时候收到推送。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1429982-6a7d458bb426e048.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="导出p12.png"></p>
-<p>导出的时候会提示设置密码，这里我设置的是：123456，后面生成pem和js文件中会用到。</p>
-<p>然后通过终端命令将两个文件转换为PEM格式：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs Bash">openssl pkcs12 -clcerts -nokeys -out apns-dev-cert.pem -<span class="hljs-keyword">in</span> apns-dev-cert.p12<br><br>openssl pkcs12 -nocerts -out apns-dev-key.pem -<span class="hljs-keyword">in</span> apns-dev-key.p12<br></code></pre></td></tr></table></figure>
 
-<p>上述转PEM文件语句可能转换不成功（终端中其实是不会提示你的，你可以对比下转换前后的p12 与pem文件，如果两者的文件大小相差太多，那就可能是失败了。当然如果转换失败，那最终在执行推送的时候肯定是不会成功的，那时也能发现到错误）</p>
-<p>如果转换失败，可以试下以下转换语句</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Bash">openssl pkcs12 -<span class="hljs-keyword">in</span> apns-dev-key.p12 -out apns-dev-key.pem -nodes<br></code></pre></td></tr></table></figure>
+<h3 id="二、无dSYM符号表文件崩溃分析"><a href="#二、无dSYM符号表文件崩溃分析" class="headerlink" title="二、无dSYM符号表文件崩溃分析"></a>二、无dSYM符号表文件崩溃分析</h3><p>下面来讲一下本文的重点：无dSYM符号表文件下的崩溃分析。</p>
+<p>要是很不幸缺失了dSYM文件，但如果能够获取到崩溃日志以及对应的.app文件的情况下，那么我们同样可以对崩溃详情进行分析。</p>
+<h4 id="获取crash-log崩溃日志"><a href="#获取crash-log崩溃日志" class="headerlink" title="获取crash log崩溃日志"></a>获取crash log崩溃日志</h4><ol>
+<li><p>将iOS设备连接到电脑上，打开 Xcode -&gt; Window -&gt; Devices and Simulators -&gt; Devices，找到该台设备，点击<strong>View Device Logs</strong>，在 This Device的崩溃日志列表中中找到对应app的崩溃日志即可；也可以点击右键，Export Log将日志导出（后缀为 .crash 的 log 文件）。</p>
+</li>
+<li><p>如果你的应用已经上架App Store，那么开发者可以通过iTunes Connect（Manage Your Applications - View Details - Crash Reports）获取用户的crash log。不过这并不是100%有效的，而且大多数开发者并不依赖于此，因为这需要用户设备同意上传相关信息，详情可参见iOS: Providing Apple with diagnostics and usage information摘要。</p>
+</li>
+<li><p>第三方crash收集系统，甚至还带了符号化crash日志的功能。比较常用的有<a target="_blank" rel="noopener" href="https://link.jianshu.com/?t=http://www.cnblogs.com/www.crashlytics.com">Crashlytics</a>，<a target="_blank" rel="noopener" href="https://link.jianshu.com/?t=http://www.flurry.com/">Flurry</a>等。</p>
+</li>
+</ol>
+<h4 id="获取-app文件"><a href="#获取-app文件" class="headerlink" title="获取.app文件"></a>获取.app文件</h4><ol>
+<li><p>如果是Xcode debug模式下崩溃获取.app文件：打开Xcode，找到项目工程<strong>Products</strong>文件夹下的编译产物，右键Show in Finder，即可找到 <strong>CJTest.app</strong> (本文示例.app名为CJTest.app，后同)。</p>
+</li>
+<li><p>如果是导出ipa安装之后的崩溃：修改.ipa后缀名为.zip，解压之后进入<strong>Payload</strong>文件夹，同样可以找到 <strong>CJTest.app</strong> 文件。注意如果是从App Store渠道获取的ipa文件，那么必须先经过砸壳处理！</p>
+</li>
+</ol>
+<h4 id="app文件瘦身（非必要步骤）"><a href="#app文件瘦身（非必要步骤）" class="headerlink" title=".app文件瘦身（非必要步骤）"></a>.app文件瘦身（非必要步骤）</h4><p>首先判断崩溃日志是来自arm64还是其他机器，以及得到的.app是否集成多架构。</p>
+<p>查看.app架构，终端执行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">lipo -info CJTest.app/CJTest<br></code></pre></td></tr></table></figure>
 
-<h5 id="2-编辑js文件（APNS-js）"><a href="#2-编辑js文件（APNS-js）" class="headerlink" title="2. 编辑js文件（APNS.js）"></a>2. 编辑js文件（<a target="_blank" rel="noopener" href="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/APNS.js">APNS.js</a>）</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs Bash"><span class="hljs-string">&quot;use strict&quot;</span>;<br><br>const apn = require(<span class="hljs-string">&quot;apn&quot;</span>);<br><br>// token 数组<br><span class="hljs-built_in">let</span> tokens = [<span class="hljs-string">&quot;45c0bc9952a930e96cd50df871dfc0f6a8382bb0ded0821c1111495507f8f5c3&quot;</span>, <span class="hljs-string">&quot;4a633149803b1721590802eac88003ed024be210a3053ad51fa7a657d3b2a531&quot;</span>];<br><br><span class="hljs-built_in">let</span> service = new apn.Provider(&#123;<br>  cert: <span class="hljs-string">&quot;/你电脑上的绝对路径/apns-dev-cert.pem&quot;</span>,<br>  key: <span class="hljs-string">&quot;/你电脑上的绝对路径/apns-dev-key.pem&quot;</span>,<br>  gateway: <span class="hljs-string">&quot;gateway.sandbox.push.apple.com&quot;</span>,<br>  // gateway: <span class="hljs-string">&quot;gateway.push.apple.com&quot;</span>; //线上地址<br>  // port: 2195, //端口<br>  passphrase: <span class="hljs-string">&quot;123456&quot;</span> //pem证书密码<br>&#125;);<br><br><span class="hljs-built_in">let</span> note = new apn.Notification(&#123;<br>    alert:  <span class="hljs-string">&quot;Breaking News: I just sent my first Push Notification&quot;</span>,<br>&#125;);<br><br>// 主题 一般取应用标识符（bundle identifier）<br>note.topic = <span class="hljs-string">&quot;com.xxx.xxx&quot;</span><br><br>console.log(`Sending: <span class="hljs-variable">$&#123;note.compile()&#125;</span> to <span class="hljs-variable">$&#123;tokens&#125;</span>`);<br>service.send(note, tokens).<span class="hljs-keyword">then</span>( result =&gt; &#123;<br>    console.log(<span class="hljs-string">&quot;sent:&quot;</span>, result.sent.length);<br>    console.log(<span class="hljs-string">&quot;failed:&quot;</span>, result.failed.length);<br>    console.log(result.failed);<br>&#125;);<br><br>service.shutdown();<br></code></pre></td></tr></table></figure>
+<p>如果结果提示本身就只包含<strong>arm64</strong>，那么可以跳过本步骤了。</p>
+<p>否则执行以下指令进行瘦身：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">lipo -thin arm64 CJTest.app/CJTest -out CJTest_arm64<br></code></pre></td></tr></table></figure>
 
-<h5 id="3-配置"><a href="#3-配置" class="headerlink" title="3. 配置"></a>3. 配置</h5><p>安装Node.js地址 <a target="_blank" rel="noopener" href="https://nodejs.org/">https://nodejs.org</a></p>
-<p>安装apn，终端执行：</p>
-<blockquote>
-<p>$  sudo npm install apn</p>
-</blockquote>
-<p>配置node_modules环境变量 ，终端执行：</p>
-<blockquote>
-<p>// 进入当前用户目录，创建.bash_profile文件（如果没有会新建）<br>$  touch ~/.bash_profile</p>
-</blockquote>
-<p>打开.bash_profile文件，添加以下内容并保存</p>
-<blockquote>
-<p>export NODE_PATH=/usr/local/lib/node_modules/</p>
-</blockquote>
-<p>完成后在终端运行：</p>
-<blockquote>
-<p>$ node APNS.js</p>
-</blockquote>
-<p>不出意外，等待若干秒后可以收到推送消息，如果有问题可以根据终端提示修改。<br>更多关于apn的介绍看这里：<a target="_blank" rel="noopener" href="https://github.com/node-apn/node-apn">https://github.com/node-apn/node-apn</a></p>
-<p><a target="_blank" rel="noopener" href="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/APNS.js">APNS.js</a>下载</p>
+
+
+<h4 id="符号恢复工具restore-symbol"><a href="#符号恢复工具restore-symbol" class="headerlink" title="符号恢复工具restore-symbol"></a>符号恢复工具<a target="_blank" rel="noopener" href="https://github.com/troyzhao/parse-crash-log/raw/master/restore-symbol">restore-symbol</a></h4><p><a target="_blank" rel="noopener" href="https://github.com/troyzhao/parse-crash-log/raw/master/restore-symbol">下载</a>后修改权限</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">chmod a+x restore-symbol<br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="恢复符号"><a href="#恢复符号" class="headerlink" title="恢复符号"></a>恢复符号</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">./restore-symbol -o CJTest_symbol CJTest<br><br><span class="hljs-meta">#</span><span class="bash"> 如果是.app有经过瘦身，则执行</span><br>./restore-symbol -o CJTest_arm64_symbol CJTest_arm64<br></code></pre></td></tr></table></figure>
+
+<p>最终得到恢复了符号表的二时制文件 <strong>CJTest_symbol</strong>。</p>
+<p>另外如果运行restore-symbol指令的过程中系统提示<code>&quot;无法打开restore-symbol，因为无法验证开发者“</code>，可通过以下步骤解决：打开系统偏好设置选项 — 点击打开安全性与隐私选项 — 点击上方的通用选项 — 点击选中下方的任何来源选项即可。</p>
+<h4 id="Bug位置定位"><a href="#Bug位置定位" class="headerlink" title="Bug位置定位"></a>Bug位置定位</h4><p>最后执行指令，定位到最终的崩溃代码。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">atos -arch arm64 -o CJTest_arm64_symbol -l 0x1045e8000 0x0000000105b8b738 0x0000000105b8b724<br></code></pre></td></tr></table></figure>
+
+<p>atos指令说明：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash"> atos -arch ”CPU架构“ -o “二进制文件” -l “起始地址” “一系列内存地址。。。”</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>-l</strong> 后面跟的是模块的起始地址，然后后面可以罗列很多内存地址，执行命令后会依次解析出，所罗列的内存地址对应的所有函数。</p>
+<p>对应的崩溃日志快照说明：<br><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/crashlog/crashlog1.png" alt="crashlog1" style="zoom:67%;" /></p>
+<p><img src="https://lele8446infoq.oss-cn-shenzhen.aliyuncs.com/crashlog/crashlog2.png" alt="crashlog2"></p>
+<p>Binary Images表示的是app崩溃时程序加载的所有库的快照，找到CJTest所在行，开始的地址区间0x1045e8000 - 0x10658ffff代表的是程序崩溃时的内存区间，其中起始地址为0x1045e8000。其后是对应的app二进制文件名，架构类型arm64，再后面的尖括号里对应的是uuid说明。</p>
 
       
     </div>
@@ -372,8 +385,6 @@
           
             <a href="/tags/iOS%E5%BC%80%E5%8F%91/" rel="tag"># iOS开发</a>
           
-            <a href="/tags/APNS/" rel="tag"># APNS</a>
-          
             <a href="/tags/Shell/" rel="tag"># Shell</a>
           
         </div>
@@ -387,8 +398,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/Shell%E8%84%9A%E6%9C%AC%E2%80%94%E2%80%94Xcode%E8%84%9A%E6%9C%AC%E6%89%93%E5%8C%85/" rel="next" title="Shell脚本——Xcode脚本打包">
-                <i class="fa fa-chevron-left"></i> Shell脚本——Xcode脚本打包
+              <a href="/%E5%86%8D%E8%B0%88APP%E6%8D%A2%E8%82%A4%E5%AE%9E%E7%8E%B0/" rel="next" title="再谈APP换肤实现">
+                <i class="fa fa-chevron-left"></i> 再谈APP换肤实现
               </a>
             
           </div>
@@ -396,10 +407,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/Runtime%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5%E2%80%94%E2%80%94hook%E9%BB%91%E9%AD%94%E6%B3%95%E4%BB%A5%E5%8F%8A%E6%89%A9%E5%B1%95%E7%B1%BB/" rel="prev" title="Runtime应用实践——hook黑魔法以及扩展类">
-                Runtime应用实践——hook黑魔法以及扩展类 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -556,7 +563,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9C%80%E6%B1%82%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">需求背景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%99%E5%9C%A8%E5%BC%80%E5%A4%B4"><span class="nav-number">2.</span> <span class="nav-text">写在开头</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B9%B2%E8%B4%A7"><span class="nav-number">3.</span> <span class="nav-text">干货</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E7%94%9F%E6%88%90-pem%E6%96%87%E4%BB%B6"><span class="nav-number">3.1.</span> <span class="nav-text">1. 生成 pem文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E7%BC%96%E8%BE%91js%E6%96%87%E4%BB%B6%EF%BC%88APNS-js%EF%BC%89"><span class="nav-number">3.2.</span> <span class="nav-text">2. 编辑js文件（APNS.js）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-%E9%85%8D%E7%BD%AE"><span class="nav-number">3.3.</span> <span class="nav-text">3. 配置</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81dSYM%E7%AC%A6%E5%8F%B7%E8%A1%A8%E5%88%86%E6%9E%90%E5%B4%A9%E6%BA%83"><span class="nav-number">1.</span> <span class="nav-text">一、dSYM符号表分析崩溃</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%97%A0dSYM%E7%AC%A6%E5%8F%B7%E8%A1%A8%E6%96%87%E4%BB%B6%E5%B4%A9%E6%BA%83%E5%88%86%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text">二、无dSYM符号表文件崩溃分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96crash-log%E5%B4%A9%E6%BA%83%E6%97%A5%E5%BF%97"><span class="nav-number">2.1.</span> <span class="nav-text">获取crash log崩溃日志</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96-app%E6%96%87%E4%BB%B6"><span class="nav-number">2.2.</span> <span class="nav-text">获取.app文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#app%E6%96%87%E4%BB%B6%E7%98%A6%E8%BA%AB%EF%BC%88%E9%9D%9E%E5%BF%85%E8%A6%81%E6%AD%A5%E9%AA%A4%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">.app文件瘦身（非必要步骤）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%A6%E5%8F%B7%E6%81%A2%E5%A4%8D%E5%B7%A5%E5%85%B7restore-symbol"><span class="nav-number">2.4.</span> <span class="nav-text">符号恢复工具restore-symbol</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%81%A2%E5%A4%8D%E7%AC%A6%E5%8F%B7"><span class="nav-number">2.5.</span> <span class="nav-text">恢复符号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Bug%E4%BD%8D%E7%BD%AE%E5%AE%9A%E4%BD%8D"><span class="nav-number">2.6.</span> <span class="nav-text">Bug位置定位</span></a></li></ol></li></ol></div>
             
 
           </div>
